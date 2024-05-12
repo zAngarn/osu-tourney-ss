@@ -8,13 +8,11 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Ladder.Components;
 using osuTK;
-using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Schedule
 {
@@ -276,7 +274,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                             new TournamentSpriteText {
                                 Shadow = true,
                                 Text = title.ToUpperInvariant(),
-                                Font = OsuFont.TorusAlternate.With(size: 24)
+                                Font = OsuFont.TorusAlternate.With(size: 24, weight: FontWeight.SemiBold)
                             },
                             content = new FillFlowContainer
                             {

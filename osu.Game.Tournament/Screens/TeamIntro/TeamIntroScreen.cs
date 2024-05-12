@@ -51,23 +51,33 @@ namespace osu.Game.Tournament.Screens.TeamIntro
             {
                 new RoundDisplay(match.NewValue)
                 {
-                    Position = new Vector2(100, 100)
+                    Position = new Vector2(0, 100)
                 },
                 new DrawableTeamFlag(match.NewValue.Team1.Value)
                 {
-                    Position = new Vector2(165, y_flag_offset),
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Position = new Vector2(-250, y_flag_offset),
+                    Scale = new Vector2(2f),
                 },
                 new DrawableTeamWithPlayers(match.NewValue.Team1.Value, TeamColour.Red)
                 {
-                    Position = new Vector2(165, y_offset),
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Position = new Vector2(-250, y_offset),
                 },
                 new DrawableTeamFlag(match.NewValue.Team2.Value)
                 {
-                    Position = new Vector2(740, y_flag_offset),
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Position = new Vector2(250, y_flag_offset),
+                    Scale = new Vector2(2f),
                 },
                 new DrawableTeamWithPlayers(match.NewValue.Team2.Value, TeamColour.Blue)
                 {
-                    Position = new Vector2(740, y_offset),
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Position = new Vector2(250, y_offset),
                 },
             };
         }
