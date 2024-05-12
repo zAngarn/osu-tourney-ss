@@ -34,6 +34,7 @@ namespace osu.Game.Tournament.Screens.MapPool
         private OsuButton buttonBlueBan = null!;
         private OsuButton buttonRedPick = null!;
         private OsuButton buttonBluePick = null!;
+        private OsuButton buttonModoSexo = null!;
 
         private ScheduledDelegate? scheduledScreenChange;
 
@@ -90,6 +91,11 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Text = "Blue Pick",
                             Action = () => setMode(TeamColour.Blue, ChoiceType.Pick)
+                        },
+                        buttonModoSexo = new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Modo Sexo"
                         },
                         new ControlPanel.Spacer(),
                         new TourneyButton

@@ -12,7 +12,7 @@ namespace osu.Game.Tournament.Components
     {
         public readonly TournamentSpriteText Text;
 
-        protected readonly Box Background;
+        //protected readonly Box Background;
 
         public TournamentSpriteTextWithBackground(string text = "")
         {
@@ -20,11 +20,11 @@ namespace osu.Game.Tournament.Components
 
             InternalChildren = new Drawable[]
             {
-                Background = new Box
+                /*Background = new Box
                 {
                     Colour = TournamentGame.ELEMENT_BACKGROUND_COLOUR,
                     RelativeSizeAxes = Axes.Both,
-                },
+                },*/
                 Text = new TournamentSpriteText
                 {
                     Colour = TournamentGame.ELEMENT_FOREGROUND_COLOUR,
