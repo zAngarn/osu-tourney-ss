@@ -253,7 +253,7 @@ namespace osu.Game.Tournament.Screens.Schedule
 
             protected override string Format() => Date < DateTimeOffset.Now
                 ? $"Comenzó {base.Format()}"
-                : $"Comenzando {base.Format()}";
+                : $"Comienza {base.Format()}";
         }
 
         public partial class ScheduleContainer : Container
