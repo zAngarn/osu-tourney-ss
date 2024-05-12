@@ -68,19 +68,6 @@ namespace osu.Game.Tournament.Screens.Schedule
                                             {
                                                 Margin = new MarginPadding { Top = 40 },
                                                 AutoSizeAxes = Axes.Both,
-                                                Children = new Drawable[]
-                                                {
-                                                    new Box
-                                                    {
-                                                        Colour = Color4.White,
-                                                        Size = new Vector2(50, 10),
-                                                    },
-                                                    new TournamentSpriteTextWithBackground("Schedule")
-                                                    {
-                                                        X = 60,
-                                                        Scale = new Vector2(0.8f)
-                                                    }
-                                                }
                                             },
                                         }
                                     },
@@ -150,13 +137,13 @@ namespace osu.Game.Tournament.Screens.Schedule
                             Direction = FillDirection.Horizontal,
                             Children = new Drawable[]
                             {
-                                new ScheduleContainer("recent matches")
+                                new ScheduleContainer("partidos recientes")
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Width = 0.4f,
                                     ChildrenEnumerable = recent.Select(p => new ScheduleMatch(p))
                                 },
-                                new ScheduleContainer("upcoming matches")
+                                new ScheduleContainer("próximamente")
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Width = 0.6f,
@@ -165,7 +152,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                             }
                         }
                     },
-                    comingUpNext = new ScheduleContainer("coming up next")
+                    comingUpNext = new ScheduleContainer("próximo partido")
                     {
                         RelativeSizeAxes = Axes.Both,
                         Height = 0.25f,
@@ -265,8 +252,8 @@ namespace osu.Game.Tournament.Screens.Schedule
             }
 
             protected override string Format() => Date < DateTimeOffset.Now
-                ? $"Started {base.Format()}"
-                : $"Starting {base.Format()}";
+                ? $"Comenzó {base.Format()}"
+                : $"Comenzando {base.Format()}";
         }
 
         public partial class ScheduleContainer : Container
@@ -286,9 +273,10 @@ namespace osu.Game.Tournament.Screens.Schedule
                         Direction = FillDirection.Vertical,
                         Children = new Drawable[]
                         {
-                            new TournamentSpriteTextWithBackground(title.ToUpperInvariant())
-                            {
-                                Scale = new Vector2(0.5f)
+                            new TournamentSpriteText {
+                                Shadow = true,
+                                Text = title.ToUpperInvariant(),
+                                Font = OsuFont.TorusAlternate.With(size: 24)
                             },
                             content = new FillFlowContainer
                             {

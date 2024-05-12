@@ -223,7 +223,7 @@ namespace osu.Game.Tournament.Components
                                             new DiffPiece(("BPM", $"{bpm:0.#}")),
                                         }
                                     },
-                                    new Container
+                                    /*new Container
                                     {
                                         RelativeSizeAxes = Axes.Both,
                                         Children = new Drawable[]
@@ -244,7 +244,7 @@ namespace osu.Game.Tournament.Components
                                                 Origin = Anchor.CentreRight,
                                             },
                                         }
-                                    },
+                                    },*/
                                 },
                             }
                         }

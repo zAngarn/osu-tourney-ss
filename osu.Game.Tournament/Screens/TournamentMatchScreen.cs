@@ -23,7 +23,7 @@ namespace osu.Game.Tournament.Screens
         {
             if (match.NewValue == null)
             {
-                AddInternal(noMatchWarning = new WarningBox("Choose a match first from the brackets screen"));
+                AddInternal(noMatchWarning = new WarningBox("No has elegido un partido, subnormal."));
                 return;
             }
 
