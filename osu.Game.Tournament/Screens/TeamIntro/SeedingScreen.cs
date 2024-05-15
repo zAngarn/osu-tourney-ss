@@ -273,9 +273,9 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                         Children = new Drawable[]
                         {
                             new TeamDisplay(team) { Margin = new MarginPadding { Bottom = 30 } },
-                            new RowDisplay("Average Rank:", $"#{team.AverageRank:#,0}"),
+                            new RowDisplay("Puesto promedio:", $"#{team.AverageRank:#,0}"),
                             new RowDisplay("Seed:", team.Seed.Value),
-                            new RowDisplay("Last year's placing:", team.LastYearPlacing.Value > 0 ? $"#{team.LastYearPlacing:#,0}" : "N/A"),
+                            new RowDisplay("Seed del año pasado:", team.LastYearPlacing.Value > 0 ? $"#{team.LastYearPlacing:#,0}" : "No jugó"),
                             new Container { Margin = new MarginPadding { Bottom = 30 } },
                         }
                     },
