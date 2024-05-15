@@ -10,11 +10,21 @@ namespace osu.Game.Tournament.Components
     {
         public DrawableTeamHeader(TeamColour colour)
         {
-            Background.Colour = TournamentGame.GetTeamColour(colour);
+            // cutre pero funciona, cambiar el nombre en el enum rompe 28 referencias, cosa con la que no me apetece lidiar
+            string localisedTeamDisplay;
 
-            Text.Colour = TournamentGame.TEXT_COLOUR;
-            Text.Text = $"Team {colour}".ToUpperInvariant();
-            Text.Scale = new Vector2(0.6f);
+            if (colour.ToString().Equals("Red", System.StringComparison.OrdinalIgnoreCase))
+            {
+                localisedTeamDisplay = "Equipo Rojo";
+            }
+            else
+            {
+                localisedTeamDisplay = "Equipo Azul";
+            }
+
+            Text.Colour = TournamentGame.GetTeamColour(colour);
+            Text.Text = localisedTeamDisplay;
+            Text.Scale = new Vector2(1f);
         }
     }
 }

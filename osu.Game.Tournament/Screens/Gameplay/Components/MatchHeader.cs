@@ -62,7 +62,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                     RelativeSizeAxes = Axes.Both,
                     Direction = FillDirection.Vertical,
                     Padding = new MarginPadding(20),
-                    Spacing = new Vector2(5),
+                    Spacing = new Vector2(0),
                     Children = new Drawable[]
                     {
                         logo = new DrawableTournamentHeaderLogo
@@ -76,12 +76,12 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
                         },
-                        new MatchRoundDisplay
+                        /*new MatchRoundDisplay
                         {
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
                             Scale = new Vector2(0.4f)
-                        },
+                        },*/
                     }
                 },
                 teamDisplay1 = new TeamScoreDisplay(TeamColour.Red)

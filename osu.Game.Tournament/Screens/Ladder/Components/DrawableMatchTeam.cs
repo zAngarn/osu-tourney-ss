@@ -83,8 +83,8 @@ namespace osu.Game.Tournament.Screens.Ladder.Components
             this.ladderEditor = ladderEditor;
 
             colourWinner = losers
-                ? Color4Extensions.FromHex("#8e832f")
-                : Color4Extensions.FromHex("#8e2f86");
+                ? Color4Extensions.FromHex("#d8c324")
+                : Color4Extensions.FromHex("#ea941c");
 
             InternalChildren = new Drawable[]
             {

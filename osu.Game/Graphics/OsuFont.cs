@@ -3,6 +3,7 @@
 
 #nullable disable
 
+using System;
 using System.ComponentModel;
 using osu.Framework.Graphics.Sprites;
 
@@ -23,6 +24,8 @@ namespace osu.Game.Graphics
         public static FontUsage Numeric => GetFont(Typeface.Venera, weight: FontWeight.Bold);
 
         public static FontUsage Torus => GetFont(Typeface.Torus, weight: FontWeight.Regular);
+
+        public static FontUsage Poppins => GetFont(Typeface.Poppins, weight: FontWeight.Regular);
 
         public static FontUsage TorusAlternate => GetFont(Typeface.TorusAlternate, weight: FontWeight.Regular);
 
@@ -61,6 +64,9 @@ namespace osu.Game.Graphics
             {
                 case Typeface.Venera:
                     return @"Venera";
+
+                case Typeface.Poppins:
+                    return @"Poppins";
 
                 case Typeface.Torus:
                     return @"Torus";
@@ -115,6 +121,7 @@ namespace osu.Game.Graphics
     public enum Typeface
     {
         Venera,
+        Poppins,
         Torus,
 
         [Description("Torus (alternate)")]

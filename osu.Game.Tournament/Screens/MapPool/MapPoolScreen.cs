@@ -34,6 +34,7 @@ namespace osu.Game.Tournament.Screens.MapPool
         private OsuButton buttonBlueBan = null!;
         private OsuButton buttonRedPick = null!;
         private OsuButton buttonBluePick = null!;
+        private OsuButton buttonModoSexo = null!;
 
         private ScheduledDelegate? scheduledScreenChange;
 
@@ -53,7 +54,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                 },
                 mapFlows = new FillFlowContainer<FillFlowContainer<TournamentBeatmapPanel>>
                 {
-                    Y = 160,
+                    Y = 100,
                     Spacing = new Vector2(10, 10),
                     Direction = FillDirection.Vertical,
                     RelativeSizeAxes = Axes.X,
@@ -90,6 +91,11 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Text = "Blue Pick",
                             Action = () => setMode(TeamColour.Blue, ChoiceType.Pick)
+                        },
+                        buttonModoSexo = new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Modo Sexo"
                         },
                         new ControlPanel.Spacer(),
                         new TourneyButton
@@ -174,7 +180,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
             setMode(nextColour, hasAllBans ? ChoiceType.Pick : ChoiceType.Ban);
 
-            TeamColour getOppositeTeamColour(TeamColour colour) => colour == TeamColour.Red ? TeamColour.Blue : TeamColour.Red;
+            static TeamColour getOppositeTeamColour(TeamColour colour) => colour == TeamColour.Red ? TeamColour.Blue : TeamColour.Red;
         }
 
         protected override bool OnMouseDown(MouseDownEvent e)
@@ -296,7 +302,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     {
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Height = 42,
+                        Height = 60,
                     });
                 }
             }

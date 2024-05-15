@@ -93,7 +93,7 @@ namespace osu.Game.Tournament.Screens.TeamWin
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Position = new Vector2(-300, 10),
-                    Scale = new Vector2(2f)
+                    Scale = new Vector2(3f)
                 },
                 new FillFlowContainer
                 {
@@ -110,8 +110,8 @@ namespace osu.Game.Tournament.Screens.TeamWin
                         },
                         new TournamentSpriteText
                         {
-                            Text = "WINNER",
-                            Font = OsuFont.Torus.With(size: 100, weight: FontWeight.Bold),
+                            Text = "GANADOR",
+                            Font = OsuFont.Poppins.With(size: 120, weight: FontWeight.SemiBold),
                             Margin = new MarginPadding { Bottom = 50 },
                         },
                         new DrawableTeamWithPlayers(match.Winner, match.WinnerColour)
