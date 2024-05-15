@@ -165,8 +165,8 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                             Spacing = new Vector2(5),
                             Children = new Drawable[]
                             {
-                                new TournamentSpriteText { Text = beatmap.Beatmap.Metadata.Title, Colour = TournamentGame.TEXT_COLOUR, Font = OsuFont.Poppins.With(size: 30, weight: FontWeight.Light) },
-                                new TournamentSpriteText { Text = "de", Colour = TournamentGame.TEXT_COLOUR, Font = OsuFont.Poppins.With(size: 30, weight: FontWeight.Light) },
+                                new TournamentSpriteText { Text = beatmap.Beatmap.Metadata.Title + ",", Colour = TournamentGame.TEXT_COLOUR, Font = OsuFont.Poppins.With(size: 30, weight: FontWeight.Light) },
+                                new TournamentSpriteText { Text = "por", Colour = TournamentGame.TEXT_COLOUR, Font = OsuFont.Poppins.With(size: 30, weight: FontWeight.Light) },
                                 new TournamentSpriteText { Text = beatmap.Beatmap.Metadata.Artist, Colour = TournamentGame.TEXT_COLOUR, Font = OsuFont.Poppins.With(size: 30, weight: FontWeight.Light) },
                             }
                         },
@@ -257,7 +257,6 @@ namespace osu.Game.Tournament.Screens.TeamIntro
         {
             public LeftInfo(TournamentTeam? team)
             {
-                FillFlowContainer fill;
 
                 Width = 200;
 
@@ -265,7 +264,7 @@ namespace osu.Game.Tournament.Screens.TeamIntro
 
                 InternalChildren = new Drawable[]
                 {
-                    fill = new FillFlowContainer
+                    new FillFlowContainer
                     {
                         RelativeSizeAxes = Axes.X,
                         AutoSizeAxes = Axes.Y,
@@ -273,16 +272,13 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                         Children = new Drawable[]
                         {
                             new TeamDisplay(team) { Margin = new MarginPadding { Bottom = 30 } },
-                            new RowDisplay("Puesto promedio:", $"#{team.AverageRank:#,0}"),
+                            new RowDisplay("Rank:", $"#{team.AverageRank:#,0}"),
                             new RowDisplay("Seed:", team.Seed.Value),
                             new RowDisplay("Seed del año pasado:", team.LastYearPlacing.Value > 0 ? $"#{team.LastYearPlacing:#,0}" : "No jugó"),
                             new Container { Margin = new MarginPadding { Bottom = 30 } },
                         }
                     },
                 };
-
-                foreach (var p in team.Players)
-                    fill.Add(new RowDisplay(p.Username, p.Rank?.ToString("\\##,0") ?? "-"));
             }
 
             internal partial class RowDisplay : CompositeDrawable
