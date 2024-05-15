@@ -24,7 +24,7 @@ namespace osu.Game.Tournament.Components
 
             Text.Colour = TournamentGame.GetTeamColour(colour);
             Text.Text = localisedTeamDisplay;
-            Text.Scale = new Vector2(0.6f);
+            Text.Scale = new Vector2(1f);
         }
     }
 }

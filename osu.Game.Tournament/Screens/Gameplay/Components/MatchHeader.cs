@@ -62,7 +62,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                     RelativeSizeAxes = Axes.Both,
                     Direction = FillDirection.Vertical,
                     Padding = new MarginPadding(20),
-                    Spacing = new Vector2(5),
+                    Spacing = new Vector2(0),
                     Children = new Drawable[]
                     {
                         logo = new DrawableTournamentHeaderLogo

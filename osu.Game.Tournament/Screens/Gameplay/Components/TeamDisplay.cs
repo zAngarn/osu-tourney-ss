@@ -84,7 +84,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                         {
                                             new DrawableTeamHeader(colour)
                                             {
-                                                Scale = new Vector2(0.75f),
+                                                Scale = new Vector2(0.5f),
                                                 Origin = anchor,
                                                 Anchor = anchor,
                                             },
@@ -97,13 +97,15 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                     },
                                     teamNameText = new TournamentSpriteTextWithBackground
                                     {
-                                        Scale = new Vector2(0.5f),
+                                        BypassAutoSizeAxes = Axes.X,
+                                        Position = new Vector2(0, 200),
+                                        Scale = new Vector2(0.75f),
                                         Origin = anchor,
                                         Anchor = anchor,
                                     },
                                     new DrawableTeamSeed(Team)
                                     {
-                                        Scale = new Vector2(0.5f),
+                                        Scale = new Vector2(0.75f),
                                         Origin = anchor,
                                         Anchor = anchor,
                                     },

@@ -14,9 +14,7 @@ using osu.Game.Extensions;
 using osu.Game.Graphics;
 using osu.Game.Models;
 using osu.Game.Rulesets;
-using osu.Game.Screens.Menu;
 using osuTK;
-using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Components
 {
@@ -106,11 +104,11 @@ namespace osu.Game.Tournament.Components
             {
                 Metadata = new BeatmapMetadata
                 {
-                    Artist = "unknown",
-                    Title = "no beatmap selected",
-                    Author = new RealmUser { Username = "unknown" },
+                    Artist = "desconocido",
+                    Title = "sin beatmap seleccionado",
+                    Author = new RealmUser { Username = "desconocido" },
                 },
-                DifficultyName = "unknown",
+                DifficultyName = "desconocido",
                 BeatmapSet = new BeatmapSetInfo(),
                 StarRating = 0,
                 Difficulty = new BeatmapDifficulty
@@ -207,7 +205,7 @@ namespace osu.Game.Tournament.Components
                                         Children = new Drawable[]
                                         {
                                             new DiffPiece(stats),
-                                            new DiffPiece(("Star Rating", $"{beatmap.StarRating:0.00}{srExtra}"))
+                                            new DiffPiece(("Estrellas", $"{beatmap.StarRating:0.00}{srExtra}"))
                                         }
                                     },
                                     new FillFlowContainer
@@ -219,7 +217,7 @@ namespace osu.Game.Tournament.Components
                                         Direction = FillDirection.Vertical,
                                         Children = new Drawable[]
                                         {
-                                            new DiffPiece(("Length", length.ToFormattedDuration().ToString())),
+                                            new DiffPiece(("Duración", length.ToFormattedDuration().ToString())),
                                             new DiffPiece(("BPM", $"{bpm:0.#}")),
                                         }
                                     },
@@ -270,7 +268,7 @@ namespace osu.Game.Tournament.Components
 
                 static void cp(SpriteText s, bool bold)
                 {
-                    s.Font = OsuFont.Torus.With(weight: bold ? FontWeight.Bold : FontWeight.Regular, size: 15);
+                    s.Font = OsuFont.Poppins.With(weight: bold ? FontWeight.SemiBold : FontWeight.Light, size: 24);
                 }
 
                 for (int i = 0; i < tuples.Length; i++)

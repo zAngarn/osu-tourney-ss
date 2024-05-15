@@ -51,7 +51,8 @@ namespace osu.Game.Tournament.Screens.TeamIntro
             {
                 new RoundDisplay(match.NewValue)
                 {
-                    Position = new Vector2(0, 100)
+                    Position = new Vector2(0, 100),
+                    Colour = Colour4.FromHex("#d6c568")
                 },
                 new DrawableTeamFlag(match.NewValue.Team1.Value)
                 {

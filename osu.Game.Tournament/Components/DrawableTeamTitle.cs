@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Game.Tournament.Models;
+using osuTK;
 
 namespace osu.Game.Tournament.Components
 {
@@ -18,6 +19,7 @@ namespace osu.Game.Tournament.Components
         public DrawableTeamTitle(TournamentTeam? team)
         {
             this.team = team;
+            Text.Scale = new Vector2(1.5f);
         }
 
         [BackgroundDependencyLoader]

@@ -472,6 +472,10 @@ namespace osu.Game
             AddFont(Resources, @"Fonts/Noto/Noto-CJK-Compatibility");
             AddFont(Resources, @"Fonts/Noto/Noto-Thai");
 
+            AddFont(Resources, @"Fonts/Poppins/Poppins");
+            AddFont(Resources, @"Fonts/Poppins/Poppins-Light");
+            AddFont(Resources, @"Fonts/Poppins/Poppins-SemiBold");
+
             AddFont(Resources, @"Fonts/Venera/Venera-Light");
             AddFont(Resources, @"Fonts/Venera/Venera-Bold");
             AddFont(Resources, @"Fonts/Venera/Venera-Black");

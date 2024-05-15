@@ -176,14 +176,15 @@ namespace osu.Game.Tournament.Screens.Schedule
                         {
                             Anchor = Anchor.CentreLeft,
                             Origin = Anchor.CentreLeft,
-                            Scale = new Vector2(0.5f)
+                            Scale = new Vector2(0.75f),
+                            Colour = Colour4.FromHex("#d6c568")
                         },
                         new TournamentSpriteText
                         {
                             Anchor = Anchor.CentreLeft,
                             Origin = Anchor.CentreLeft,
                             Text = currentMatch.Value.Team1.Value?.FullName + " vs " + currentMatch.Value.Team2.Value?.FullName,
-                            Font = OsuFont.Torus.With(size: 24, weight: FontWeight.SemiBold)
+                            Font = OsuFont.Poppins.With(size: 40, weight: FontWeight.Light)
                         },
                         new FillFlowContainer
                         {
@@ -195,7 +196,8 @@ namespace osu.Game.Tournament.Screens.Schedule
                             {
                                 new ScheduleMatchDate(currentMatch.Value.Date.Value)
                                 {
-                                    Font = OsuFont.Torus.With(size: 24, weight: FontWeight.Regular)
+                                    Font = OsuFont.Poppins.With(size: 40, weight: FontWeight.Light),
+                                    Colour = Colour4.FromHex("#91908a")
                                 }
                             }
                         },
@@ -226,7 +228,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                         Origin = Anchor.TopLeft,
                         Colour = OsuColour.Gray(0.7f),
                         Alpha = conditional ? 0.6f : 1,
-                        Font = OsuFont.Torus,
+                        Font = OsuFont.Poppins,
                         Margin = new MarginPadding { Horizontal = 10, Vertical = 5 },
                     });
                     AddInternal(new TournamentSpriteText
@@ -274,7 +276,8 @@ namespace osu.Game.Tournament.Screens.Schedule
                             new TournamentSpriteText {
                                 Shadow = true,
                                 Text = title.ToUpperInvariant(),
-                                Font = OsuFont.TorusAlternate.With(size: 24, weight: FontWeight.SemiBold)
+                                Font = OsuFont.Poppins.With(size: 40, weight: FontWeight.SemiBold),
+                                Colour = Colour4.FromHex("#d6c14f")
                             },
                             content = new FillFlowContainer
                             {

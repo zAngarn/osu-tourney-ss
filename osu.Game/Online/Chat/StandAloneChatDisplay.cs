@@ -57,7 +57,7 @@ namespace osu.Game.Online.Chat
                 Background = new Box
                 {
                     Colour = Color4.Black,
-                    Alpha = 0.8f,
+                    Alpha = 0f,
                     RelativeSizeAxes = Axes.Both
                 },
             };

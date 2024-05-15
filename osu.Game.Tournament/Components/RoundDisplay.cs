@@ -34,7 +34,7 @@ namespace osu.Game.Tournament.Components
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
                             Text = match.Round.Value?.Name.Value ?? "Unknown Round",
-                            Font = OsuFont.Torus.With(size: 26, weight: FontWeight.SemiBold)
+                            Font = OsuFont.Poppins.With(size: 50, weight: FontWeight.SemiBold)
                         },
                     }
                 }
