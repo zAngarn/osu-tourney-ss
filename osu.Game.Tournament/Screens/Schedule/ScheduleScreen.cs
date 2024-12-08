@@ -8,13 +8,11 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Ladder.Components;
 using osuTK;
-using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Schedule
 {
@@ -68,7 +66,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                                             {
                                                 Margin = new MarginPadding { Top = 40 },
                                                 AutoSizeAxes = Axes.Both,
-                                                Children = new Drawable[]
+                                                /*Children = new Drawable[]
                                                 {
                                                     new Box
                                                     {
@@ -80,7 +78,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                                                         X = 60,
                                                         Scale = new Vector2(0.8f)
                                                     }
-                                                }
+                                                }*/
                                             },
                                         }
                                     },
