@@ -7,6 +7,7 @@ using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Localisation;
@@ -14,6 +15,7 @@ using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.Drawables;
 using osu.Game.Graphics;
 using osu.Game.Tournament.Models;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Components
@@ -24,7 +26,7 @@ namespace osu.Game.Tournament.Components
 
         private readonly string mod;
 
-        public const float HEIGHT = 50;
+        public const float HEIGHT = 48;
 
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
 
@@ -52,20 +54,31 @@ namespace osu.Game.Tournament.Components
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Color4.Black,
+                    Colour = ColourInfo.GradientHorizontal(Color4.White, Color4.Gray),
+                    Shear = new Vector2(0.2f, 0),
+                    EdgeSmoothness = new Vector2(2, 2)
                 },
                 new NoUnloadBeatmapSetCover
                 {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = OsuColour.Gray(0.5f),
+                    RelativeSizeAxes = Axes.Y,
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
                     OnlineInfo = (Beatmap as IBeatmapSetOnlineInfo),
+                    Shear = new Vector2(0.2f, 0),
+                    Blending = BlendingParameters.Mixture,
                 },
                 new FillFlowContainer
                 {
                     AutoSizeAxes = Axes.Both,
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
-                    Padding = new MarginPadding(15),
+                    Padding = new MarginPadding
+                    {
+                        Left = 120,
+                        Right = 50,
+                        Top = 8,
+                        Bottom = 10,
+                    },
                     Direction = FillDirection.Vertical,
                     Children = new Drawable[]
                     {
@@ -73,6 +86,7 @@ namespace osu.Game.Tournament.Components
                         {
                             Text = Beatmap?.GetDisplayTitleRomanisable(false, false) ?? (LocalisableString)@"unknown",
                             Font = OsuFont.Torus.With(weight: FontWeight.Bold),
+                            Colour = Colour4.Black,
                         },
                         new FillFlowContainer
                         {
@@ -84,24 +98,36 @@ namespace osu.Game.Tournament.Components
                                 {
                                     Text = "mapper",
                                     Padding = new MarginPadding { Right = 5 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 14)
+                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 14),
+                                    Colour = Colour4.Black,
                                 },
                                 new TournamentSpriteText
                                 {
                                     Text = Beatmap?.Metadata.Author.Username ?? "unknown",
                                     Padding = new MarginPadding { Right = 20 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 14)
+                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 14),
+                                    Colour = Colour4.Black,
                                 },
+                            }
+                        },
+                        new FillFlowContainer
+                        {
+                            AutoSizeAxes = Axes.Both,
+                            Direction = FillDirection.Horizontal,
+                            Children = new Drawable[]
+                            {
                                 new TournamentSpriteText
                                 {
                                     Text = "difficulty",
                                     Padding = new MarginPadding { Right = 5 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 14)
+                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 14),
+                                    Colour = Colour4.Black,
                                 },
                                 new TournamentSpriteText
                                 {
                                     Text = Beatmap?.DifficultyName ?? "unknown",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 14)
+                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 14),
+                                    Colour = Colour4.Black,
                                 },
                             }
                         }
@@ -120,10 +146,16 @@ namespace osu.Game.Tournament.Components
             {
                 AddInternal(new TournamentModIcon(mod)
                 {
-                    Anchor = Anchor.CentreRight,
-                    Origin = Anchor.CentreRight,
-                    Margin = new MarginPadding(10),
-                    Width = 60,
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.CentreLeft,
+                    Margin = new MarginPadding
+                    {
+                        Left = 10,
+                        Right = 10,
+                        Top = 10,
+                        Bottom = 10,
+                    },
+                    Width = 55,
                     RelativeSizeAxes = Axes.Y,
                 });
             }
