@@ -82,12 +82,12 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                         Anchor = anchor,
                                         Children = new Drawable[]
                                         {
-                                            new DrawableTeamHeader(colour)
+                                            /*new DrawableTeamHeader(colour)
                                             {
                                                 Scale = new Vector2(0.75f),
                                                 Origin = anchor,
                                                 Anchor = anchor,
-                                            },
+                                            },*/
                                             score = new TeamScore(currentTeamScore, colour, pointsToWin)
                                             {
                                                 Origin = anchor,

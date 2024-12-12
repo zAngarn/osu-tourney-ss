@@ -7,7 +7,6 @@ using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Localisation;
@@ -54,8 +53,8 @@ namespace osu.Game.Tournament.Components
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = ColourInfo.GradientHorizontal(Color4.White, Color4.Gray),
-                    Shear = new Vector2(0.2f, 0),
+                    Colour = Colour4.White,
+                    //Shear = new Vector2(0.2f, 0),
                     EdgeSmoothness = new Vector2(2, 2)
                 },
                 new NoUnloadBeatmapSetCover
@@ -64,11 +63,12 @@ namespace osu.Game.Tournament.Components
                     Anchor = Anchor.TopLeft,
                     Origin = Anchor.TopLeft,
                     OnlineInfo = (Beatmap as IBeatmapSetOnlineInfo),
-                    Shear = new Vector2(0.2f, 0),
+                    //Shear = new Vector2(0.2f, 0),
                     Blending = BlendingParameters.Mixture,
                 },
                 new FillFlowContainer
                 {
+                    Shear = new Vector2(-0.2f, 0),
                     AutoSizeAxes = Axes.Both,
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
@@ -84,8 +84,9 @@ namespace osu.Game.Tournament.Components
                     {
                         new TournamentSpriteText
                         {
-                            Text = Beatmap?.GetDisplayTitleRomanisable(false, false) ?? (LocalisableString)@"unknown",
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold),
+                            //Text = Beatmap?.GetDisplayTitleRomanisable(false, false) ?? (LocalisableString)@"unknown",
+                            Text = Beatmap?.Metadata.Author.Username ?? "unknown",
+                            Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 10),
                             Colour = Colour4.Black,
                         },
                         new FillFlowContainer
@@ -96,16 +97,9 @@ namespace osu.Game.Tournament.Components
                             {
                                 new TournamentSpriteText
                                 {
-                                    Text = "mapper",
-                                    Padding = new MarginPadding { Right = 5 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 14),
-                                    Colour = Colour4.Black,
-                                },
-                                new TournamentSpriteText
-                                {
-                                    Text = Beatmap?.Metadata.Author.Username ?? "unknown",
+                                    Text = Beatmap?.GetDisplayTitleRomanisable(false, false) ?? (LocalisableString)@"unknown",
                                     Padding = new MarginPadding { Right = 20 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 14),
+                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold),
                                     Colour = Colour4.Black,
                                 },
                             }
@@ -118,16 +112,9 @@ namespace osu.Game.Tournament.Components
                             {
                                 new TournamentSpriteText
                                 {
-                                    Text = "difficulty",
-                                    Padding = new MarginPadding { Right = 5 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 14),
-                                    Colour = Colour4.Black,
-                                },
-                                new TournamentSpriteText
-                                {
                                     Text = Beatmap?.DifficultyName ?? "unknown",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 14),
-                                    Colour = Colour4.Black,
+                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 15),
+                                    Colour = Colour4.FromHex("#ec675d"),
                                 },
                             }
                         }

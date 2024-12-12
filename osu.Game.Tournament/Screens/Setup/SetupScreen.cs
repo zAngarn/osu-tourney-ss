@@ -2,21 +2,30 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Drawing;
+using System.Threading.Tasks;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Logging;
+using osu.Framework.Platform;
+using osu.Framework.Statistics;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Containers;
 using osu.Game.Graphics.UserInterfaceV2;
+using osu.Game.Localisation;
 using osu.Game.Online.API;
 using osu.Game.Overlays;
+using osu.Game.Overlays.Settings;
+//using osu.Game.Overlays.Settings.Sections.General;
 using osu.Game.Rulesets;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
+using osu.Game.Utils;
 using osuTK;
+using SharpCompress.Archives.Zip;
 
 namespace osu.Game.Tournament.Screens.Setup
 {
@@ -26,6 +35,8 @@ namespace osu.Game.Tournament.Screens.Setup
 
         private LoginOverlay? loginOverlay;
         private ResolutionSelector resolution = null!;
+        private INotificationOverlay? notifications { get; set; }
+        private Storage storage { get; set; } = null!;
 
         [Resolved]
         private MatchIPCInfo ipc { get; set; } = null!;
@@ -146,6 +157,11 @@ namespace osu.Game.Tournament.Screens.Setup
                     Description = "Team seeds will display alongside each team at the top in gameplay/map pool screens.",
                     Current = LadderInfo.DisplayTeamSeeds,
                 },
+                new SettingsButton
+                {
+                    Text = GeneralSettingsStrings.ExportLogs,
+                    Action = () => Task.Run(exportLogs),
+                },
             };
         }
 
@@ -156,6 +172,34 @@ namespace osu.Game.Tournament.Screens.Setup
             base.Update();
 
             resolution.Value = $"{ScreenSpaceDrawQuad.Width:N0}x{ScreenSpaceDrawQuad.Height:N0}";
+        }
+
+        private void exportLogs()
+        {
+            const string archive_filename = "exports/compressed-logs.zip";
+
+            try
+            {
+                GlobalStatistics.OutputToLog();
+                Logger.Flush();
+
+                var logStorage = Logger.Storage;
+
+                using (var outStream = storage.CreateFileSafely(archive_filename))
+                using (var zip = ZipArchive.Create())
+                {
+                    foreach (string? f in logStorage.GetFiles(string.Empty, "*.log"))
+                        FileUtils.AttemptOperation(z => z.AddEntry(f, logStorage.GetStream(f), true), zip);
+
+                    zip.SaveTo(outStream);
+                }
+            }
+            catch
+            {
+                // cleanup if export is failed or canceled.
+                storage.Delete(archive_filename);
+                throw;
+            }
         }
     }
 }

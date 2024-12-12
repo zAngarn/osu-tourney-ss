@@ -64,7 +64,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                                             new DrawableTournamentHeaderText(),
                                             new Container
                                             {
-                                                Margin = new MarginPadding { Top = 40 },
+                                                Margin = new MarginPadding { Top = 80 },
                                                 AutoSizeAxes = Axes.Both,
                                                 /*Children = new Drawable[]
                                                 {
@@ -141,7 +141,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                     new Container
                     {
                         RelativeSizeAxes = Axes.Both,
-                        Height = 0.74f,
+                        Height = 0.76f,
                         Child = new FillFlowContainer
                         {
                             RelativeSizeAxes = Axes.Both,
