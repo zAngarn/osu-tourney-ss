@@ -44,6 +44,8 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
 
             var anchor = flip ? Anchor.TopLeft : Anchor.TopRight;
 
+            var margenScore = anchor == Anchor.TopLeft ? new MarginPadding { Left = 6 } : new MarginPadding { Right = 6 }; // Corrección de posición a causa del Shear
+
             Flag.RelativeSizeAxes = Axes.None;
             Flag.Scale = new Vector2(0.8f);
             Flag.Origin = anchor;
@@ -73,7 +75,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                 Spacing = new Vector2(5),
                                 Children = new Drawable[]
                                 {
-                                    new FillFlowContainer
+                                    new FillFlowContainer // TEAM (color) + Team Score
                                     {
                                         AutoSizeAxes = Axes.Both,
                                         Direction = FillDirection.Horizontal,
@@ -82,20 +84,21 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                         Anchor = anchor,
                                         Children = new Drawable[]
                                         {
-                                            /*new DrawableTeamHeader(colour)
-                                            {
-                                                Scale = new Vector2(0.75f),
-                                                Origin = anchor,
-                                                Anchor = anchor,
-                                            },*/
                                             score = new TeamScore(currentTeamScore, colour, pointsToWin)
                                             {
                                                 Origin = anchor,
                                                 Anchor = anchor,
+                                                Margin = margenScore,
                                             }
                                         }
                                     },
-                                    teamNameText = new TournamentSpriteTextWithBackground
+                                    teamNameText = new TournamentSpriteTextWithBackground(colour) // Nombre
+                                    {
+                                        Scale = new Vector2(0.5f),
+                                        Origin = anchor,
+                                        Anchor = anchor,
+                                    },
+                                    new DrawableTeamHeader(colour, team)
                                     {
                                         Scale = new Vector2(0.5f),
                                         Origin = anchor,

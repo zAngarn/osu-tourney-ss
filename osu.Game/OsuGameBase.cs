@@ -480,6 +480,9 @@ namespace osu.Game
             AddFont(Resources, @"Fonts/Venera/Venera-Bold");
             AddFont(Resources, @"Fonts/Venera/Venera-Black");
 
+            AddFont(Resources, @"Fonts/Futura/Futura");
+            AddFont(Resources, @"Fonts/Futura/Futura-Bold");
+
             Fonts.AddStore(new OsuIcon.OsuIconStore(Textures));
         }
 

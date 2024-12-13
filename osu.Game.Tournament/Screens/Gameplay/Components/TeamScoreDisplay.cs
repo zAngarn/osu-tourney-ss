@@ -37,6 +37,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
         {
             this.teamColour = teamColour;
 
+            //Shear = teamColour == TeamColour.Red ? new Vector2(0.2f, 0) : new Vector2(-0.2f, 0);
             RelativeSizeAxes = Axes.Y;
             AutoSizeAxes = Axes.X;
         }

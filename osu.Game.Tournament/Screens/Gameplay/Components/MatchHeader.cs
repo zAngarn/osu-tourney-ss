@@ -93,6 +93,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
+                    //Shear = new Vector2(-0.2f, 0),
                 },
             };
         }

@@ -19,6 +19,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
     {
         private readonly Bindable<int?> currentTeamScore = new Bindable<int?>();
         private readonly StarCounter counter;
+        private const float shear = 0.25f;
 
         public TeamScore(Bindable<int?> score, TeamColour colour, int count)
         {
@@ -35,6 +36,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
 
             currentTeamScore.BindValueChanged(scoreChanged);
             currentTeamScore.BindTo(score);
+            Shear = colour == TeamColour.Red ? new Vector2(shear, 0) : new Vector2(-shear, 0);
         }
 
         private void scoreChanged(ValueChangedEvent<int?> score) => counter.Current = score.NewValue ?? 0;

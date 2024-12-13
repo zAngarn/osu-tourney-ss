@@ -5,6 +5,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
+using osu.Game.Tournament.Models;
 
 namespace osu.Game.Tournament.Components
 {
@@ -28,7 +29,28 @@ namespace osu.Game.Tournament.Components
                 Text = new TournamentSpriteText
                 {
                     Colour = TournamentGame.ELEMENT_FOREGROUND_COLOUR,
-                    Font = OsuFont.Torus.With(weight: FontWeight.SemiBold, size: 50),
+                    Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 50),
+                    Padding = new MarginPadding { Left = 10, Right = 20 },
+                    Text = text,
+                }
+            };
+        }
+
+        public TournamentSpriteTextWithBackground(TeamColour colour, string text = "")
+        {
+            AutoSizeAxes = Axes.Both;
+
+            InternalChildren = new Drawable[]
+            {
+                Background = new Box
+                {
+                    Colour = TournamentGame.ELEMENT_BACKGROUND_COLOUR,
+                    RelativeSizeAxes = Axes.Both,
+                },
+                Text = new TournamentSpriteText
+                {
+                    Colour = TournamentGame.GetTeamColour(colour),
+                    Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 50),
                     Padding = new MarginPadding { Left = 10, Right = 20 },
                     Text = text,
                 }

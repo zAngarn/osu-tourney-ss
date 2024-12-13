@@ -55,7 +55,7 @@ namespace osu.Game.Tournament.Components
                     RelativeSizeAxes = Axes.Both,
                     Colour = Colour4.White,
                     //Shear = new Vector2(0.2f, 0),
-                    EdgeSmoothness = new Vector2(2, 2)
+                    //EdgeSmoothness = new Vector2(2, 2)
                 },
                 new NoUnloadBeatmapSetCover
                 {
@@ -84,9 +84,8 @@ namespace osu.Game.Tournament.Components
                     {
                         new TournamentSpriteText
                         {
-                            //Text = Beatmap?.GetDisplayTitleRomanisable(false, false) ?? (LocalisableString)@"unknown",
                             Text = Beatmap?.Metadata.Author.Username ?? "unknown",
-                            Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 10),
+                            Font = OsuFont.Futura.With(weight: FontWeight.Regular, size: 12),
                             Colour = Colour4.Black,
                         },
                         new FillFlowContainer
@@ -99,7 +98,7 @@ namespace osu.Game.Tournament.Components
                                 {
                                     Text = Beatmap?.GetDisplayTitleRomanisable(false, false) ?? (LocalisableString)@"unknown",
                                     Padding = new MarginPadding { Right = 20 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold),
+                                    Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 16),
                                     Colour = Colour4.Black,
                                 },
                             }
@@ -113,7 +112,7 @@ namespace osu.Game.Tournament.Components
                                 new TournamentSpriteText
                                 {
                                     Text = Beatmap?.DifficultyName ?? "unknown",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 15),
+                                    Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 14),
                                     Colour = Colour4.FromHex("#ec675d"),
                                 },
                             }
@@ -137,12 +136,12 @@ namespace osu.Game.Tournament.Components
                     Origin = Anchor.CentreLeft,
                     Margin = new MarginPadding
                     {
-                        Left = 10,
+                        Left = 330,
                         Right = 10,
-                        Top = 10,
-                        Bottom = 10,
+                        Top = 0,
+                        Bottom = 0,
                     },
-                    Width = 55,
+                    Width = 71,
                     RelativeSizeAxes = Axes.Y,
                 });
             }
