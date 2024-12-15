@@ -215,7 +215,7 @@ namespace osu.Game.Tournament
             {
                 case MapPoolScreen:
                     chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
-                    chatContainer.ResizeWidthTo(1.0f, 500, Easing.OutQuint);
+                    chatContainer.ResizeWidthTo(0.2f, 500, Easing.OutQuint);
                     break;
 
                 case GameplayScreen:

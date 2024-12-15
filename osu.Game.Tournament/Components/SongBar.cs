@@ -16,7 +16,6 @@ using osu.Game.Models;
 using osu.Game.Rulesets;
 using osu.Game.Screens.Menu;
 using osuTK;
-using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Components
 {
@@ -228,12 +227,6 @@ namespace osu.Game.Tournament.Components
                                         RelativeSizeAxes = Axes.Both,
                                         Children = new Drawable[]
                                         {
-                                            new Box
-                                            {
-                                                Colour = Color4.Black,
-                                                RelativeSizeAxes = Axes.Both,
-                                                Alpha = 0.1f,
-                                            },
                                             new OsuLogo
                                             {
                                                 Triangles = false,
@@ -250,8 +243,9 @@ namespace osu.Game.Tournament.Components
                         }
                     }
                 },
-                new TournamentBeatmapPanel(beatmap)
+                new TournamentBeatmapPanel(beatmap, 30)
                 {
+                    //Shear = new Vector2(0.2f, 0),
                     RelativeSizeAxes = Axes.X,
                     Width = 0.5f,
                     Height = HEIGHT,

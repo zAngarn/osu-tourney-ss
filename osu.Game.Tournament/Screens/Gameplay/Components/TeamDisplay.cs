@@ -75,7 +75,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                 Spacing = new Vector2(5),
                                 Children = new Drawable[]
                                 {
-                                    new FillFlowContainer // TEAM (color) + Team Score
+                                    new FillFlowContainer // TEAM (color) + Team Score  (bueno ya no)
                                     {
                                         AutoSizeAxes = Axes.Both,
                                         Direction = FillDirection.Horizontal,

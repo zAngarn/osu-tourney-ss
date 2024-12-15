@@ -31,13 +31,28 @@ namespace osu.Game.Tournament.Components
 
         private Box flash = null!;
 
-        public TournamentBeatmapPanel(IBeatmapInfo? beatmap, string mod = "")
+        public int Margen = 0;
+
+        private Vector2 shearTexto;
+
+        public TournamentBeatmapPanel(IBeatmapInfo? beatmap, int margen, string mod = "") // Constructor del BeatmapPanel de la pantalla de gameplay (y showcase)
+        {
+            Beatmap = beatmap;
+            this.mod = mod;
+            Width = 400;
+            Height = HEIGHT;
+
+            Margen = margen;
+            shearTexto = new Vector2(0, 0);
+        }
+        public TournamentBeatmapPanel(IBeatmapInfo? beatmap, string mod = "") // Constructor del BeatmapPanel de la pantalla de Mappool
         {
             Beatmap = beatmap;
             this.mod = mod;
 
             Width = 400;
             Height = HEIGHT;
+            shearTexto = new Vector2(-0.2f, 0);
         }
 
         [BackgroundDependencyLoader]
@@ -45,7 +60,6 @@ namespace osu.Game.Tournament.Components
         {
             currentMatch.BindValueChanged(matchChanged);
             currentMatch.BindTo(ladder.CurrentMatch);
-
             Masking = true;
 
             AddRangeInternal(new Drawable[]
@@ -68,13 +82,13 @@ namespace osu.Game.Tournament.Components
                 },
                 new FillFlowContainer
                 {
-                    Shear = new Vector2(-0.2f, 0),
+                    Shear = shearTexto,
                     AutoSizeAxes = Axes.Both,
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
                     Padding = new MarginPadding
                     {
-                        Left = 120,
+                        Left = 120 + Margen,
                         Right = 50,
                         Top = 8,
                         Bottom = 10,

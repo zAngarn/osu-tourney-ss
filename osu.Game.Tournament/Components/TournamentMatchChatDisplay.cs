@@ -25,7 +25,7 @@ namespace osu.Game.Tournament.Components
         public TournamentMatchChatDisplay()
         {
             RelativeSizeAxes = Axes.X;
-            Height = 0;
+            Height = 144;
             Anchor = Anchor.BottomLeft;
             Origin = Anchor.BottomLeft;
 

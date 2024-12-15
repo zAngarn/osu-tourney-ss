@@ -36,7 +36,7 @@ namespace osu.Game.Screens.OnlinePlay.Multiplayer
         {
             RelativeSizeAxes = Axes.X;
 
-            Background.Alpha = 0.2f;
+            //Background.Alpha = 0.2f;
 
             TextBox.PlaceholderText = ChatStrings.InGameInputPlaceholder;
             TextBox.Focus = () => TextBox.PlaceholderText = Resources.Localisation.Web.ChatStrings.InputPlaceholder;
