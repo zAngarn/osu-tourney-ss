@@ -64,7 +64,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         {
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
-                            Height = 512,
+                            Height = 513,
                             Children = new Drawable[]
                             {
                                 new ChromaArea

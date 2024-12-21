@@ -15,6 +15,7 @@ using osu.Game.Graphics;
 using osu.Game.Models;
 using osu.Game.Rulesets;
 using osu.Game.Screens.Menu;
+using osu.Game.Screens.Select.Details;
 using osuTK;
 
 namespace osu.Game.Tournament.Components
@@ -24,6 +25,8 @@ namespace osu.Game.Tournament.Components
         private IBeatmapInfo? beatmap;
 
         public const float HEIGHT = 145 / 2f;
+
+        protected AdvancedStats.StatisticRow? ApproachRate, CircleSize, OverrallDifficulty;
 
         [Resolved]
         private IBindable<RulesetInfo> ruleset { get; set; } = null!;
@@ -84,7 +87,7 @@ namespace osu.Game.Tournament.Components
                 {
                     Colour = colours.Gray3,
                     RelativeSizeAxes = Axes.Both,
-                    Alpha = 0.4f,
+                    Alpha = 0,
                 },
                 flow = new FillFlowContainer
                 {
@@ -128,6 +131,10 @@ namespace osu.Game.Tournament.Components
 
             float ar = beatmap.Difficulty.ApproachRate;
 
+            CircleSize ??= new AdvancedStats.StatisticRow(11f, false);
+            ApproachRate ??= new AdvancedStats.StatisticRow(11f, false);
+            OverrallDifficulty ??= new AdvancedStats.StatisticRow(11f, false);
+
             if ((mods & LegacyMods.HardRock) > 0)
             {
                 hardRockExtra = "*";
@@ -145,36 +152,9 @@ namespace osu.Game.Tournament.Components
                 srExtra = "*";
             }
 
+            ApproachRate!.Value = (ar, null);
+
             (string heading, string content)[] stats;
-
-            switch (ruleset.Value.OnlineID)
-            {
-                default:
-                    stats = new (string heading, string content)[]
-                    {
-                        ("CS", $"{beatmap.Difficulty.CircleSize:0.#}{hardRockExtra}"),
-                        ("AR", $"{ar:0.#}{hardRockExtra}"),
-                        ("OD", $"{beatmap.Difficulty.OverallDifficulty:0.#}{hardRockExtra}"),
-                    };
-                    break;
-
-                case 1:
-                case 3:
-                    stats = new (string heading, string content)[]
-                    {
-                        ("OD", $"{beatmap.Difficulty.OverallDifficulty:0.#}{hardRockExtra}"),
-                        ("HP", $"{beatmap.Difficulty.DrainRate:0.#}{hardRockExtra}")
-                    };
-                    break;
-
-                case 2:
-                    stats = new (string heading, string content)[]
-                    {
-                        ("CS", $"{beatmap.Difficulty.CircleSize:0.#}{hardRockExtra}"),
-                        ("AR", $"{ar:0.#}"),
-                    };
-                    break;
-            }
 
             flow.Children = new Drawable[]
             {
@@ -200,26 +180,85 @@ namespace osu.Game.Tournament.Components
                                     {
                                         RelativeSizeAxes = Axes.X,
                                         AutoSizeAxes = Axes.Y,
-                                        Anchor = Anchor.Centre,
-                                        Origin = Anchor.Centre,
-                                        Direction = FillDirection.Vertical,
+                                        Anchor = Anchor.CentreLeft,
+                                        Origin = Anchor.CentreLeft,
+                                        Direction = FillDirection.Horizontal,
                                         Children = new Drawable[]
                                         {
-                                            new DiffPiece(stats),
-                                            new DiffPiece(("Star Rating", $"{beatmap.StarRating:0.00}{srExtra}"))
+                                            CircleSize = new AdvancedStats.StatisticRow
+                                            {
+                                                Padding = new MarginPadding { Left = 231, Top = 135, Bottom = 2.5f },
+                                                Rotation = -9.5f,
+                                            },
+                                            ApproachRate = new AdvancedStats.StatisticRow
+                                            {
+                                                Padding = new MarginPadding { Left = 127, Top = 78, Bottom = 2.5f },
+                                                Rotation = -9.5f,
+                                            },
+                                            OverrallDifficulty = new AdvancedStats.StatisticRow
+                                            {
+                                                Padding = new MarginPadding { Left = -11, Top = 96, Bottom = 2.5f },
+                                                Rotation = -9.5f,
+                                            },
                                         }
                                     },
                                     new FillFlowContainer
                                     {
                                         RelativeSizeAxes = Axes.X,
                                         AutoSizeAxes = Axes.Y,
-                                        Anchor = Anchor.Centre,
-                                        Origin = Anchor.Centre,
-                                        Direction = FillDirection.Vertical,
+                                        Anchor = Anchor.TopLeft,
+                                        Origin = Anchor.TopLeft,
+                                        Direction = FillDirection.Horizontal,
                                         Children = new Drawable[]
                                         {
-                                            new DiffPiece(("Length", length.ToFormattedDuration().ToString())),
-                                            new DiffPiece(("BPM", $"{bpm:0.#}")),
+                                            new FillFlowContainer
+                                            {
+                                                Padding = new MarginPadding { Left = -190, Top = 15, Bottom = 2.5f },
+                                                Direction = FillDirection.Vertical,
+                                                Children = new Drawable[]
+                                                {
+                                                    new DiffPiece(true, ("SR", $"{beatmap.StarRating:0.#}*"))
+                                                    {
+                                                        Padding = new MarginPadding { Left = 0, Top = 0, Bottom = 2.5f }
+                                                    },
+                                                    new DiffPiece(true, ("Lenght", length.ToFormattedDuration().ToString()))
+                                                    {
+                                                        Padding = new MarginPadding { Left = 35, Top = 5, Bottom = 2.5f }
+                                                    },
+                                                }
+                                            },
+                                            new FillFlowContainer
+                                            {
+                                                Padding = new MarginPadding { Left = -80, Top = 15, Bottom = 2.5f },
+                                                Direction = FillDirection.Vertical,
+                                                Children = new Drawable[]
+                                                {
+                                                    new DiffPiece(true, ("BPM", $"{bpm:0.#}"))
+                                                    {
+                                                        Padding = new MarginPadding { Left = 0, Top = 0, Bottom = 2.5f }
+                                                    },
+                                                    new DiffPiece(false, ("CS", $"{beatmap.Difficulty.CircleSize:0.#}"))
+                                                    {
+                                                        Padding = new MarginPadding { Left = 120, Top = -16, Bottom = 2.5f }
+                                                    },
+                                                }
+                                            },
+                                            new FillFlowContainer
+                                            {
+                                                Padding = new MarginPadding { Left = 165, Top = 20, Bottom = 2.5f },
+                                                Direction = FillDirection.Vertical,
+                                                Children = new Drawable[]
+                                                {
+                                                    new DiffPiece(false, ("AR", $"{beatmap.Difficulty.ApproachRate:0.#}"))
+                                                    {
+                                                        Padding = new MarginPadding { Left = 0, Top = 0, Bottom = 2.5f }
+                                                    },
+                                                    new DiffPiece(false, ("OD", $"{beatmap.Difficulty.OverallDifficulty:0.#}"))
+                                                    {
+                                                        Padding = new MarginPadding { Left = 117, Top = -32, Bottom = 2.5f }
+                                                    },
+                                                }
+                                            },
                                         }
                                     },
                                     new Container
@@ -253,18 +292,60 @@ namespace osu.Game.Tournament.Components
                     Origin = Anchor.BottomRight,
                 }
             };
+
+            CircleSize!.Value = (beatmap.Difficulty.CircleSize, null);
+            ApproachRate!.Value = (ar, null);
+            OverrallDifficulty!.Value = (beatmap.Difficulty.OverallDifficulty, null);
+
+            switch (ruleset.Value.OnlineID)
+            {
+                default:
+                    stats = new (string heading, string content)[]
+                    {
+                        ("CS", $"{beatmap.Difficulty.CircleSize:0.#}{hardRockExtra}"),
+                        ("AR", $"{ar:0.#}{hardRockExtra}"),
+                        ("OD", $"{beatmap.Difficulty.OverallDifficulty:0.#}{hardRockExtra}"),
+                    };
+                    break;
+
+                case 1:
+                case 3:
+                    stats = new (string heading, string content)[]
+                    {
+                        ("OD", $"{beatmap.Difficulty.OverallDifficulty:0.#}{hardRockExtra}"),
+                        ("HP", $"{beatmap.Difficulty.DrainRate:0.#}{hardRockExtra}")
+                    };
+                    break;
+
+                case 2:
+                    stats = new (string heading, string content)[]
+                    {
+                        ("CS", $"{beatmap.Difficulty.CircleSize:0.#}{hardRockExtra}"),
+                        ("AR", $"{ar:0.#}"),
+                    };
+                    break;
+            }
         }
 
         public partial class DiffPiece : TextFlowContainer
         {
-            public DiffPiece(params (string heading, string content)[] tuples)
+            public DiffPiece(bool color, params (string heading, string content)[] tuples)
             {
                 Margin = new MarginPadding { Horizontal = 15, Vertical = 1 };
                 AutoSizeAxes = Axes.Both;
 
-                static void cp(SpriteText s, bool bold)
+                static void cp(SpriteText s, bool color)
                 {
-                    s.Font = OsuFont.Torus.With(weight: bold ? FontWeight.Bold : FontWeight.Regular, size: 15);
+                    int sizeTexto;
+                    if (color)
+                    {
+                        sizeTexto = 20;
+                    }
+                    else
+                    {
+                        sizeTexto = 30;
+                    }
+                    s.Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: sizeTexto);
                 }
 
                 for (int i = 0; i < tuples.Length; i++)
@@ -280,9 +361,18 @@ namespace osu.Game.Tournament.Components
                         });
                     }
 
-                    AddText(new TournamentSpriteText { Text = heading }, s => cp(s, false));
-                    AddText(" ", s => cp(s, false));
-                    AddText(new TournamentSpriteText { Text = content }, s => cp(s, true));
+                    //AddText(new TournamentSpriteText { Text = heading }, s => cp(s, false));
+                    //AddText(" ", s => cp(s, false));
+                    Colour4 textoColor;
+                    if (color)
+                    {
+                        textoColor = Colour4.FromHex("#ec675d");
+                    }
+                    else
+                    {
+                        textoColor = Colour4.White;
+                    }
+                    AddText(new TournamentSpriteText { Text = content, Colour = textoColor, Rotation = -9, Shear = new Vector2(0.25f, 0) }, s => cp(s, color));
                 }
             }
         }

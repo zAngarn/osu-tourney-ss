@@ -13,7 +13,7 @@ namespace osu.Game.Tournament.Components
     {
         public readonly TournamentSpriteText Text;
 
-        protected readonly Box Background;
+        protected readonly Box? Background;
 
         public TournamentSpriteTextWithBackground(string text = "")
         {
@@ -55,6 +55,43 @@ namespace osu.Game.Tournament.Components
                     Text = text,
                 }
             };
+        }
+
+        public TournamentSpriteTextWithBackground(Colour4 bg, Colour4 colorTexto, bool bgtexto, string text = "")
+        {
+            AutoSizeAxes = Axes.Both;
+
+            if (bgtexto)
+            {
+                InternalChildren = new Drawable[]
+                {
+                    Background = new Box
+                    {
+                        Colour = bg,
+                        RelativeSizeAxes = Axes.Both
+                    },
+                    Text = new TournamentSpriteText
+                    {
+                        Colour = colorTexto,
+                        Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 50),
+                        Padding = new MarginPadding { Left = 10, Right = 10 },
+                        Text = text,
+                    }
+                };
+            }
+            else
+            {
+                InternalChildren = new Drawable[]
+                {
+                    Text = new TournamentSpriteText
+                    {
+                        Colour = colorTexto,
+                        Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 50),
+                        Padding = new MarginPadding { Left = 10, Right = 10 },
+                        Text = text,
+                    }
+                };
+            }
         }
     }
 }

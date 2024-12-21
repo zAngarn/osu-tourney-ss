@@ -51,7 +51,13 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             Flag.Origin = anchor;
             Flag.Anchor = anchor;
 
-            Margin = new MarginPadding(20);
+            Margin = new MarginPadding
+            {
+                Left = 20,
+                Right = 20,
+                Top = 10,
+                Bottom = 20,
+            };
 
             InternalChild = new Container
             {
@@ -75,6 +81,18 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                 Spacing = new Vector2(5),
                                 Children = new Drawable[]
                                 {
+                                    teamNameText = new TournamentSpriteTextWithBackground(Colour4.White, Colour4.FromHex("#ec675d"), true) // Nombre
+                                    {
+                                        Scale = new Vector2(0.5f),
+                                        Origin = anchor,
+                                        Anchor = anchor,
+                                    },
+                                    new DrawableTeamHeader(Colour4.FromHex("#ec675d"), team) // Miembros equipo
+                                    {
+                                        Scale = new Vector2(0.5f),
+                                        Origin = anchor,
+                                        Anchor = anchor,
+                                    },
                                     new FillFlowContainer // TEAM (color) + Team Score  (bueno ya no)
                                     {
                                         AutoSizeAxes = Axes.Both,
@@ -91,18 +109,6 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                                 Margin = margenScore,
                                             }
                                         }
-                                    },
-                                    teamNameText = new TournamentSpriteTextWithBackground(colour) // Nombre
-                                    {
-                                        Scale = new Vector2(0.5f),
-                                        Origin = anchor,
-                                        Anchor = anchor,
-                                    },
-                                    new DrawableTeamHeader(colour, team)
-                                    {
-                                        Scale = new Vector2(0.5f),
-                                        Origin = anchor,
-                                        Anchor = anchor,
                                     },
                                     new DrawableTeamSeed(Team)
                                     {

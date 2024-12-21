@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Linq;
+using osu.Framework.Graphics;
 using osu.Game.Tournament.Models;
 using osuTK;
 
@@ -17,11 +18,11 @@ namespace osu.Game.Tournament.Components
             Text.Text = $"Team {colour}".ToUpperInvariant();
             Text.Scale = new Vector2(0.6f);
         }
-        public DrawableTeamHeader(TeamColour colour, TournamentTeam? team)
+        public DrawableTeamHeader(Colour4 texto, TournamentTeam? team)
         {
-            Background.Colour = TournamentGame.GetTeamColour(colour);
+            Background.Colour = TournamentGame.ELEMENT_BACKGROUND_COLOUR;
 
-            Text.Colour = TournamentGame.TEXT_COLOUR;
+            Text.Colour = texto;
             if (team != null) Text.Text = string.Join(" & ", team.Players.Select(u => u.Username));
             Text.Scale = new Vector2(0.6f);
         }

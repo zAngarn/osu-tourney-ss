@@ -64,7 +64,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                         {
                             RelativeSizeAxes = Axes.Both,
                             Masking = true,
-                            BorderColour = OsuColour.Gray(0.5f),
+                            BorderColour = OsuColour.Gray(0.7f),
                             BorderThickness = 3,
                             Children = new Drawable[]
                             {

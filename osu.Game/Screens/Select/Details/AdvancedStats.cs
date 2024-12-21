@@ -29,6 +29,7 @@ using osu.Game.Resources.Localisation.Web;
 using osu.Game.Rulesets;
 using osu.Game.Overlays.Mods;
 using osu.Game.Utils;
+using osuTK;
 
 namespace osu.Game.Screens.Select.Details
 {
@@ -337,30 +338,33 @@ namespace osu.Game.Screens.Select.Details
                     },
                     new Container
                     {
-                        RelativeSizeAxes = Axes.Both,
-                        Padding = new MarginPadding { Left = name_width + 10, Right = value_width + 10 },
+                        //RelativeSizeAxes = Axes.Both,
+                        Padding = new MarginPadding { Left = 10, Right = value_width + 10 },
                         Children = new Drawable[]
                         {
                             new Container
                             {
                                 Origin = Anchor.CentreLeft,
                                 Anchor = Anchor.CentreLeft,
-                                RelativeSizeAxes = Axes.X,
-                                Height = 5,
+                                //RelativeSizeAxes = Axes.X,
+                                Height = 4,
+                                Width = 73,
 
-                                CornerRadius = 2,
+                                //CornerRadius = 2,
                                 Masking = true,
                                 Children = new Drawable[]
                                 {
                                     bar = new Bar
                                     {
+                                        Shear = new Vector2(0.25f, 0),
                                         RelativeSizeAxes = Axes.Both,
-                                        BackgroundColour = Color4.White.Opacity(0.5f),
+                                        BackgroundColour = Color4.White.Opacity(0),
                                     },
                                     ModBar = new Bar
                                     {
+                                        Shear = new Vector2(0.25f, 0),
                                         RelativeSizeAxes = Axes.Both,
-                                        Alpha = 0.5f,
+                                        Alpha = 1,
                                     },
                                 }
                             },
@@ -370,13 +374,13 @@ namespace osu.Game.Screens.Select.Details
                     {
                         Anchor = Anchor.TopRight,
                         Origin = Anchor.TopRight,
-                        Width = value_width,
+                        Width = 0,
                         RelativeSizeAxes = Axes.Y,
-                        Child = valueText = new OsuSpriteText
+                        Child = valueText = new OsuSpriteText // quitar esto hace que la SongBar.cs directamente deje de funcionar. No lo entiendo
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
-                            Font = OsuFont.GetFont(size: 12)
+                            Font = OsuFont.GetFont(size: 0.1f)
                         },
                     },
                 };
