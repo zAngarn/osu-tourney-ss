@@ -12,7 +12,7 @@ namespace osu.Game.Tournament.Components
     {
         public DrawableTeamHeader(TeamColour colour)
         {
-            Background.Colour = TournamentGame.GetTeamColour(colour);
+            Background!.Colour = TournamentGame.GetTeamColour(colour);
 
             Text.Colour = TournamentGame.TEXT_COLOUR;
             Text.Text = $"Team {colour}".ToUpperInvariant();
@@ -20,7 +20,7 @@ namespace osu.Game.Tournament.Components
         }
         public DrawableTeamHeader(Colour4 texto, TournamentTeam? team)
         {
-            Background.Colour = TournamentGame.ELEMENT_BACKGROUND_COLOUR;
+            Background!.Colour = TournamentGame.ELEMENT_BACKGROUND_COLOUR;
 
             Text.Colour = texto;
             if (team != null) Text.Text = string.Join(" & ", team.Players.Select(u => u.Username));

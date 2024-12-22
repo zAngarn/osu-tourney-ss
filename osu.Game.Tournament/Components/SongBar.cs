@@ -154,7 +154,7 @@ namespace osu.Game.Tournament.Components
 
             ApproachRate!.Value = (ar, null);
 
-            (string heading, string content)[] stats;
+            //(string heading, string content)[] stats;
 
             flow.Children = new Drawable[]
             {
@@ -185,17 +185,17 @@ namespace osu.Game.Tournament.Components
                                         Direction = FillDirection.Horizontal,
                                         Children = new Drawable[]
                                         {
-                                            CircleSize = new AdvancedStats.StatisticRow
+                                            CircleSize = new AdvancedStats.StatisticRow(maxValue: 11)
                                             {
                                                 Padding = new MarginPadding { Left = 231, Top = 135, Bottom = 2.5f },
                                                 Rotation = -9.5f,
                                             },
-                                            ApproachRate = new AdvancedStats.StatisticRow
+                                            ApproachRate = new AdvancedStats.StatisticRow(maxValue: 11)
                                             {
                                                 Padding = new MarginPadding { Left = 127, Top = 78, Bottom = 2.5f },
                                                 Rotation = -9.5f,
                                             },
-                                            OverrallDifficulty = new AdvancedStats.StatisticRow
+                                            OverrallDifficulty = new AdvancedStats.StatisticRow(maxValue: 11)
                                             {
                                                 Padding = new MarginPadding { Left = -11, Top = 96, Bottom = 2.5f },
                                                 Rotation = -9.5f,
@@ -217,11 +217,11 @@ namespace osu.Game.Tournament.Components
                                                 Direction = FillDirection.Vertical,
                                                 Children = new Drawable[]
                                                 {
-                                                    new DiffPiece(true, ("SR", $"{beatmap.StarRating:0.#}*"))
+                                                    new DiffPiece(true, ("SR", $"{beatmap.StarRating:0.#}{srExtra}"))
                                                     {
                                                         Padding = new MarginPadding { Left = 0, Top = 0, Bottom = 2.5f }
                                                     },
-                                                    new DiffPiece(true, ("Lenght", length.ToFormattedDuration().ToString()))
+                                                    new DiffPiece(true, ("Length", length.ToFormattedDuration().ToString()))
                                                     {
                                                         Padding = new MarginPadding { Left = 35, Top = 5, Bottom = 2.5f }
                                                     },
@@ -237,7 +237,7 @@ namespace osu.Game.Tournament.Components
                                                     {
                                                         Padding = new MarginPadding { Left = 0, Top = 0, Bottom = 2.5f }
                                                     },
-                                                    new DiffPiece(false, ("CS", $"{beatmap.Difficulty.CircleSize:0.#}"))
+                                                    new DiffPiece(false, ("CS", $"{beatmap.Difficulty.CircleSize:0.#}{hardRockExtra}"))
                                                     {
                                                         Padding = new MarginPadding { Left = 120, Top = -16, Bottom = 2.5f }
                                                     },
@@ -249,11 +249,11 @@ namespace osu.Game.Tournament.Components
                                                 Direction = FillDirection.Vertical,
                                                 Children = new Drawable[]
                                                 {
-                                                    new DiffPiece(false, ("AR", $"{beatmap.Difficulty.ApproachRate:0.#}"))
+                                                    new DiffPiece(false, ("AR", $"{beatmap.Difficulty.ApproachRate:0.#}{hardRockExtra}"))
                                                     {
                                                         Padding = new MarginPadding { Left = 0, Top = 0, Bottom = 2.5f }
                                                     },
-                                                    new DiffPiece(false, ("OD", $"{beatmap.Difficulty.OverallDifficulty:0.#}"))
+                                                    new DiffPiece(false, ("OD", $"{beatmap.Difficulty.OverallDifficulty:0.#}{hardRockExtra}"))
                                                     {
                                                         Padding = new MarginPadding { Left = 117, Top = -32, Bottom = 2.5f }
                                                     },
@@ -297,7 +297,7 @@ namespace osu.Game.Tournament.Components
             ApproachRate!.Value = (ar, null);
             OverrallDifficulty!.Value = (beatmap.Difficulty.OverallDifficulty, null);
 
-            switch (ruleset.Value.OnlineID)
+            /*switch (ruleset.Value.OnlineID)
             {
                 default:
                     stats = new (string heading, string content)[]
@@ -324,7 +324,7 @@ namespace osu.Game.Tournament.Components
                         ("AR", $"{ar:0.#}"),
                     };
                     break;
-            }
+            }*/
         }
 
         public partial class DiffPiece : TextFlowContainer
