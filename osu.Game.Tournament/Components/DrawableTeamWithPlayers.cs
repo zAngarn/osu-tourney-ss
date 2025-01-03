@@ -30,7 +30,7 @@ namespace osu.Game.Tournament.Components
                 {
                     AutoSizeAxes = Axes.Both,
                     Direction = FillDirection.Vertical,
-                    Spacing = new Vector2(30),
+                    Spacing = new Vector2(10),
                     Children = new Drawable[]
                     {
                         new DrawableTeamTitleWithHeader(team, colour),
@@ -39,20 +39,14 @@ namespace osu.Game.Tournament.Components
                             AutoSizeAxes = Axes.Both,
                             Direction = FillDirection.Horizontal,
                             Padding = new MarginPadding { Left = 10 },
-                            Spacing = new Vector2(30),
+                            //Spacing = new Vector2(5),
                             Children = new Drawable[]
                             {
                                 new FillFlowContainer
                                 {
                                     Direction = FillDirection.Vertical,
                                     AutoSizeAxes = Axes.Both,
-                                    ChildrenEnumerable = players.Take(split).Select(createPlayerText),
-                                },
-                                new FillFlowContainer
-                                {
-                                    Direction = FillDirection.Vertical,
-                                    AutoSizeAxes = Axes.Both,
-                                    ChildrenEnumerable = players.Skip(split).Select(createPlayerText),
+                                    ChildrenEnumerable = players.Select(createPlayerText),
                                 },
                             }
                         },
@@ -64,8 +58,8 @@ namespace osu.Game.Tournament.Components
                 new TournamentSpriteText
                 {
                     Text = p.Username,
-                    Font = OsuFont.Torus.With(size: 24, weight: FontWeight.SemiBold),
-                    Colour = Color4.White,
+                    Font = OsuFont.Futura.With(size: 24, weight: FontWeight.Bold),
+                    Colour = Color4.Black,
                 };
         }
     }

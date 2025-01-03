@@ -336,15 +336,7 @@ namespace osu.Game.Tournament.Components
 
                 static void cp(SpriteText s, bool color)
                 {
-                    int sizeTexto;
-                    if (color)
-                    {
-                        sizeTexto = 20;
-                    }
-                    else
-                    {
-                        sizeTexto = 30;
-                    }
+                    int sizeTexto = color ? 20 : 30;
                     s.Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: sizeTexto);
                 }
 
@@ -363,16 +355,8 @@ namespace osu.Game.Tournament.Components
 
                     //AddText(new TournamentSpriteText { Text = heading }, s => cp(s, false));
                     //AddText(" ", s => cp(s, false));
-                    Colour4 textoColor;
-                    if (color)
-                    {
-                        textoColor = Colour4.FromHex("#ec675d");
-                    }
-                    else
-                    {
-                        textoColor = Colour4.White;
-                    }
-                    AddText(new TournamentSpriteText { Text = content, Colour = textoColor, Rotation = -9, Shear = new Vector2(0.25f, 0) }, s => cp(s, color));
+                    var textoColor = color ? Colour4.FromHex("#ec675d") : Colour4.White;
+                    AddText(new TournamentSpriteText { Text = content, Colour = textoColor, Rotation = -9, Shear = new Vector2(0.25f, 0), Shadow = false }, s => cp(s, color));
                 }
             }
         }

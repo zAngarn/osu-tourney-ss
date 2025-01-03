@@ -54,7 +54,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                 mapFlows = new FillFlowContainer<FillFlowContainer<TournamentBeatmapPanel>>
                 {
                     Y = 100,
-                    X = -175,
+                    X = -195,
                     Anchor = Anchor.TopLeft,
                     Spacing = new Vector2(10, 10),
                     Direction = FillDirection.Vertical,
@@ -304,7 +304,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         Shear = new Vector2(0.2f, 0),
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Height = 55,
+                        Height = 48,
                     });
                 }
             }

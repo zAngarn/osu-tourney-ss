@@ -22,19 +22,29 @@ namespace osu.Game.Tournament.Components
 
         private Sprite? flagSprite;
 
+        private bool teamIntro = false;
+
         public DrawableTeamFlag(TournamentTeam? team)
         {
             this.team = team;
+        }
+        public DrawableTeamFlag(TournamentTeam? team, bool isTeamIntro)
+        {
+            this.team = team;
+            teamIntro = isTeamIntro;
         }
 
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
+            float size = 75;
             if (team == null) return;
 
-            Size = new Vector2(75, 54);
+            if (teamIntro) size = 175;
+
+            Size = new Vector2(size, size);
             Masking = true;
-            CornerRadius = 5;
+            CornerRadius = 0;
             Child = flagSprite = new Sprite
             {
                 RelativeSizeAxes = Axes.Both,

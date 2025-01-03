@@ -5,7 +5,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 using osuTK;
@@ -92,7 +91,7 @@ namespace osu.Game.Tournament.Screens.TeamWin
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Position = new Vector2(-300, 10),
+                    Position = new Vector2(40, 190),
                     Scale = new Vector2(2f)
                 },
                 new FillFlowContainer
@@ -101,20 +100,18 @@ namespace osu.Game.Tournament.Screens.TeamWin
                     Direction = FillDirection.Vertical,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    X = 260,
+                    Y = 190,
+                    X = 400,
+                    Spacing = new Vector2(10f),
                     Children = new Drawable[]
                     {
                         new RoundDisplay(match)
                         {
-                            Margin = new MarginPadding { Bottom = 30 },
+                            Margin = new MarginPadding { Bottom = 10, Left = 10 },
+                            Colour = Colour4.FromHex("#ec675d"),
                         },
-                        new TournamentSpriteText
-                        {
-                            Text = "WINNER",
-                            Font = OsuFont.Torus.With(size: 100, weight: FontWeight.Bold),
-                            Margin = new MarginPadding { Bottom = 50 },
-                        },
-                        new DrawableTeamWithPlayers(match.Winner, match.WinnerColour)
+                        new DrawableTeamTitleWithHeader(match.Winner),
+                        new DrawableTeamHeader(Colour4.Black, match.Winner),
                     }
                 },
             };

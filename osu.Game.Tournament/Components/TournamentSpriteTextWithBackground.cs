@@ -13,7 +13,7 @@ namespace osu.Game.Tournament.Components
     {
         public readonly TournamentSpriteText Text;
 
-        protected readonly Box? Background;
+        protected Box? Background;
 
         public TournamentSpriteTextWithBackground(string text = "")
         {
@@ -23,7 +23,7 @@ namespace osu.Game.Tournament.Components
             {
                 Background = new Box
                 {
-                    Colour = TournamentGame.ELEMENT_BACKGROUND_COLOUR,
+                    Colour = Colour4.FromHex("#ec675d"),
                     RelativeSizeAxes = Axes.Both,
                 },
                 Text = new TournamentSpriteText
@@ -32,6 +32,7 @@ namespace osu.Game.Tournament.Components
                     Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 50),
                     Padding = new MarginPadding { Left = 10, Right = 20 },
                     Text = text,
+                    Shadow = false,
                 }
             };
         }
@@ -53,6 +54,7 @@ namespace osu.Game.Tournament.Components
                     Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 50),
                     Padding = new MarginPadding { Left = 10, Right = 20 },
                     Text = text,
+                    Shadow = false,
                 }
             };
         }
@@ -76,6 +78,7 @@ namespace osu.Game.Tournament.Components
                         Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 50),
                         Padding = new MarginPadding { Left = 10, Right = 10 },
                         Text = text,
+                        Shadow = false,
                     }
                 };
             }
@@ -89,6 +92,7 @@ namespace osu.Game.Tournament.Components
                         Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 50),
                         Padding = new MarginPadding { Left = 10, Right = 10 },
                         Text = text,
+                        Shadow = false,
                     }
                 };
             }

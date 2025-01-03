@@ -3,6 +3,7 @@
 
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
+using osu.Framework.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 
@@ -17,6 +18,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
         {
             currentMatch.BindValueChanged(matchChanged);
             currentMatch.BindTo(ladder.CurrentMatch);
+            Text.Colour = Colour4.White;
         }
 
         private void matchChanged(ValueChangedEvent<TournamentMatch?> match) =>
