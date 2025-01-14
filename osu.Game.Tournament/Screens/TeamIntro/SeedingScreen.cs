@@ -109,7 +109,7 @@ namespace osu.Game.Tournament.Screens.TeamIntro
 
             mainContainer.Children = new Drawable[]
             {
-                new LeftInfo(currentTeam.Value) { Position = new Vector2(55, 150), },
+                new LeftInfo(currentTeam.Value) { Position = new Vector2(55, 30), },
                 new RightInfo(currentTeam.Value) { Position = new Vector2(470, 137), },
             };
         });
@@ -312,7 +312,7 @@ namespace osu.Game.Tournament.Screens.TeamIntro
             {
                 FillFlowContainer fill;
 
-                Width = 200;
+                Width = 100;
 
                 if (team == null) return;
 
@@ -325,17 +325,54 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                         Direction = FillDirection.Vertical,
                         Children = new Drawable[]
                         {
-                            new TeamDisplay(team) { Margin = new MarginPadding { Bottom = 30 } },
-                            new RowDisplay("Average Rank:", $"#{team.AverageRank:#,0}"),
-                            new RowDisplay("Seed:", team.Seed.Value),
-                            new RowDisplay("Last year's placing:", team.LastYearPlacing.Value > 0 ? $"#{team.LastYearPlacing:#,0}" : "N/A"),
-                            new Container { Margin = new MarginPadding { Bottom = 30 } },
+                            new TeamDisplay(team) { Margin = new MarginPadding { Bottom = 80 } },
+                            new TournamentSpriteText
+                            {
+                                Text = $"#{team.AverageRank:#,0}",
+                                Colour = Colour4.FromHex("#ec675d"),
+                                Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 80),
+                                Shadow = false,
+                                Shear = new Vector2(0.2f, 0),
+                                Rotation = -9.5f,
+                                Anchor = Anchor.TopLeft,
+                                Origin = Anchor.TopLeft,
+                                Width = 500,
+                            },
+                            new TournamentSpriteText
+                            {
+                                Text = team.Seed.Value,
+                                Colour = Colour4.FromHex("#ec675d"),
+                                Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 80),
+                                Shadow = false,
+                                Shear = new Vector2(0.2f, 0),
+                                Rotation = -9.5f,
+                                Margin = new MarginPadding { Left = 225, Top = -30 },
+                                Anchor = Anchor.TopLeft,
+                                Origin = Anchor.TopLeft,
+                                Width = 300,
+                            },
+                            //new RowDisplay("Average Rank:", $"#{team.AverageRank:#,0}"),
+                            //new RowDisplay("Seed:", team.Seed.Value),
+                            //new RowDisplay("Last year's placing:", team.LastYearPlacing.Value > 0 ? $"#{team.LastYearPlacing:#,0}" : "N/A"),
+                            //new Container { Margin = new MarginPadding { Bottom = -10 } },
                         }
                     },
                 };
 
+                bool isFirst = true;
+
                 foreach (var p in team.Players)
-                    fill.Add(new RowDisplay(p.Username, p.Rank?.ToString("\\##,0") ?? "-"));
+                {
+                    var row = new RowDisplay(p.Username, p.Rank?.ToString("\\##,0") ?? "-");
+
+                    if (isFirst)
+                    {
+                        row.Margin = new MarginPadding { Top = -30 }; // margen solo para el primero.
+                        isFirst = false;
+                    }
+
+                    fill.Add(row);
+                }
             }
 
             internal partial class RowDisplay : CompositeDrawable
@@ -344,22 +381,33 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                 {
                     AutoSizeAxes = Axes.Y;
                     RelativeSizeAxes = Axes.X;
+                    Margin = new MarginPadding { Top = -10, };
 
                     InternalChildren = new Drawable[]
                     {
                         new TournamentSpriteText
                         {
                             Text = left,
-                            Colour = TournamentGame.TEXT_COLOUR,
-                            Font = OsuFont.Futura.With(size: 22, weight: FontWeight.SemiBold),
+                            Colour = Colour4.Black,
+                            Font = OsuFont.Futura.With(size: 20, weight: FontWeight.Bold),
+                            RelativeSizeAxes = Axes.None,
+                            Width = 150,
+                            Anchor = Anchor.TopLeft,
+                            Origin = Anchor.TopLeft,
+                            Margin = new MarginPadding { Left = -20 },
+                            Shadow = false,
                         },
                         new TournamentSpriteText
                         {
                             Text = right,
-                            Colour = TournamentGame.TEXT_COLOUR,
+                            Colour = Colour4.White,
                             Anchor = Anchor.TopRight,
                             Origin = Anchor.TopLeft,
-                            Font = OsuFont.Futura.With(size: 22, weight: FontWeight.Regular),
+                            Font = OsuFont.Futura.With(size: 20, weight: FontWeight.Bold),
+                            Margin = new MarginPadding { Left = 20 },
+                            RelativeSizeAxes = Axes.None,
+                            Width = 100,
+                            Shadow = false,
                         },
                     };
                 }
@@ -373,7 +421,8 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                     AutoSizeAxes = Axes.Both;
 
                     Flag.RelativeSizeAxes = Axes.None;
-                    Flag.Scale = new Vector2(1.2f);
+                    Flag.Scale = new Vector2(2.4f);
+                    Flag.Margin = new MarginPadding { Bottom = -4, Left = 20 };
 
                     InternalChild = new FillFlowContainer
                     {
@@ -386,8 +435,10 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                             new OsuSpriteText
                             {
                                 Text = team?.FullName.Value ?? "???",
-                                Font = OsuFont.Futura.With(size: 32, weight: FontWeight.SemiBold),
-                                Colour = TournamentGame.TEXT_COLOUR,
+                                Font = OsuFont.Futura.With(size: 42, weight: FontWeight.Bold),
+                                Colour = Colour4.Black,
+                                Shadow = false,
+                                Margin = new MarginPadding { Left = -25 }
                             },
                         }
                     };
