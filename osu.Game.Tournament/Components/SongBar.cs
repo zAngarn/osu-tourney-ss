@@ -24,7 +24,7 @@ namespace osu.Game.Tournament.Components
     {
         private IBeatmapInfo? beatmap;
 
-        public const float HEIGHT = 145 / 2f;
+        public const float HEIGHT = 72;
 
         protected AdvancedStats.StatisticRow? ApproachRate, CircleSize, OverrallDifficulty;
 

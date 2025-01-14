@@ -60,12 +60,12 @@ namespace osu.Game.Tournament.Models
 
         public TournamentTeam()
         {
-            Acronym.ValueChanged += val =>
+            /*Acronym.ValueChanged += val =>
             {
                 // use a sane default flag name based on acronym.
                 if (val.OldValue.StartsWith(FlagName.Value, StringComparison.InvariantCultureIgnoreCase))
                     FlagName.Value = val.NewValue?.Length >= 2 ? val.NewValue.Substring(0, 2).ToUpperInvariant() : string.Empty;
-            };
+            };*/
 
             FullName.ValueChanged += val =>
             {
