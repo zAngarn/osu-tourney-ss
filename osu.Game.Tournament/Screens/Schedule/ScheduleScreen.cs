@@ -66,19 +66,6 @@ namespace osu.Game.Tournament.Screens.Schedule
                                             {
                                                 Margin = new MarginPadding { Top = 80 },
                                                 AutoSizeAxes = Axes.Both,
-                                                /*Children = new Drawable[]
-                                                {
-                                                    new Box
-                                                    {
-                                                        Colour = Color4.White,
-                                                        Size = new Vector2(50, 10),
-                                                    },
-                                                    new TournamentSpriteTextWithBackground("Schedule")
-                                                    {
-                                                        X = 60,
-                                                        Scale = new Vector2(0.8f)
-                                                    }
-                                                }*/
                                             },
                                         }
                                     },
@@ -141,29 +128,43 @@ namespace osu.Game.Tournament.Screens.Schedule
                     new Container
                     {
                         RelativeSizeAxes = Axes.Both,
-                        Height = 0.76f,
+                        Height = 0.75f,
                         Child = new FillFlowContainer
                         {
                             RelativeSizeAxes = Axes.Both,
                             Direction = FillDirection.Horizontal,
                             Children = new Drawable[]
                             {
-                                new ScheduleContainer("recent matches")
-                                {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Width = 0.4f,
-                                    ChildrenEnumerable = recent.Select(p => new ScheduleMatch(p))
-                                },
-                                new ScheduleContainer("upcoming matches")
+                                new ScheduleContainer("")
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Width = 0.6f,
-                                    ChildrenEnumerable = upcoming.Select(p => new ScheduleMatch(p))
+                                    ChildrenEnumerable = recent.Select(p => new ScheduleMatch(p))
                                 },
+                                new FillFlowContainer
+                                {
+                                    RelativeSizeAxes = Axes.Both,
+                                    Direction = FillDirection.Vertical,
+                                    Width = 0.4f,
+                                    Children = new Drawable[]
+                                    {
+                                        new Container
+                                        {
+                                            RelativeSizeAxes = Axes.Both,
+                                            Height = 0.36f,
+                                        },
+                                        new ScheduleContainer("")
+                                        {
+                                            RelativeSizeAxes = Axes.Both,
+                                            Height = 0.64f,
+                                            ChildrenEnumerable = upcoming.Select(p => new ScheduleMatch(p))
+                                        }
+                                    }
+                                }
                             }
                         }
                     },
-                    comingUpNext = new ScheduleContainer("coming up next")
+                    comingUpNext = new ScheduleContainer("")
                     {
                         RelativeSizeAxes = Axes.Both,
                         Height = 0.25f,
@@ -180,35 +181,39 @@ namespace osu.Game.Tournament.Screens.Schedule
                     Spacing = new Vector2(30),
                     Children = new Drawable[]
                     {
-                        new ScheduleMatch(currentMatch.Value, false)
-                        {
-                            Anchor = Anchor.CentreLeft,
-                            Origin = Anchor.CentreLeft,
-                        },
-                        new TournamentSpriteTextWithBackground(currentMatch.Value.Round.Value?.Name.Value ?? string.Empty)
-                        {
-                            Anchor = Anchor.CentreLeft,
-                            Origin = Anchor.CentreLeft,
-                            Scale = new Vector2(0.5f)
-                        },
-                        new TournamentSpriteText
-                        {
-                            Anchor = Anchor.CentreLeft,
-                            Origin = Anchor.CentreLeft,
-                            Text = currentMatch.Value.Team1.Value?.FullName + " vs " + currentMatch.Value.Team2.Value?.FullName,
-                            Font = OsuFont.Torus.With(size: 24, weight: FontWeight.SemiBold)
-                        },
                         new FillFlowContainer
                         {
                             AutoSizeAxes = Axes.Both,
-                            Direction = FillDirection.Horizontal,
-                            Anchor = Anchor.CentreLeft,
-                            Origin = Anchor.CentreLeft,
+                            Direction = FillDirection.Vertical,
+                            Spacing = new Vector2(5),
                             Children = new Drawable[]
                             {
+                                new TournamentSpriteTextWithBackground(currentMatch.Value.Round.Value?.Name.Value ?? string.Empty)
+                                {
+                                    Anchor = Anchor.TopCentre,
+                                    Origin = Anchor.TopCentre,
+                                    Scale = new Vector2(0.5f)
+                                },
+                                new ScheduleMatch(currentMatch.Value, false)
+                                {
+                                    Anchor = Anchor.TopCentre,
+                                    Origin = Anchor.TopCentre,
+                                    //Margin = new MarginPadding { Left = 30 },
+                                },
+                                new TournamentSpriteText
+                                {
+                                    Anchor = Anchor.TopCentre,
+                                    Origin = Anchor.TopCentre,
+                                    Text = currentMatch.Value.Team1.Value?.FullName + " vs " + currentMatch.Value.Team2.Value?.FullName,
+                                    Font = OsuFont.Futura.With(size: 24, weight: FontWeight.Bold),
+                                    Colour = Colour4.Black,
+                                    Margin = new MarginPadding { Left = -20 },
+                                },
                                 new ScheduleMatchDate(currentMatch.Value.Date.Value)
                                 {
-                                    Font = OsuFont.Torus.With(size: 24, weight: FontWeight.Regular)
+                                    Font = OsuFont.Futura.With(size: 24, weight: FontWeight.Bold),
+                                    Colour = Colour4.Black,
+                                    Margin = new MarginPadding { Left = 250, Top = 40 }
                                 }
                             }
                         },
@@ -262,9 +267,7 @@ namespace osu.Game.Tournament.Screens.Schedule
             {
             }
 
-            protected override string Format() => Date < DateTimeOffset.Now
-                ? $"Started {base.Format()}"
-                : $"Starting {base.Format()}";
+            protected override string Format() => $"{base.Format()}";
         }
 
         public partial class ScheduleContainer : Container
