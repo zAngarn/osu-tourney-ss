@@ -135,10 +135,15 @@ namespace osu.Game.Tournament.Screens.Schedule
                             Direction = FillDirection.Horizontal,
                             Children = new Drawable[]
                             {
+                                new Container
+                                {
+                                    RelativeSizeAxes = Axes.Both,
+                                    Width = 0.2f,
+                                },
                                 new ScheduleContainer("")
                                 {
                                     RelativeSizeAxes = Axes.Both,
-                                    Width = 0.6f,
+                                    Width = 0.4f,
                                     ChildrenEnumerable = recent.Select(p => new ScheduleMatch(p))
                                 },
                                 new FillFlowContainer
@@ -188,7 +193,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                             Spacing = new Vector2(5),
                             Children = new Drawable[]
                             {
-                                new TournamentSpriteTextWithBackground(currentMatch.Value.Round.Value?.Name.Value ?? string.Empty)
+                                new TournamentSpriteTextWithBackground(Colour4.White, Colour4.Black, false, currentMatch.Value.Round.Value?.Name.Value ?? string.Empty)
                                 {
                                     Anchor = Anchor.TopCentre,
                                     Origin = Anchor.TopCentre,
@@ -213,7 +218,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                                 {
                                     Font = OsuFont.Futura.With(size: 24, weight: FontWeight.Bold),
                                     Colour = Colour4.Black,
-                                    Margin = new MarginPadding { Left = 250, Top = 40 }
+                                    Margin = new MarginPadding { Left = 250, Top = 10 }
                                 }
                             }
                         },

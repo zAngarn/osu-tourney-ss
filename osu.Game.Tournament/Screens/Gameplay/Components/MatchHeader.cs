@@ -76,7 +76,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
                         },
-                        new MatchRoundDisplay
+                        /*new MatchRoundDisplay
                         {
                             Margin = new MarginPadding
                             {
@@ -85,7 +85,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
                             Scale = new Vector2(0.75f)
-                        },
+                        },*/
                     }
                 },
                 teamDisplay1 = new TeamScoreDisplay(TeamColour.Red)

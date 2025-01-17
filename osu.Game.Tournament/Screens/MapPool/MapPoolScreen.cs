@@ -53,8 +53,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                 },
                 mapFlows = new FillFlowContainer<FillFlowContainer<TournamentBeatmapPanel>>
                 {
-                    Y = 100,
-                    X = -195,
+                    Y = 120,
+                    X = -215,
                     Anchor = Anchor.TopLeft,
                     Spacing = new Vector2(10, 10),
                     Direction = FillDirection.Vertical,
