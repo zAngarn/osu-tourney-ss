@@ -213,12 +213,14 @@ namespace osu.Game.Tournament.Screens.Schedule
                                     Font = OsuFont.Futura.With(size: 24, weight: FontWeight.Bold),
                                     Colour = Colour4.Black,
                                     Margin = new MarginPadding { Left = -20 },
+                                    Shadow = false,
                                 },
                                 new ScheduleMatchDate(currentMatch.Value.Date.Value)
                                 {
                                     Font = OsuFont.Futura.With(size: 24, weight: FontWeight.Bold),
-                                    Colour = Colour4.Black,
-                                    Margin = new MarginPadding { Left = 250, Top = 10 }
+                                    Colour = Colour4.FromHex("#ec675d"),
+                                    Margin = new MarginPadding { Left = 250, Top = 10 },
+                                    Shadow = false,
                                 }
                             }
                         },

@@ -101,6 +101,7 @@ namespace osu.Game.Tournament.Components
                             Text = Beatmap?.Metadata.Author.Username ?? "unknown",
                             Font = OsuFont.Futura.With(weight: FontWeight.Regular, size: 12),
                             Colour = Colour4.Black,
+                            Shadow = false,
                         },
                         new FillFlowContainer
                         {
@@ -114,6 +115,7 @@ namespace osu.Game.Tournament.Components
                                     Padding = new MarginPadding { Right = 20 },
                                     Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 16),
                                     Colour = Colour4.Black,
+                                    Shadow = false,
                                 },
                             }
                         },
@@ -128,6 +130,7 @@ namespace osu.Game.Tournament.Components
                                     Text = Beatmap?.DifficultyName ?? "unknown",
                                     Font = OsuFont.Futura.With(weight: FontWeight.Bold, size: 14),
                                     Colour = Colour4.FromHex("#ec675d"),
+                                    Shadow = false,
                                 },
                             }
                         }
@@ -192,7 +195,7 @@ namespace osu.Game.Tournament.Components
                 if (shouldFlash)
                     flash.FadeOutFromOne(500).Loop(0, 10);
 
-                BorderThickness = 6;
+                BorderThickness = 4;
 
                 BorderColour = TournamentGame.GetTeamColour(newChoice.Team);
 
@@ -204,7 +207,7 @@ namespace osu.Game.Tournament.Components
                         break;
 
                     case ChoiceType.Ban:
-                        Colour = Color4.Gray;
+                        Colour = Colour4.FromHex(TournamentGame.GetTeamColour(newChoice.Team) == Colour4.FromHex("#ffe63d") ? "#ffe63d" : "#2bf8ff");
                         Alpha = 0.5f;
                         break;
                 }

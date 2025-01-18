@@ -47,12 +47,12 @@ namespace osu.Game.Tournament.Screens.TeamIntro
             {
                 new RoundDisplay(match.NewValue)
                 {
-                    Position = new Vector2(1000, 100),
+                    Position = new Vector2(930, 100),
                     Scale = new Vector2(2f),
                 },
                 new DrawableTeamFlag(match.NewValue.Team1.Value, true)
                 {
-                    Position = new Vector2(100, 105),
+                    Position = new Vector2(100, 80),
                 },
                 new DrawableTeamWithPlayers(match.NewValue.Team1.Value, TeamColour.Red)
                 {
@@ -60,7 +60,7 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                 },
                 new DrawableTeamFlag(match.NewValue.Team2.Value, true)
                 {
-                    Position = new Vector2(100, 500),
+                    Position = new Vector2(100, 480),
                 },
                 new DrawableTeamWithPlayers(match.NewValue.Team2.Value, TeamColour.Blue)
                 {
