@@ -72,25 +72,25 @@ namespace osu.Game.Tournament.Screens.MapPool
                         buttonRedBan = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Red Ban",
+                            Text = "Yellow Ban (red)",
                             Action = () => setMode(TeamColour.Red, ChoiceType.Ban)
                         },
                         buttonBlueBan = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Blue Ban",
+                            Text = "Light blue Ban (blue)",
                             Action = () => setMode(TeamColour.Blue, ChoiceType.Ban)
                         },
                         buttonRedPick = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Red Pick",
+                            Text = "Yellow Ban (red)",
                             Action = () => setMode(TeamColour.Red, ChoiceType.Pick)
                         },
                         buttonBluePick = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Blue Pick",
+                            Text = "Light blue Ban (blue)",
                             Action = () => setMode(TeamColour.Blue, ChoiceType.Pick)
                         },
                         new ControlPanel.Spacer(),
