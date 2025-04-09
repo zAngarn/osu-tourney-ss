@@ -28,7 +28,12 @@ namespace osu.Game.Tournament.Components
 
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
 
+        public Bindable<bool> RevealBeatmapInfo = new Bindable<bool>(false);
+
         private Box flash = null!;
+
+        private NoUnloadBeatmapSetCover beatmapCover = null!;
+        private Drawable infoContainer = null!;
 
         public TournamentBeatmapPanel(IBeatmapInfo? beatmap, string mod = "")
         {
@@ -54,13 +59,13 @@ namespace osu.Game.Tournament.Components
                     RelativeSizeAxes = Axes.Both,
                     Colour = Color4.Black,
                 },
-                new NoUnloadBeatmapSetCover
+                beatmapCover = new NoUnloadBeatmapSetCover
                 {
                     RelativeSizeAxes = Axes.Both,
                     Colour = OsuColour.Gray(0.5f),
                     OnlineInfo = (Beatmap as IBeatmapSetOnlineInfo),
                 },
-                new FillFlowContainer
+                infoContainer = new FillFlowContainer
                 {
                     AutoSizeAxes = Axes.Both,
                     Anchor = Anchor.CentreLeft,
@@ -185,6 +190,11 @@ namespace osu.Game.Tournament.Components
             }
 
             choice = newChoice;
+
+            bool showDetails = RevealBeatmapInfo.Value || choice?.Type == ChoiceType.Pick;
+
+            beatmapCover.Alpha = showDetails ? 1 : 0;
+            infoContainer.Alpha = showDetails ? 1 : 0;
         }
 
         private partial class NoUnloadBeatmapSetCover : UpdateableOnlineBeatmapSetCover
