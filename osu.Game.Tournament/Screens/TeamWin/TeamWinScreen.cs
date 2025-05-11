@@ -77,6 +77,8 @@ namespace osu.Game.Tournament.Screens.TeamWin
             redWinVideo.Alpha = match.WinnerColour == TeamColour.Red ? 1 : 0;
             blueWinVideo.Alpha = match.WinnerColour == TeamColour.Blue ? 1 : 0;
 
+            Colour4 colorTexto = match.WinnerColour == TeamColour.Red ? Colour4.FromHex("#A1548C") : Colour4.FromHex("#3D6C74");
+
             if (firstDisplay)
             {
                 if (match.WinnerColour == TeamColour.Red)
@@ -92,8 +94,8 @@ namespace osu.Game.Tournament.Screens.TeamWin
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Position = new Vector2(-300, 10),
-                    Scale = new Vector2(2f)
+                    Position = new Vector2(0, 0),
+                    Scale = new Vector2(4f),
                 },
                 new FillFlowContainer
                 {
@@ -101,20 +103,22 @@ namespace osu.Game.Tournament.Screens.TeamWin
                     Direction = FillDirection.Vertical,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    X = 260,
+                    X = 0,
+                    Y = 190,
                     Children = new Drawable[]
                     {
-                        new RoundDisplay(match)
+                        new TournamentSpriteText
                         {
-                            Margin = new MarginPadding { Bottom = 30 },
+                            Colour = colorTexto,
+                            Font = OsuFont.Inter.With(size: 16, weight: FontWeight.Regular),
+                            Text = match.Round.Value!.ToString(),
                         },
                         new TournamentSpriteText
                         {
-                            Text = "WINNER",
-                            Font = OsuFont.Torus.With(size: 100, weight: FontWeight.Bold),
-                            Margin = new MarginPadding { Bottom = 50 },
-                        },
-                        new DrawableTeamWithPlayers(match.Winner, match.WinnerColour)
+                            Colour = colorTexto,
+                            Font = OsuFont.Inter.With(size: 36, weight: FontWeight.Bold),
+                            Text = match.Winner.ToString(),
+                        }
                     }
                 },
             };
