@@ -62,7 +62,7 @@ namespace osu.Game.Tournament
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
-                Font = OsuFont.Torus.With(size: 32),
+                Font = OsuFont.Inter.With(size: 32),
             });
 
             Resources.AddStore(new DllResourceStore(typeof(TournamentGameBase).Assembly));

@@ -28,7 +28,7 @@ namespace osu.Game.Tournament.Components
 
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
 
-        public Bindable<bool> RevealBeatmapInfo = new Bindable<bool>(false);
+        public Bindable<bool> RevealBeatmapInfo = new Bindable<bool>(true); // El parámetro se cambia aqui por el momento TODO: Cambiarlo desde la pantalla de Mappool
 
         private Box flash = null!;
 
@@ -77,7 +77,7 @@ namespace osu.Game.Tournament.Components
                         new TournamentSpriteText
                         {
                             Text = Beatmap?.GetDisplayTitleRomanisable(false, false) ?? (LocalisableString)@"unknown",
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold),
+                            Font = OsuFont.Inter.With(weight: FontWeight.Bold),
                         },
                         new FillFlowContainer
                         {
@@ -87,26 +87,26 @@ namespace osu.Game.Tournament.Components
                             {
                                 new TournamentSpriteText
                                 {
-                                    Text = "mapper",
+                                    Text = "Mapeado por",
                                     Padding = new MarginPadding { Right = 5 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 14)
+                                    Font = OsuFont.Inter.With(weight: FontWeight.Regular, size: 14)
                                 },
                                 new TournamentSpriteText
                                 {
-                                    Text = Beatmap?.Metadata.Author.Username ?? "unknown",
+                                    Text = Beatmap?.Metadata.Author.Username ?? "desconocido",
                                     Padding = new MarginPadding { Right = 20 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 14)
+                                    Font = OsuFont.Inter.With(weight: FontWeight.Bold, size: 14)
                                 },
                                 new TournamentSpriteText
                                 {
-                                    Text = "difficulty",
+                                    Text = "Dificultad",
                                     Padding = new MarginPadding { Right = 5 },
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 14)
+                                    Font = OsuFont.Inter.With(weight: FontWeight.Regular, size: 14)
                                 },
                                 new TournamentSpriteText
                                 {
-                                    Text = Beatmap?.DifficultyName ?? "unknown",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 14)
+                                    Text = Beatmap?.DifficultyName ?? "desconocido",
+                                    Font = OsuFont.Inter.With(weight: FontWeight.Bold, size: 14)
                                 },
                             }
                         }

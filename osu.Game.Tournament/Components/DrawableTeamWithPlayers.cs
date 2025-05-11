@@ -64,7 +64,7 @@ namespace osu.Game.Tournament.Components
                 new TournamentSpriteText
                 {
                     Text = p.Username,
-                    Font = OsuFont.Torus.With(size: 24, weight: FontWeight.SemiBold),
+                    Font = OsuFont.Inter.With(size: 24, weight: FontWeight.SemiBold),
                     Colour = Color4.White,
                 };
         }

@@ -38,6 +38,9 @@ namespace osu.Game.Tournament.Screens.Ladder.Components
         private readonly Func<bool>? isWinner;
         private LadderEditorScreen ladderEditor = null!;
 
+        private Color4 teamRosaWin = Colour4.FromHex("#8879BA");
+        private Color4 teamAzulWin = Colour4.FromHex("#80DCED");
+
         [Resolved]
         private LadderInfo? ladderInfo { get; set; }
 
@@ -68,7 +71,8 @@ namespace osu.Game.Tournament.Screens.Ladder.Components
 
             AcronymText.Anchor = AcronymText.Origin = Anchor.CentreLeft;
             AcronymText.Padding = new MarginPadding { Left = 50 };
-            AcronymText.Font = OsuFont.Torus.With(size: 22, weight: FontWeight.Bold);
+            AcronymText.Font = OsuFont.Inter.With(size: 25, weight: FontWeight.Bold);
+            AcronymText.Colour = Colour4.Black;
 
             isWinner = () => match.Winner == Team;
 
@@ -91,10 +95,10 @@ namespace osu.Game.Tournament.Screens.Ladder.Components
                 background = new Box
                 {
                     RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.White,
                 },
                 new Container
                 {
-                    Padding = new MarginPadding(5),
                     RelativeSizeAxes = Axes.Both,
                     Children = new Drawable[]
                     {
@@ -113,15 +117,14 @@ namespace osu.Game.Tournament.Screens.Ladder.Components
                     {
                         backgroundRight = new Box
                         {
-                            Colour = OsuColour.Gray(0.1f),
-                            Alpha = 0.8f,
+                            Colour = Color4.Black,
                             RelativeSizeAxes = Axes.Both,
                         },
                         scoreText = new TournamentSpriteText
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
-                            Font = OsuFont.Torus.With(size: 22),
+                            Font = OsuFont.Inter.With(size: 22),
                         }
                     }
                 }
@@ -178,10 +181,8 @@ namespace osu.Game.Tournament.Screens.Ladder.Components
         {
             bool winner = completed.Value && isWinner?.Invoke() == true;
 
-            background.FadeColour(winner ? Color4.White : Color4Extensions.FromHex("#444"), winner ? 500 : 0, Easing.OutQuint);
+            //background.FadeColour(winner ? Color4.White : Color4Extensions.FromHex("#444"), winner ? 500 : 0, Easing.OutQuint);
             backgroundRight.FadeColour(winner ? colourWinner : Color4Extensions.FromHex("#333"), winner ? 500 : 0, Easing.OutQuint);
-
-            AcronymText.Colour = winner ? Color4.Black : Color4.White;
 
             scoreText.Font = scoreText.Font.With(weight: winner ? FontWeight.Bold : FontWeight.Regular);
         }

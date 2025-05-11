@@ -6,7 +6,6 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Primitives;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.Legacy;
@@ -14,10 +13,8 @@ using osu.Game.Extensions;
 using osu.Game.Graphics;
 using osu.Game.Models;
 using osu.Game.Rulesets;
-using osu.Game.Screens.Menu;
 using osu.Game.Utils;
 using osuTK;
-using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Components
 {
@@ -82,12 +79,6 @@ namespace osu.Game.Tournament.Components
 
             InternalChildren = new Drawable[]
             {
-                new Box
-                {
-                    Colour = colours.Gray3,
-                    RelativeSizeAxes = Axes.Both,
-                    Alpha = 0.4f,
-                },
                 flow = new FillFlowContainer
                 {
                     RelativeSizeAxes = Axes.X,
@@ -107,11 +98,11 @@ namespace osu.Game.Tournament.Components
             {
                 Metadata = new BeatmapMetadata
                 {
-                    Artist = "unknown",
-                    Title = "no beatmap selected",
-                    Author = new RealmUser { Username = "unknown" },
+                    Artist = "desconocido",
+                    Title = "sin beatmap seleccionado",
+                    Author = new RealmUser { Username = "desconocido" },
                 },
-                DifficultyName = "unknown",
+                DifficultyName = "desconocido",
                 BeatmapSet = new BeatmapSetInfo(),
                 StarRating = 0,
                 Difficulty = new BeatmapDifficulty
@@ -208,7 +199,7 @@ namespace osu.Game.Tournament.Components
                                         Children = new Drawable[]
                                         {
                                             new DiffPiece(stats),
-                                            new DiffPiece(("Star Rating", $"{beatmap.StarRating.FormatStarRating()}{srExtra}"))
+                                            new DiffPiece(("Estrellas", $"{beatmap.StarRating.FormatStarRating()}{srExtra}"))
                                         }
                                     },
                                     new FillFlowContainer
@@ -220,30 +211,8 @@ namespace osu.Game.Tournament.Components
                                         Direction = FillDirection.Vertical,
                                         Children = new Drawable[]
                                         {
-                                            new DiffPiece(("Length", length.ToFormattedDuration().ToString())),
+                                            new DiffPiece(("Duración", length.ToFormattedDuration().ToString())),
                                             new DiffPiece(("BPM", $"{bpm:0.#}")),
-                                        }
-                                    },
-                                    new Container
-                                    {
-                                        RelativeSizeAxes = Axes.Both,
-                                        Children = new Drawable[]
-                                        {
-                                            new Box
-                                            {
-                                                Colour = Color4.Black,
-                                                RelativeSizeAxes = Axes.Both,
-                                                Alpha = 0.1f,
-                                            },
-                                            new OsuLogo
-                                            {
-                                                Triangles = false,
-                                                Scale = new Vector2(0.08f),
-                                                Margin = new MarginPadding(50),
-                                                X = -10,
-                                                Anchor = Anchor.CentreRight,
-                                                Origin = Anchor.CentreRight,
-                                            },
                                         }
                                     },
                                 },
@@ -271,7 +240,7 @@ namespace osu.Game.Tournament.Components
 
                 static void cp(SpriteText s, bool bold)
                 {
-                    s.Font = OsuFont.Torus.With(weight: bold ? FontWeight.Bold : FontWeight.Regular, size: 15);
+                    s.Font = OsuFont.Inter.With(weight: bold ? FontWeight.Bold : FontWeight.Regular, size: 15);
                 }
 
                 for (int i = 0; i < tuples.Length; i++)
