@@ -17,6 +17,8 @@ namespace osu.Game.Tournament.Components
     public partial class DrawableTeamFlag : Container
     {
         private readonly TournamentTeam? team;
+        private readonly Vector2 size = new Vector2(75f);
+        private readonly int cornerRadius = 5;
 
         [UsedImplicitly]
         private Bindable<string>? flag;
@@ -28,14 +30,21 @@ namespace osu.Game.Tournament.Components
             this.team = team;
         }
 
+        public DrawableTeamFlag(TournamentTeam? team, Vector2 size, int cornerRadius)
+        {
+            this.team = team;
+            this.size = size;
+            this.cornerRadius = cornerRadius;
+        }
+
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
             if (team == null) return;
 
-            Size = new Vector2(75, 54);
+            Size = size;
             Masking = true;
-            CornerRadius = 5;
+            CornerRadius = cornerRadius;
             Children = new Drawable[]
             {
                 new Box
@@ -48,7 +57,7 @@ namespace osu.Game.Tournament.Components
                     RelativeSizeAxes = Axes.Both,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    FillMode = FillMode.Fit
+                    FillMode = FillMode.Fill
                 },
             };
 
