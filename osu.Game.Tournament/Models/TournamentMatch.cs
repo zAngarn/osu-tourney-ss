@@ -47,6 +47,8 @@ namespace osu.Game.Tournament.Models
 
         public readonly Bindable<bool> Completed = new Bindable<bool>();
 
+        public readonly Bindable<bool> Started = new Bindable<bool>();
+
         public readonly Bindable<bool> Losers = new Bindable<bool>();
 
         public readonly ObservableCollection<BeatmapChoice> PicksBans = new ObservableCollection<BeatmapChoice>();
@@ -102,6 +104,7 @@ namespace osu.Game.Tournament.Models
         {
             Team1Score.Value = null;
             Team2Score.Value = null;
+            Started.Value = false;
         }
 
         /// <summary>
@@ -117,6 +120,7 @@ namespace osu.Game.Tournament.Models
 
             Team1Score.Value = 0;
             Team2Score.Value = 0;
+            Started.Value = true;
         }
 
         public void Reset()
@@ -126,6 +130,7 @@ namespace osu.Game.Tournament.Models
             Team2.Value = null;
             Completed.Value = false;
             PicksBans.Clear();
+            Started.Value = true;
         }
     }
 }
