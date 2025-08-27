@@ -31,6 +31,11 @@ namespace osu.Game.Tournament.Models
         public int? Rank { get; set; }
 
         /// <summary>
+        /// The player's country rank. Null if not available.
+        /// </summary>>
+        public int? CountryRank { get; set; }
+
+        /// <summary>
         /// A URL to the player's profile cover.
         /// </summary>
         public string CoverUrl { get; set; } = string.Empty;

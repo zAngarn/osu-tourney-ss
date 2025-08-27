@@ -324,6 +324,7 @@ namespace osu.Game.Tournament
                 user.CoverUrl = res.CoverUrl;
                 user.CountryCode = res.CountryCode;
                 user.Rank = res.Statistics?.GlobalRank;
+                user.CountryRank = res.Statistics?.CountryRank;
 
                 success?.Invoke();
             }
