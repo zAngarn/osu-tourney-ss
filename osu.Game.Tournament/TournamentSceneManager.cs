@@ -102,7 +102,9 @@ namespace osu.Game.Tournament
                                 new SeedingScreen(),
                                 new DrawingsScreen(),
                                 new GameplayScreen(),
-                                new TeamWinScreen()
+                                new TeamWinScreen(),
+
+                                new MapPoolScreenV2(),
                             }
                         },
                         chatContainer = new Container
@@ -150,6 +152,8 @@ namespace osu.Game.Tournament
                                 new Separator(),
                                 new ScreenButton(typeof(DrawingsScreen)) { Text = "Drawings", RequestSelection = SetScreen },
                                 new ScreenButton(typeof(ShowcaseScreen)) { Text = "Showcase", RequestSelection = SetScreen },
+                                new Separator(),
+                                new ScreenButton(typeof(MapPoolScreenV2), Key.A) { Text = "Map Pool V2", RequestSelection = SetScreen },
                             }
                         },
                     },

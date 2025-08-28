@@ -24,6 +24,8 @@ namespace osu.Game.Tournament.Components
 
         private readonly string mod;
 
+        private readonly string slot;
+
         public const float HEIGHT = 50;
 
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
@@ -34,6 +36,16 @@ namespace osu.Game.Tournament.Components
         {
             Beatmap = beatmap;
             this.mod = mod;
+
+            Width = 400;
+            Height = HEIGHT;
+        }
+
+        public TournamentBeatmapPanel(IBeatmapInfo? beatmap, string mod, string slot)
+        {
+            Beatmap = beatmap;
+            this.mod = mod;
+            this.slot = slot;
 
             Width = 400;
             Height = HEIGHT;
@@ -71,7 +83,7 @@ namespace osu.Game.Tournament.Components
                     {
                         new TournamentSpriteText
                         {
-                            Text = Beatmap?.GetDisplayTitleRomanisable(false, false) ?? (LocalisableString)@"unknown",
+                            Text = (Beatmap?.GetDisplayTitleRomanisable(false, false) ?? (LocalisableString)@"unknown") + " | " + slot,
                             Font = OsuFont.Torus.With(weight: FontWeight.Bold),
                         },
                         new FillFlowContainer
