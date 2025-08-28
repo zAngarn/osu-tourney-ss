@@ -163,6 +163,8 @@ namespace osu.Game.Tournament.Screens.Editors
 
                     private readonly Bindable<string> mods = new Bindable<string>(string.Empty);
 
+                    private readonly Bindable<string> slot = new Bindable<string>(string.Empty);
+
                     private readonly Container drawableContainer;
 
                     public RoundBeatmapRow(TournamentRound team, RoundBeatmap beatmap)
@@ -204,8 +206,15 @@ namespace osu.Game.Tournament.Screens.Editors
                                     {
                                         LabelText = "Mods",
                                         RelativeSizeAxes = Axes.None,
-                                        Width = 200,
+                                        Width = 100,
                                         Current = mods,
+                                    },
+                                    new SettingsTextBox
+                                    {
+                                        LabelText = "Slot",
+                                        RelativeSizeAxes = Axes.None,
+                                        Width = 100,
+                                        Current = slot,
                                     },
                                     drawableContainer = new Container
                                     {
@@ -265,6 +274,9 @@ namespace osu.Game.Tournament.Screens.Editors
 
                         mods.Value = Model.Mods;
                         mods.BindValueChanged(modString => Model.Mods = modString.NewValue);
+
+                        slot.Value = Model.Slot;
+                        slot.BindValueChanged(slotString => Model.Slot = slotString.NewValue);
                     }
 
                     private void updatePanel() => Schedule(() =>
