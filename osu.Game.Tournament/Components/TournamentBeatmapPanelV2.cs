@@ -10,6 +10,7 @@ using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Localisation;
+using osu.Framework.Logging;
 using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.Drawables;
 using osu.Game.Graphics;
@@ -27,6 +28,8 @@ namespace osu.Game.Tournament.Components
         private readonly string slot;
 
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
+
+        private Container content;
 
         public TournamentBeatmapPanelV2(IBeatmapInfo? beatmap, string mod, string slot)
         {
@@ -63,7 +66,7 @@ namespace osu.Game.Tournament.Components
                     Shadow = false,
                     Margin = new MarginPadding { Left = 10 }
                 },
-                new Container
+                content = new Container
                 {
                     RelativeSizeAxes = Axes.Both,
                     Anchor = Anchor.CentreRight,
@@ -197,15 +200,24 @@ namespace osu.Game.Tournament.Components
             if (match.NewValue != null)
                 match.NewValue.PicksBansProtects.CollectionChanged += picksBansProtectsOnCollectionChanged;
 
-            Scheduler.AddOnce(updateState);
+            //Scheduler.AddOnce(UpdateState);
         }
 
         private void picksBansProtectsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-            => Scheduler.AddOnce(updateState);
+            => Logger.Log("d"); //Scheduler.AddOnce(UpdateState);
 
-        private void updateState()
+        public void UpdateState(TeamColour colour)
         {
-            // hay que replantear la logica de esto
+            Colour4 colorGradiente = Colour4.FromHex(colour == TeamColour.Blue ? "ed6dac" : "6ddded");
+
+            content.Add(new Box
+            {
+                Anchor = Anchor.CentreRight,
+                Origin = Anchor.CentreRight,
+                RelativeSizeAxes = Axes.Both,
+                Width = 0.5f,
+                Colour = ColourInfo.GradientHorizontal(Colour4.FromHex("00000000"), colorGradiente),
+            });
         }
 
         private partial class NoUnloadBeatmapSetCover : UpdateableOnlineBeatmapSetCover

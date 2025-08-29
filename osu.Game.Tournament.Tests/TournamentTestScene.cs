@@ -149,17 +149,6 @@ namespace osu.Game.Tournament.Tests
             }
         };
 
-        public static TournamentBeatmap CreateSampleBeatmap() =>
-            new TournamentBeatmap
-            {
-                Metadata = new BeatmapMetadata
-                {
-                    Title = "Test Title",
-                    Artist = "Test Artist",
-                },
-                OnlineID = RNG.Next(0, 1000000),
-            };
-
         protected override ITestSceneTestRunner CreateRunner() => new TournamentTestSceneTestRunner();
 
         public partial class TournamentTestSceneTestRunner : TournamentGameBase, ITestSceneTestRunner
@@ -185,5 +174,17 @@ namespace osu.Game.Tournament.Tests
                 runner?.RunTestBlocking(test);
             }
         }
+
+        public static TournamentBeatmap CreateSampleBeatmap() =>
+            new TournamentBeatmap
+            {
+                Metadata = new BeatmapMetadata
+                {
+                    Title = "Test Title",
+                    Artist = "Test Artist",
+                },
+                OnlineID = RNG.Next(0, 1000000),
+                DifficultyName = "Test Difficulty",
+            };
     }
 }

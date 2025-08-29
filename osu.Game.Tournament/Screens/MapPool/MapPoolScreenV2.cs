@@ -38,6 +38,8 @@ namespace osu.Game.Tournament.Screens.MapPool
         private OsuButton redProtectButton = null!;
         private OsuButton blueProtectButton = null!;
 
+        private RoundBeatmap lastPickedMap = null!;
+
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
         {
@@ -220,6 +222,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                     BeatmapID = targetMap.ID
                 });
 
+                lastPickedMap = targetMap;
+
                 switch (choiceType)
                 {
                     // Picks
@@ -334,6 +338,42 @@ namespace osu.Game.Tournament.Screens.MapPool
             base.LoadComplete();
 
             computeCurrentState();
+        }
+
+        private void updateWinState(TeamColour colour)
+        {
+            if (lastPickedMap == null) return;
+
+            foreach (TournamentBeatmapPanelV2 b in redActions.OfType<TournamentBeatmapPanelV2>())
+            {
+                if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
+                {
+                    int panelID1 = panel.Beatmap.OnlineID;
+
+                    if (panel.Beatmap.OnlineID == lastPickedMap.ID)
+                    {
+                        panel.UpdateState(colour);
+                    }
+                }
+            }
+
+            foreach (TournamentBeatmapPanelV2 b in blueActions.OfType<TournamentBeatmapPanelV2>())
+            {
+                if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
+                {
+                    int panelID2 = panel.Beatmap.OnlineID;
+
+                    if (panel.Beatmap.OnlineID == lastPickedMap.ID)
+                    {
+                        panel.UpdateState(colour);
+                    }
+                }
+            }
+        }
+
+        public static void UpdateWinStateStatic(MapPoolScreenV2 screen, TeamColour colour)
+        {
+            screen?.updateWinState(colour);
         }
 
         private void computeCurrentState()

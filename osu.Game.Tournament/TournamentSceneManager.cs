@@ -51,6 +51,19 @@ namespace osu.Game.Tournament
         private Container chatContainer = null!;
         private FillFlowContainer buttons = null!;
 
+        private static MapPoolScreenV2 mappoolInstance = null!;
+
+        public static MapPoolScreenV2 MappoolInstance
+        {
+            get => mappoolInstance;
+            set
+            {
+                if (mappoolInstance == value) return;
+
+                mappoolInstance = value;
+            }
+        }
+
         public TournamentSceneManager()
         {
             RelativeSizeAxes = Axes.Both;
@@ -104,7 +117,7 @@ namespace osu.Game.Tournament
                                 new GameplayScreen(),
                                 new TeamWinScreen(),
 
-                                new MapPoolScreenV2(),
+                                mappoolInstance = new MapPoolScreenV2(),
                             }
                         },
                         chatContainer = new Container

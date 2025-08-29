@@ -10,6 +10,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
 using osu.Game.Graphics.UserInterface;
 using osu.Game.Tournament.Models;
+using osu.Game.Tournament.Screens.MapPool;
 using osuTK;
 using osuTK.Graphics;
 
@@ -19,11 +20,14 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
     {
         private readonly Bindable<int?> currentTeamScore = new Bindable<int?>();
         private readonly StarCounter counter;
+        private readonly TeamColour counterColour;
 
         public TeamScore(Bindable<int?> score, TeamColour colour, int count)
         {
             bool flip = colour == TeamColour.Blue;
             var anchor = flip ? Anchor.TopRight : Anchor.TopLeft;
+
+            counterColour = colour;
 
             AutoSizeAxes = Axes.Both;
 
@@ -37,7 +41,11 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             currentTeamScore.BindTo(score);
         }
 
-        private void scoreChanged(ValueChangedEvent<int?> score) => counter.Current = score.NewValue ?? 0;
+        private void scoreChanged(ValueChangedEvent<int?> score)
+        {
+            counter.Current = score.NewValue ?? 0;
+            MapPoolScreenV2.UpdateWinStateStatic(TournamentSceneManager.MappoolInstance, counterColour);
+        }
 
         public partial class TeamScoreStarCounter : StarCounter
         {
