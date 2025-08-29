@@ -3,28 +3,37 @@
 
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Overlays.Settings;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
-using osu.Game.Tournament.Screens.Gameplay.Components;
+using osuTK;
 
 namespace osu.Game.Tournament.Screens.MapPool
 {
     public partial class MapPoolScreenV2 : TournamentMatchScreen
     {
-        private FillFlowContainer<TournamentBeatmapPanel> redActions = null!;
-        private FillFlowContainer<TournamentBeatmapPanel> blueActions = null!;
+        private FillFlowContainer<TournamentBeatmapPanelV2> redActions = null!;
+        private FillFlowContainer<TournamentBeatmapPanelV2> blueActions = null!;
 
         private readonly Bindable<string> slot = new Bindable<string>(string.Empty);
+
+        private DrawablePlayerCard redPlayer = null!;
+        private DrawablePlayerCard bluePlayer = null!;
 
         private string mapSlot = null!;
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
         {
+            // Tienen que ser dos dummys distintos porque si no la instancia de TeamFlag es
+            // compartida por ambos. 2H para darme cuenta de esto, soy imbécil.
+            var dummyTeam1 = new TournamentTeam { FullName = { Value = "???" } };
+            var dummyTeam2 = new TournamentTeam { FullName = { Value = "???" } };
+
             InternalChildren = new Drawable[]
             {
                 new TourneyVideo("mappoolV2")
@@ -32,9 +41,19 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Loop = true,
                     RelativeSizeAxes = Axes.Both
                 },
-                new MatchHeader()
+                redPlayer = new DrawablePlayerCard(dummyTeam1, Color4Extensions.FromHex("#ed6dac"))
                 {
-                    ShowScores = true,
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
+                    Scale = new Vector2(1.4f),
+                    Margin = new MarginPadding { Top = 100, Left = 20 }
+                },
+                bluePlayer = new DrawablePlayerCard(dummyTeam2, Color4Extensions.FromHex("#6ddded"))
+                {
+                    Anchor = Anchor.TopRight,
+                    Origin = Anchor.TopRight,
+                    Scale = new Vector2(1.4f),
+                    Margin = new MarginPadding { Top = 100, Right = 220 }
                 },
                 new FillFlowContainer
                 {
@@ -50,7 +69,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Children = new Drawable[]
                             {
-                                redActions = new FillFlowContainer<TournamentBeatmapPanel>()
+                                redActions = new FillFlowContainer<TournamentBeatmapPanelV2>()
                                 {
                                     Anchor = Anchor.TopLeft,
                                     Origin = Anchor.TopLeft,
@@ -63,7 +82,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Children = new Drawable[]
                             {
-                                blueActions = new FillFlowContainer<TournamentBeatmapPanel>()
+                                blueActions = new FillFlowContainer<TournamentBeatmapPanelV2>()
                                 {
                                     Anchor = Anchor.TopRight,
                                     Origin = Anchor.TopRight,
@@ -131,6 +150,20 @@ namespace osu.Game.Tournament.Screens.MapPool
             };
 
             slot.BindValueChanged(slotString => mapSlot = slotString.NewValue);
+
+            // La lógica reside en primero se le da un dummy para que no crashee, despues ese dummy lo
+            // reemplazo por el team real. Es bastante peruano pero qué se le va a hacer.
+            LadderInfo.CurrentMatch.BindValueChanged(match =>
+            {
+                var t1 = match.NewValue?.Team1?.Value
+                         ?? new TournamentTeam { FullName = { Value = "???" } };
+
+                var t2 = match.NewValue?.Team2?.Value
+                         ?? new TournamentTeam { FullName = { Value = "???" } };
+
+                redPlayer.Team = t1;
+                bluePlayer.Team = t2;
+            }, true);
         }
 
         private void executeAction(TeamColour colour, ChoiceType choiceType, string map)
@@ -151,11 +184,11 @@ namespace osu.Game.Tournament.Screens.MapPool
 
                 if (targetMap == null!) return;
 
-                if (choiceType == ChoiceType.Pick)
+                if (choiceType == ChoiceType.Pick) // Pick
                 {
                     if (colour == TeamColour.Red)
                     {
-                        redActions.Add(new TournamentBeatmapPanel(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
+                        redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
                         {
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
@@ -164,7 +197,49 @@ namespace osu.Game.Tournament.Screens.MapPool
                     }
                     else
                     {
-                        blueActions.Add(new TournamentBeatmapPanel(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
+                        blueActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
+                        {
+                            Anchor = Anchor.TopCentre,
+                            Origin = Anchor.TopCentre,
+                            Height = 42,
+                        });
+                    }
+                }
+                else if (choiceType == ChoiceType.Ban) // Bans
+                {
+                    if (colour == TeamColour.Red)
+                    {
+                        redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
+                        {
+                            Anchor = Anchor.TopCentre,
+                            Origin = Anchor.TopCentre,
+                            Height = 42,
+                        });
+                    }
+                    else
+                    {
+                        blueActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
+                        {
+                            Anchor = Anchor.TopCentre,
+                            Origin = Anchor.TopCentre,
+                            Height = 42,
+                        });
+                    }
+                }
+                else // Protects
+                {
+                    if (colour == TeamColour.Red)
+                    {
+                        redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
+                        {
+                            Anchor = Anchor.TopCentre,
+                            Origin = Anchor.TopCentre,
+                            Height = 42,
+                        });
+                    }
+                    else
+                    {
+                        blueActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
                         {
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,

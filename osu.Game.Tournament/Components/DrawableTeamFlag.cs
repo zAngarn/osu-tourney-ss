@@ -21,7 +21,7 @@ namespace osu.Game.Tournament.Components
         private readonly int cornerRadius = 5;
 
         [UsedImplicitly]
-        private Bindable<string>? flag;
+        public Bindable<string>? flag;
 
         private Sprite? flagSprite;
 
@@ -51,6 +51,7 @@ namespace osu.Game.Tournament.Components
                 {
                     RelativeSizeAxes = Axes.Both,
                     Colour = Colour4.FromHex("333"),
+                    Alpha = 0.5f,
                 },
                 flagSprite = new Sprite
                 {

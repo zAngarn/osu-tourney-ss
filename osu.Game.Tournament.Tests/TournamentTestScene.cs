@@ -64,8 +64,8 @@ namespace osu.Game.Tournament.Tests
                 Value = new TournamentTeam
                 {
                     Acronym = { Value = "JPN" },
-                    FlagName = { Value = "JP" },
-                    FullName = { Value = "Japan" },
+                    FlagName = { Value = "ESC" },
+                    FullName = { Value = "ESCRUPULILLO" },
                     LastYearPlacing = { Value = 10 },
                     Seed = { Value = "#12" },
                     SeedingResults =
@@ -125,11 +125,7 @@ namespace osu.Game.Tournament.Tests
                     },
                     Players =
                     {
-                        new TournamentUser { Username = "Hello", Rank = 12 },
-                        new TournamentUser { Username = "Hello", Rank = 16 },
-                        new TournamentUser { Username = "Hello", Rank = 20 },
-                        new TournamentUser { Username = "Hello", Rank = 24 },
-                        new TournamentUser { Username = "Hello", Rank = 30 },
+                        new TournamentUser { Username = "Hello", Rank = 12500, CountryRank = 101 },
                     }
                 }
             },
@@ -138,16 +134,12 @@ namespace osu.Game.Tournament.Tests
                 Value = new TournamentTeam
                 {
                     Acronym = { Value = "USA" },
-                    FlagName = { Value = "US" },
-                    FullName = { Value = "United States" },
+                    FlagName = { Value = "SOR" },
+                    FullName = { Value = "Yuri Enjoyer" },
                     Seed = { Value = "#3" },
                     Players =
                     {
-                        new TournamentUser { Username = "Hello" },
-                        new TournamentUser { Username = "Hello" },
-                        new TournamentUser { Username = "Hello" },
-                        new TournamentUser { Username = "Hello" },
-                        new TournamentUser { Username = "Hello" },
+                        new TournamentUser { Username = "Hello", Rank = 14600, CountryRank = 103 },
                     }
                 }
             },
