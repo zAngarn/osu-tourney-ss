@@ -24,15 +24,19 @@ namespace osu.Game.Tournament.Screens.MapPool
         private DrawablePlayerCard redPlayer = null!;
         private DrawablePlayerCard bluePlayer = null!;
 
+        private RoundDisplayV2 roundDisplay = null!;
+
         private string mapSlot = null!;
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
         {
+            // TODO meter en dummyMatch los dummyTeams
             // Tienen que ser dos dummys distintos porque si no la instancia de TeamFlag es
             // compartida por ambos. 2H para darme cuenta de esto, soy imbécil.
             var dummyTeam1 = new TournamentTeam { FullName = { Value = "???" } };
             var dummyTeam2 = new TournamentTeam { FullName = { Value = "???" } };
+            var dummyRound = new TournamentRound { Name = { Value = "???" } };
 
             InternalChildren = new Drawable[]
             {
@@ -41,14 +45,20 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Loop = true,
                     RelativeSizeAxes = Axes.Both
                 },
-                redPlayer = new DrawablePlayerCard(dummyTeam1, Color4Extensions.FromHex("#ed6dac"))
+                roundDisplay = new RoundDisplayV2(dummyRound)
+                {
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
+                    Margin = new MarginPadding { Left = 160 }
+                },
+                redPlayer = new DrawablePlayerCard(dummyTeam1, Color4Extensions.FromHex("#6ddded"))
                 {
                     Anchor = Anchor.TopLeft,
                     Origin = Anchor.TopLeft,
                     Scale = new Vector2(1.4f),
                     Margin = new MarginPadding { Top = 100, Left = 20 }
                 },
-                bluePlayer = new DrawablePlayerCard(dummyTeam2, Color4Extensions.FromHex("#6ddded"))
+                bluePlayer = new DrawablePlayerCard(dummyTeam2, Color4Extensions.FromHex("#ed6dac"))
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
@@ -155,14 +165,18 @@ namespace osu.Game.Tournament.Screens.MapPool
             // reemplazo por el team real. Es bastante peruano pero qué se le va a hacer.
             LadderInfo.CurrentMatch.BindValueChanged(match =>
             {
-                var t1 = match.NewValue?.Team1?.Value
-                         ?? new TournamentTeam { FullName = { Value = "???" } };
+                TournamentTeam t1 = match.NewValue?.Team1?.Value
+                                    ?? new TournamentTeam { FullName = { Value = "???" } };
 
-                var t2 = match.NewValue?.Team2?.Value
-                         ?? new TournamentTeam { FullName = { Value = "???" } };
+                TournamentTeam t2 = match.NewValue?.Team2?.Value
+                                    ?? new TournamentTeam { FullName = { Value = "???" } };
+
+                TournamentRound round = match.NewValue?.Round.Value
+                                        ?? new TournamentRound { Name = { Value = "???" } };
 
                 redPlayer.Team = t1;
                 bluePlayer.Team = t2;
+                roundDisplay.Round = round;
             }, true);
         }
 
