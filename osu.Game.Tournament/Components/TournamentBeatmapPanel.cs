@@ -144,14 +144,14 @@ namespace osu.Game.Tournament.Components
         private void matchChanged(ValueChangedEvent<TournamentMatch?> match)
         {
             if (match.OldValue != null)
-                match.OldValue.PicksBans.CollectionChanged -= picksBansOnCollectionChanged;
+                match.OldValue.PicksBansProtects.CollectionChanged -= picksBansProtectsOnCollectionChanged;
             if (match.NewValue != null)
-                match.NewValue.PicksBans.CollectionChanged += picksBansOnCollectionChanged;
+                match.NewValue.PicksBansProtects.CollectionChanged += picksBansProtectsOnCollectionChanged;
 
             Scheduler.AddOnce(updateState);
         }
 
-        private void picksBansOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        private void picksBansProtectsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
             => Scheduler.AddOnce(updateState);
 
         private BeatmapChoice? choice;
@@ -163,7 +163,7 @@ namespace osu.Game.Tournament.Components
                 return;
             }
 
-            var newChoice = currentMatch.Value.PicksBans.FirstOrDefault(p => p.BeatmapID == Beatmap?.OnlineID);
+            var newChoice = currentMatch.Value.PicksBansProtects.FirstOrDefault(p => p.BeatmapID == Beatmap?.OnlineID);
 
             bool shouldFlash = newChoice != choice;
 

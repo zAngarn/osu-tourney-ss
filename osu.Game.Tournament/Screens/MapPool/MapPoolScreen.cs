@@ -128,7 +128,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
             int totalBansRequired = CurrentMatch.Value.Round.Value.BanCount.Value * 2;
 
-            if (CurrentMatch.Value.PicksBans.Count(p => p.Type == ChoiceType.Ban) < totalBansRequired)
+            if (CurrentMatch.Value.PicksBansProtects.Count(p => p.Type == ChoiceType.Ban) < totalBansRequired)
                 return;
 
             // if bans have already been placed, beatmap changes result in a selection being made automatically
@@ -156,16 +156,16 @@ namespace osu.Game.Tournament.Screens.MapPool
 
             int totalBansRequired = CurrentMatch.Value.Round.Value.BanCount.Value * 2;
 
-            TeamColour lastPickColour = CurrentMatch.Value.PicksBans.LastOrDefault()?.Team ?? TeamColour.Red;
+            TeamColour lastPickColour = CurrentMatch.Value.PicksBansProtects.LastOrDefault()?.Team ?? TeamColour.Red;
 
             TeamColour nextColour;
 
-            bool hasAllBans = CurrentMatch.Value.PicksBans.Count(p => p.Type == ChoiceType.Ban) >= totalBansRequired;
+            bool hasAllBans = CurrentMatch.Value.PicksBansProtects.Count(p => p.Type == ChoiceType.Ban) >= totalBansRequired;
 
             if (!hasAllBans)
             {
                 // Ban phase: switch teams every second ban.
-                nextColour = CurrentMatch.Value.PicksBans.Count % 2 == 1
+                nextColour = CurrentMatch.Value.PicksBansProtects.Count % 2 == 1
                     ? getOppositeTeamColour(lastPickColour)
                     : lastPickColour;
             }
@@ -193,11 +193,11 @@ namespace osu.Game.Tournament.Screens.MapPool
                     addForBeatmap(map.Beatmap.OnlineID);
                 else
                 {
-                    var existing = CurrentMatch.Value?.PicksBans.FirstOrDefault(p => p.BeatmapID == map.Beatmap?.OnlineID);
+                    var existing = CurrentMatch.Value?.PicksBansProtects.FirstOrDefault(p => p.BeatmapID == map.Beatmap?.OnlineID);
 
                     if (existing != null)
                     {
-                        CurrentMatch.Value?.PicksBans.Remove(existing);
+                        CurrentMatch.Value?.PicksBansProtects.Remove(existing);
                         setNextMode();
                     }
                 }
@@ -210,7 +210,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
         private void reset()
         {
-            CurrentMatch.Value?.PicksBans.Clear();
+            CurrentMatch.Value?.PicksBansProtects.Clear();
             setNextMode();
         }
 
@@ -223,11 +223,11 @@ namespace osu.Game.Tournament.Screens.MapPool
                 // don't attempt to add if the beatmap isn't in our pool
                 return;
 
-            if (CurrentMatch.Value.PicksBans.Any(p => p.BeatmapID == beatmapId))
+            if (CurrentMatch.Value.PicksBansProtects.Any(p => p.BeatmapID == beatmapId))
                 // don't attempt to add if already exists.
                 return;
 
-            CurrentMatch.Value.PicksBans.Add(new BeatmapChoice
+            CurrentMatch.Value.PicksBansProtects.Add(new BeatmapChoice
             {
                 Team = pickColour,
                 Type = pickType,
@@ -238,7 +238,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
             if (LadderInfo.AutoProgressScreens.Value)
             {
-                if (pickType == ChoiceType.Pick && CurrentMatch.Value.PicksBans.Any(i => i.Type == ChoiceType.Pick))
+                if (pickType == ChoiceType.Pick && CurrentMatch.Value.PicksBansProtects.Any(i => i.Type == ChoiceType.Pick))
                 {
                     scheduledScreenChange?.Cancel();
                     scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(GameplayScreen)); }, 10000);

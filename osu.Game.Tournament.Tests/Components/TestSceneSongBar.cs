@@ -24,7 +24,7 @@ namespace osu.Game.Tournament.Tests.Components
             AddStep("setup picks bans", () =>
             {
                 ladderBeatmap = CreateSampleBeatmap();
-                Ladder.CurrentMatch.Value!.PicksBans.Add(new BeatmapChoice
+                Ladder.CurrentMatch.Value!.PicksBansProtects.Add(new BeatmapChoice
                 {
                     BeatmapID = ladderBeatmap.OnlineID,
                     Team = TeamColour.Red,
