@@ -136,39 +136,39 @@ namespace osu.Game.Tournament.Screens.MapPool
                         redBanButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Red Ban",
+                            Text = "Blue Ban",
                             Action = () => executeAction(TeamColour.Red, ChoiceType.Ban, mapSlot)
                         },
                         blueBanButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Blue Ban",
+                            Text = "Red Ban",
                             Action = () => executeAction(TeamColour.Blue, ChoiceType.Ban, mapSlot)
                         },
                         new ControlPanel.Spacer(),
                         redPickButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Red Pick",
+                            Text = "Blue Pick",
                             Action = () => executeAction(TeamColour.Red, ChoiceType.Pick, mapSlot)
                         },
                         bluePickButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Blue Pick",
+                            Text = "Red Pick",
                             Action = () => executeAction(TeamColour.Blue, ChoiceType.Pick, mapSlot)
                         },
                         new ControlPanel.Spacer(),
                         redProtectButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Red Protect",
+                            Text = "Blue Protect",
                             Action = () => executeAction(TeamColour.Red, ChoiceType.Protect, mapSlot)
                         },
                         blueProtectButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Blue Protect",
+                            Text = "Red Protect",
                             Action = () => executeAction(TeamColour.Blue, ChoiceType.Protect, mapSlot)
                         },
                     }
