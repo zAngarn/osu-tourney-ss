@@ -111,7 +111,6 @@ namespace osu.Game.Tournament
                                 new RoundEditorScreen(),
                                 new ShowcaseScreen(),
                                 new MapPoolScreen(),
-                                new PicksBansScreen(),
                                 new TeamIntroScreen(),
                                 new SeedingScreen(),
                                 new DrawingsScreen(),
@@ -168,7 +167,6 @@ namespace osu.Game.Tournament
                                 new ScreenButton(typeof(DrawingsScreen)) { Text = "Drawings", RequestSelection = SetScreen },
                                 new ScreenButton(typeof(ShowcaseScreen)) { Text = "Showcase", RequestSelection = SetScreen },
                                 new Separator(),
-                                new ScreenButton(typeof(PicksBansScreen), Key.A) { Text = "Map Pool V2", RequestSelection = SetScreen },
                             }
                         },
                     },
@@ -238,6 +236,16 @@ namespace osu.Game.Tournament
                     break;
 
                 case GameplayScreen:
+                    chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
+                    chatContainer.ResizeWidthTo(0.5f, 500, Easing.OutQuint);
+                    break;
+
+                case PicksBansScreen:
+                    chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
+                    chatContainer.ResizeWidthTo(0.5f, 500, Easing.OutQuint);
+                    break;
+
+                case ChatSolo:
                     chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
                     chatContainer.ResizeWidthTo(0.5f, 500, Easing.OutQuint);
                     break;

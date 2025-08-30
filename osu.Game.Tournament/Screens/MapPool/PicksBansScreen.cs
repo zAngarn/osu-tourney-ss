@@ -44,9 +44,31 @@ namespace osu.Game.Tournament.Screens.MapPool
         private string currentBan = null!;
         private string currentPick = null!;
 
+        private MatchIPCInfo ipc = null!;
+
+        //Chat y tal
+        #region Chat de los Cojones
+
+        // Dependency error (arreglao): The type PicksBanScreen has a dependency on TournamentMatchChatDisplay, but the dependency is not registered.
+        /*
+        Vale resulta que en los tests hay que poner las dependencias manualmente.
+        - https://discord.com/channels/188630481301012481/1097318920991559880/1411431057773035721
+        - https://github.com/ppy/osu-framework/wiki/Dependency-Injection
+        */
+
+        [Resolved]
+        private TournamentSceneManager? sceneManager { get; set; }
+
+        [Resolved]
+        private TournamentMatchChatDisplay chat { get; set; } = null!; // Depende de TournamentSceneManager
+
+        #endregion
+
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
         {
+            this.ipc = ipc;
+
             // TODO meter en dummyMatch los dummyTeams
             // Tienen que ser dos dummys distintos porque si no la instancia de TeamFlag es
             // compartida por ambos. 2H para darme cuenta de esto, soy imbécil.
@@ -119,6 +141,24 @@ namespace osu.Game.Tournament.Screens.MapPool
                                     Spacing = new Vector2(8),
                                 }
                             }
+                        },
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.X,
+                    Height = 150,
+                    Width = 0.205f,
+                    Margin = new MarginPadding { Left = 28 },
+                    Y = 475,
+                    Children = new Drawable[]
+                    {
+                        chat = new TournamentMatchChatDisplay // tamaño del chat
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Anchor = Anchor.TopLeft,
+                            Origin = Anchor.TopLeft,
+                            Height = 275,
                         },
                     }
                 },
@@ -199,6 +239,22 @@ namespace osu.Game.Tournament.Screens.MapPool
                             Text = "Red Pick",
                             BackgroundColour = Colour4.HotPink,
                             Action = () => executeAction(TeamColour.Blue, ChoiceType.Pick, mapSlot)
+                        },
+                        new ControlPanel.HorizontalLine(),
+                        new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Toggle chat",
+                            Action = () =>
+                            {
+                                if (chat != null)
+                                {
+                                    if (chat.IsPresent)
+                                        chat.Contract();
+                                    else
+                                        chat.Expand();
+                                }
+                            }
                         },
                     },
                 },
@@ -354,6 +410,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             base.LoadComplete();
 
             computeCurrentState();
+            chat.Expand();
         }
 
         private void updateWinState(TeamColour colour)
