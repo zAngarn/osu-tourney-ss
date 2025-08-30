@@ -32,6 +32,9 @@ namespace osu.Game.Tournament.Screens.MapPool
 
         private string mapSlot = null!;
 
+        private bool redSpacer = false;
+        private bool blueSpacer = false;
+
         private OsuButton redBanButton = null!;
         private OsuButton blueBanButton = null!;
         private OsuButton redPickButton = null!;
@@ -421,7 +424,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     // Picks ---------------------------------------------
                     case ChoiceType.Pick when colour == TeamColour.Red:
 
-                        if (redActions.Children.Count >= 3)
+                        if (redActions.Children.Count >= 3 && !redSpacer)
                         {
                             redActions.Add(new Container
                             {
@@ -430,6 +433,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                                 Anchor = Anchor.TopLeft,
                                 Origin = Anchor.TopLeft,
                             });
+
+                            redSpacer = true;
                         }
 
                         redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
@@ -444,7 +449,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
                     case ChoiceType.Pick when colour == TeamColour.Blue:
 
-                        if (blueActions.Children.Count >= 3)
+                        if (blueActions.Children.Count >= 3 && !blueSpacer)
                         {
                             blueActions.Add(new Container
                             {
@@ -453,6 +458,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                                 Anchor = Anchor.TopRight,
                                 Origin = Anchor.TopRight,
                             });
+
+                            blueSpacer = true;
                         }
 
                         blueActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
