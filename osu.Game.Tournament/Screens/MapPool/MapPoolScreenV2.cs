@@ -54,15 +54,6 @@ namespace osu.Game.Tournament.Screens.MapPool
             var dummyTeam2 = new TournamentTeam { FullName = { Value = "???" } };
             var dummyRound = new TournamentRound { Name = { Value = "???" } };
 
-            //un poquito de vibecoding que te convierte automaticamente el texto en mayusculas
-            slot.ValueChanged += e =>
-            {
-                if (e.NewValue != e.NewValue.ToUpper())
-                {
-                    Schedule(() => slot.Value = e.NewValue.ToUpper());
-                }
-            };
-
             InternalChildren = new Drawable[]
             {
                 new TourneyVideo("mappoolV2")
@@ -232,7 +223,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                 },
             };
 
-            slot.BindValueChanged(slotString => mapSlot = slotString.NewValue);
+            slot.BindValueChanged(slotString => mapSlot = slotString.NewValue.ToUpper(CultureInfo.InvariantCulture));
 
             // La lógica reside en primero se le da un dummy para que no crashee, despues ese dummy lo
             // reemplazo por el team real. Es bastante peruano pero qué se le va a hacer.
