@@ -26,7 +26,8 @@ namespace osu.Game.Tournament.Models
     public enum TeamColour
     {
         Red,
-        Blue
+        Blue,
+        None
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

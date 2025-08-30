@@ -25,7 +25,17 @@ namespace osu.Game.Tournament.Components
 
         private readonly string mod;
 
-        private readonly string slot;
+        private string slot;
+
+        public string Slot
+        {
+            get => slot;
+            set
+            {
+                slot = value;
+                return;
+            }
+        }
 
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
 

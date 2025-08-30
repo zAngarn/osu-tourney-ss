@@ -23,6 +23,7 @@ namespace osu.Game.Tournament.Screens.MapPool
         private FillFlowContainer blueActions = null!;
 
         private readonly Bindable<string> slot = new Bindable<string>(string.Empty);
+        private readonly Bindable<string> toDeletion = new Bindable<string>(string.Empty);
 
         private DrawablePlayerCard redPlayer = null!;
         private DrawablePlayerCard bluePlayer = null!;
@@ -30,6 +31,7 @@ namespace osu.Game.Tournament.Screens.MapPool
         private RoundDisplayV2 roundDisplay = null!;
 
         private string mapSlot = null!;
+        private string mapToDelete = null!;
 
         private OsuButton redBanButton = null!;
         private OsuButton blueBanButton = null!;
@@ -37,12 +39,19 @@ namespace osu.Game.Tournament.Screens.MapPool
         private OsuButton bluePickButton = null!;
         private OsuButton redProtectButton = null!;
         private OsuButton blueProtectButton = null!;
+        private OsuButton deletionButton = null!;
 
         private RoundBeatmap lastPickedMap = null!;
 
-        private string currentProtect = "blue";
-        private string currentBan = null!;
-        private string currentPick = null!;
+        private ChoiceType currentPhase = ChoiceType.Protect;
+
+        private TeamColour currentProtect = TeamColour.None;
+        private TeamColour currentBan = TeamColour.None;
+        private TeamColour currentPick = TeamColour.None;
+
+        private TeamColour firstProtect = TeamColour.Blue; // TODO asignables
+        private TeamColour firstBan = TeamColour.Blue;
+        private TeamColour firstPick = TeamColour.Blue;
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
@@ -126,14 +135,9 @@ namespace osu.Game.Tournament.Screens.MapPool
                 {
                     Children = new Drawable[]
                     {
-                        new TournamentSpriteText
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Map Selection Panel",
-                        },
                         new SettingsTextBox
                         {
-                            LabelText = "Enter map slot (NM1, HR3...)",
+                            LabelText = "Enter map slot to add",
                             RelativeSizeAxes = Axes.X,
                             Current = slot,
                         },
@@ -145,18 +149,18 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Text = "Protects",
                         },
-                        redProtectButton = new TourneyButton
+                        blueProtectButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
                             Text = "Blue Protect",
-                            Action = () => executeAction(TeamColour.Red, ChoiceType.Protect, mapSlot)
+                            Action = () => addMap(TeamColour.Blue, ChoiceType.Protect, mapSlot)
                         },
-                        blueProtectButton = new TourneyButton
+                        redProtectButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
                             Text = "Red Protect",
                             BackgroundColour = Colour4.HotPink,
-                            Action = () => executeAction(TeamColour.Blue, ChoiceType.Protect, mapSlot)
+                            Action = () => addMap(TeamColour.Red, ChoiceType.Protect, mapSlot)
                         },
                         new ControlPanel.HorizontalLine(),
 
@@ -166,18 +170,18 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Text = "Bans",
                         },
-                        redBanButton = new TourneyButton
+                        blueBanButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
                             Text = "Blue Ban",
-                            Action = () => executeAction(TeamColour.Red, ChoiceType.Ban, mapSlot)
+                            Action = () => addMap(TeamColour.Blue, ChoiceType.Ban, mapSlot)
                         },
-                        blueBanButton = new TourneyButton
+                        redBanButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
                             Text = "Red Ban",
                             BackgroundColour = Colour4.HotPink,
-                            Action = () => executeAction(TeamColour.Blue, ChoiceType.Ban, mapSlot)
+                            Action = () => addMap(TeamColour.Red, ChoiceType.Ban, mapSlot)
                         },
                         new ControlPanel.HorizontalLine(),
 
@@ -187,19 +191,26 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Text = "Picks",
                         },
-                        redPickButton = new TourneyButton
+                        bluePickButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
                             Text = "Blue Pick",
-                            Action = () => executeAction(TeamColour.Red, ChoiceType.Pick, mapSlot)
+                            Action = () => addMap(TeamColour.Blue, ChoiceType.Pick, mapSlot)
                         },
-                        bluePickButton = new TourneyButton
+                        redPickButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
                             Text = "Red Pick",
                             BackgroundColour = Colour4.HotPink,
-                            Action = () => executeAction(TeamColour.Blue, ChoiceType.Pick, mapSlot)
+                            Action = () => addMap(TeamColour.Red, ChoiceType.Pick, mapSlot)
                         },
+                        new ControlPanel.Spacer(),
+                        deletionButton = new TourneyButton()
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Delete last added beatmap",
+                            Action = () => deleteMap(lastPickedMap.Slot),
+                        }
                     },
                 },
             };
@@ -222,10 +233,98 @@ namespace osu.Game.Tournament.Screens.MapPool
                 redPlayer.Team = t1;
                 bluePlayer.Team = t2;
                 roundDisplay.Round = round;
+                computeCurrentState();
             }, true);
         }
 
-        private void executeAction(TeamColour colour, ChoiceType choiceType, string map)
+        private bool deleteMap(string s)
+        {
+            // Se elimina primero el mapa visualmente (redActions, etc) y despues de la lista general (creo que es
+            // la que se guarda despues al bracket) (Dios quiera que si por favor)
+            TournamentBeatmapPanelV2 panelToDelete = null!;
+            string where = string.Empty;
+            int beatmapID = 0;
+
+            bool found = false;
+
+            foreach (TournamentBeatmapPanelV2 b in redActions.OfType<TournamentBeatmapPanelV2>())
+            {
+                if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
+                {
+                    if (panel.Slot == s)
+                    {
+                        panelToDelete = panel;
+                        where = "red";
+                        beatmapID = panel.Beatmap.OnlineID;
+                        found = true;
+                    }
+                }
+            }
+
+            foreach (TournamentBeatmapPanelV2 b in blueActions.OfType<TournamentBeatmapPanelV2>())
+            {
+                if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
+                {
+                    if (panel.Slot == s)
+                    {
+                        panelToDelete = panel;
+                        where = "blue";
+                        beatmapID = panel.Beatmap.OnlineID;
+                        found = true;
+                    }
+                }
+            }
+
+            if (found)
+            {
+                var map = CurrentMatch.Value?.PicksBansProtects.FirstOrDefault(b => b.BeatmapID == beatmapID);
+                CurrentMatch.Value?.PicksBansProtects.Remove(map!);
+            }
+
+            if (found)
+            {
+                if (where == "red")
+                {
+                    redActions.Remove(panelToDelete, true);
+                }
+                else
+                {
+                    blueActions.Remove(panelToDelete, true);
+                }
+
+                found = true;
+            }
+
+            switch (currentPhase)
+            {
+                case ChoiceType.Protect when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) < 1:
+                    currentProtect = firstProtect; // Invertir color sin cambiar fase
+                    break;
+
+                case ChoiceType.Ban when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) == 1:
+                    currentProtect = getOppositeColour(firstProtect); // Invertir color cambiando fase (condicion de contorno)
+                    currentBan = TeamColour.None;
+                    break;
+
+                case ChoiceType.Ban when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) < 3:
+                    currentBan = firstBan;
+                    break;
+
+                case ChoiceType.Pick when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) == 3:
+                    currentBan = getOppositeColour(firstBan);
+                    currentPick = TeamColour.None;
+                    break;
+
+                case ChoiceType.Pick when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Pick) < 12:
+                    currentPick = getOppositeColour(currentPick);
+                    break;
+            }
+
+            computeCurrentState();
+            return found;
+        }
+
+        private void addMap(TeamColour colour, ChoiceType choiceType, string map)
         {
             RoundBeatmap targetMap = null!;
             if (CurrentMatch.Value == null!) return;
@@ -255,42 +354,29 @@ namespace osu.Game.Tournament.Screens.MapPool
                 switch (choiceType)
                 {
                     // Protects ---------------------------------------------
-                    case ChoiceType.Protect:
-                    default:
+                    case ChoiceType.Protect when colour == TeamColour.Red:
                     {
-                        if (redActions.Count == 1 && blueActions.Count == 1)
+                        redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
                         {
-                            currentProtect = null!;
-                            break;
-                        }
+                            Anchor = Anchor.TopLeft,
+                            Origin = Anchor.TopLeft,
+                            Scale = new Vector2(0.73f),
+                        });
 
-                        if (colour == TeamColour.Red)
+                        currentProtect = TeamColour.Blue;
+                        break;
+                    }
+
+                    case ChoiceType.Protect when colour == TeamColour.Blue:
+                    {
+                        blueActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
                         {
-                            redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
-                            {
-                                Anchor = Anchor.TopLeft,
-                                Origin = Anchor.TopLeft,
-                                Scale = new Vector2(0.73f),
-                            });
+                            Anchor = Anchor.TopRight,
+                            Origin = Anchor.TopRight,
+                            Scale = new Vector2(0.73f),
+                        });
 
-                            redProtectButton.BackgroundColour = Colour4.Gray;
-                            blueProtectButton.Enabled.Value = false;
-                            currentProtect = "red";
-                        }
-                        else
-                        {
-                            blueActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
-                            {
-                                Anchor = Anchor.TopRight,
-                                Origin = Anchor.TopRight,
-                                Scale = new Vector2(0.73f),
-                            });
-
-                            blueProtectButton.BackgroundColour = Colour4.Gray;
-                            blueProtectButton.Enabled.Value = false;
-                            currentProtect = "blue";
-                        }
-
+                        currentProtect = TeamColour.Red;
                         break;
                     }
 
@@ -304,7 +390,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                             Scale = new Vector2(0.73f),
                         });
 
-                        currentBan = "red";
+                        currentBan = TeamColour.Blue;
                         break;
                     }
 
@@ -317,12 +403,24 @@ namespace osu.Game.Tournament.Screens.MapPool
                             Scale = new Vector2(0.73f),
                         });
 
-                        currentBan = "blue";
+                        currentBan = TeamColour.Red;
                         break;
                     }
 
                     // Picks ---------------------------------------------
                     case ChoiceType.Pick when colour == TeamColour.Red:
+
+                        if (redActions.Children.Count >= 3)
+                        {
+                            redActions.Add(new Container
+                            {
+                                AutoSizeAxes = Axes.X,
+                                Height = 100,
+                                Anchor = Anchor.TopRight,
+                                Origin = Anchor.TopRight,
+                            });
+                        }
+
                         redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
                         {
                             Anchor = Anchor.TopLeft,
@@ -330,10 +428,22 @@ namespace osu.Game.Tournament.Screens.MapPool
                             Scale = new Vector2(0.73f),
                         });
 
-                        currentPick = "red";
+                        currentPick = TeamColour.Blue;
                         break;
 
                     case ChoiceType.Pick when colour == TeamColour.Blue:
+
+                        if (blueActions.Children.Count >= 3)
+                        {
+                            blueActions.Add(new Container
+                            {
+                                AutoSizeAxes = Axes.X,
+                                Height = 100,
+                                Anchor = Anchor.TopRight,
+                                Origin = Anchor.TopRight,
+                            });
+                        }
+
                         blueActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
                         {
                             Anchor = Anchor.TopRight,
@@ -341,12 +451,12 @@ namespace osu.Game.Tournament.Screens.MapPool
                             Scale = new Vector2(0.73f),
                         });
 
-                        currentPick = "blue";
+                        currentPick = TeamColour.Red;
                         break;
                 }
-            }
 
-            computeCurrentState();
+                computeCurrentState();
+            }
         }
 
         protected override void LoadComplete()
@@ -388,7 +498,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             screen?.updateWinState(colour);
         }
 
-        private void computeCurrentState()
+        private void disableAllButtons()
         {
             blueProtectButton.Enabled.Value = false;
             redProtectButton.Enabled.Value = false;
@@ -398,97 +508,110 @@ namespace osu.Game.Tournament.Screens.MapPool
 
             bluePickButton.Enabled.Value = false;
             redPickButton.Enabled.Value = false;
+        }
 
-            //PROTECTS
-            if (redActions.Children.Count == 1 && blueActions.Children.Count == 1)
+        private TeamColour getOppositeColour(TeamColour c)
+        {
+            TeamColour color = c switch
             {
-                currentProtect = null!;
-                currentBan = "blue";
-            }
-            else
+                TeamColour.Blue => TeamColour.Red,
+                TeamColour.Red => TeamColour.Blue,
+                _ => TeamColour.Red // default por si aca
+            };
+
+            return color;
+        }
+
+        private void computeCurrentState()
+        {
+            if (CurrentMatch.Value?.Round.Value == null) return;
+
+            disableAllButtons();
+
+            // cambia segun la ronda TODO asignable
+            bool hasAllProtects = CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) == 2;
+            bool hasAllBans = CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) == 4;
+            bool hasAllPicks = CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Pick) == 12;
+
+            if (!hasAllProtects)
             {
-                switch (currentProtect)
+                currentPhase = ChoiceType.Pick;
+
+                if (CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) < 1)
                 {
-                    case "blue":
-                        redProtectButton.Enabled.Value = true;
-                        break;
-
-                    case "red":
+                    if (firstProtect == TeamColour.Blue)
+                    {
                         blueProtectButton.Enabled.Value = true;
-                        break;
-
-                    default:
-                        blueProtectButton.Enabled.Value = false;
-                        redProtectButton.Enabled.Value = false;
-                        break;
+                    }
+                    else if (firstProtect == TeamColour.Red)
+                    {
+                        redProtectButton.Enabled.Value = true;
+                    }
+                }
+                else
+                {
+                    if (currentProtect == TeamColour.Blue)
+                    {
+                        blueProtectButton.Enabled.Value = true;
+                    }
+                    else if (currentProtect == TeamColour.Red)
+                    {
+                        redProtectButton.Enabled.Value = true;
+                    }
                 }
             }
-
-            //BANS
-            if (redActions.Children.Count == 3 && blueActions.Children.Count == 3)
+            else if (!hasAllBans)
             {
-                currentBan = null!;
-                currentPick = "blue";
+                currentPhase = ChoiceType.Ban;
 
-                blueBanButton.BackgroundColour = Colour4.Gray;
-                redBanButton.BackgroundColour = Colour4.Gray;
-
-                redActions.Add(new Container
+                if (CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) < 1)
                 {
-                    AutoSizeAxes = Axes.X,
-                    Height = 100,
-                    Anchor = Anchor.TopLeft,
-                    Origin = Anchor.TopLeft,
-                });
-                blueActions.Add(new Container
-                {
-                    AutoSizeAxes = Axes.X,
-                    Height = 100,
-                    Anchor = Anchor.TopRight,
-                    Origin = Anchor.TopRight,
-                });
-            }
-            else
-            {
-                switch (currentBan)
-                {
-                    case "blue":
-                        redBanButton.Enabled.Value = true;
-                        break;
-
-                    case "red":
+                    if (firstBan == TeamColour.Blue)
+                    {
                         blueBanButton.Enabled.Value = true;
-                        break;
-
-                    default:
-                        blueBanButton.Enabled.Value = false;
-                        redBanButton.Enabled.Value = false;
-                        break;
+                    }
+                    else if (firstBan == TeamColour.Red)
+                    {
+                        redBanButton.Enabled.Value = true;
+                    }
+                }
+                else
+                {
+                    if (currentBan == TeamColour.Blue)
+                    {
+                        blueBanButton.Enabled.Value = true;
+                    }
+                    else if (currentBan == TeamColour.Red)
+                    {
+                        redBanButton.Enabled.Value = true;
+                    }
                 }
             }
+            else if (!hasAllPicks)
+            {
+                currentPhase = ChoiceType.Pick;
 
-            if (redActions.Children.Count == 10 && blueActions.Children.Count == 10)
-            {
-                currentPick = "tiebreaker"; // <- a lo mejor puedes usar esto para algo
-                bluePickButton.BackgroundColour = Colour4.Gray;
-                redPickButton.BackgroundColour = Colour4.Gray;
-            }
-            else
-            {
-                switch (currentPick)
+                if (CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Pick) < 1)
                 {
-                    case "blue":
-                        redPickButton.Enabled.Value = true;
-                        break;
-
-                    case "red":
+                    if (firstPick == TeamColour.Blue)
+                    {
                         bluePickButton.Enabled.Value = true;
-                        break;
-
-                    default:
-                        bluePickButton.Enabled.Value = false;
-                        redPickButton.Enabled.Value = false;
-                        break;
+                    }
+                    else if (firstPick == TeamColour.Red)
+                    {
+                        redPickButton.Enabled.Value = true;
+                    }
+                }
+                else
+                {
+                    if (currentPick == TeamColour.Blue)
+                    {
+                        bluePickButton.Enabled.Value = true;
+                    }
+                    else if (currentPick == TeamColour.Red)
+                    {
+                        redPickButton.Enabled.Value = true;
+                    }
                 }
             }
         }
