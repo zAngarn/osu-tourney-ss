@@ -4,6 +4,7 @@
 using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -52,6 +53,15 @@ namespace osu.Game.Tournament.Screens.MapPool
             var dummyTeam1 = new TournamentTeam { FullName = { Value = "???" } };
             var dummyTeam2 = new TournamentTeam { FullName = { Value = "???" } };
             var dummyRound = new TournamentRound { Name = { Value = "???" } };
+
+            //un poquito de vibecoding que te convierte automaticamente el texto en mayusculas
+            slot.ValueChanged += e =>
+            {
+                if (e.NewValue != e.NewValue.ToUpper())
+                {
+                    Schedule(() => slot.Value = e.NewValue.ToUpper());
+                }
+            };
 
             InternalChildren = new Drawable[]
             {
