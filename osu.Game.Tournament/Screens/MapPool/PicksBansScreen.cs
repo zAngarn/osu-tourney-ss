@@ -67,14 +67,14 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Origin = Anchor.TopLeft,
                     Margin = new MarginPadding { Left = 160 }
                 },
-                redPlayer = new DrawablePlayerCard(dummyTeam1, Color4Extensions.FromHex("#6ddded"))
+                redPlayer = new DrawablePlayerCard(dummyTeam1, Color4Extensions.FromHex("#ed6dac"))
                 {
                     Anchor = Anchor.TopLeft,
                     Origin = Anchor.TopLeft,
                     Scale = new Vector2(1.4f),
                     Margin = new MarginPadding { Top = 100, Left = 20 }
                 },
-                bluePlayer = new DrawablePlayerCard(dummyTeam2, Color4Extensions.FromHex("#ed6dac"))
+                bluePlayer = new DrawablePlayerCard(dummyTeam2, Color4Extensions.FromHex("#6ddded"))
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
