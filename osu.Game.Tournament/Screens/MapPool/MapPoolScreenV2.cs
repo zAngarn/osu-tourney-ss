@@ -41,8 +41,8 @@ namespace osu.Game.Tournament.Screens.MapPool
         private RoundBeatmap lastPickedMap = null!;
 
         private string currentProtect = "blue";
-        private string currentBan = null;
-        private string currentPick = null;
+        private string currentBan = null!;
+        private string currentPick = null!;
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
@@ -260,7 +260,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     {
                         if (redActions.Count == 1 && blueActions.Count == 1)
                         {
-                            currentProtect = null;
+                            currentProtect = null!;
                             break;
                         }
 
@@ -364,8 +364,6 @@ namespace osu.Game.Tournament.Screens.MapPool
             {
                 if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
                 {
-                    int panelID1 = panel.Beatmap.OnlineID;
-
                     if (panel.Beatmap.OnlineID == lastPickedMap.ID)
                     {
                         panel.UpdateState(colour);
@@ -377,8 +375,6 @@ namespace osu.Game.Tournament.Screens.MapPool
             {
                 if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
                 {
-                    int panelID2 = panel.Beatmap.OnlineID;
-
                     if (panel.Beatmap.OnlineID == lastPickedMap.ID)
                     {
                         panel.UpdateState(colour);
@@ -406,7 +402,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             //PROTECTS
             if (redActions.Children.Count == 1 && blueActions.Children.Count == 1)
             {
-                currentProtect = null;
+                currentProtect = null!;
                 currentBan = "blue";
             }
             else
@@ -431,7 +427,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             //BANS
             if (redActions.Children.Count == 3 && blueActions.Children.Count == 3)
             {
-                currentBan = null;
+                currentBan = null!;
                 currentPick = "blue";
 
                 blueBanButton.BackgroundColour = Colour4.Gray;
