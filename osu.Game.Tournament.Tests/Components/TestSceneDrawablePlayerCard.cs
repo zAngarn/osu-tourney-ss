@@ -15,7 +15,6 @@ namespace osu.Game.Tournament.Tests.Components
         private TournamentSpriteText winnerTexto;
 
         [Test]
-        [Ignore("roto")]
         public void TestBasic()
         {
             AddStep("setup", () =>
@@ -39,10 +38,10 @@ namespace osu.Game.Tournament.Tests.Components
                         Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 100),
                         Margin = new MarginPadding { Top = 300, Left = 200 }
                     },
-                    /*playerCard = new DrawablePlayerCard(team, Colour4.Aqua)
+                    playerCard = new DrawablePlayerCard(team, Colour4.Aqua)
                     {
                         Scale = new Vector2(3),
-                    },*/
+                    },
                 };
             });
         }
