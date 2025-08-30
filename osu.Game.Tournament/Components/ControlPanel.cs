@@ -17,7 +17,6 @@ namespace osu.Game.Tournament.Components
     public partial class ControlPanel : Container
     {
         private readonly FillFlowContainer buttons;
-
         protected override Container<Drawable> Content => buttons;
 
         public ControlPanel()
@@ -62,6 +61,42 @@ namespace osu.Game.Tournament.Components
                 RelativeSizeAxes = Axes.X;
                 Height = height;
                 AlwaysPresent = true;
+            }
+        }
+
+        public partial class HorizontalLine : CompositeDrawable
+        {
+            public HorizontalLine() //como cojones, como cojones le aumento el margen arriba y abajo
+            {
+                RelativeSizeAxes = Axes.X;
+                AlwaysPresent = true;
+                InternalChildren = new Drawable[]
+                {
+                    new FillFlowContainer
+                    {
+                        Direction = FillDirection.Horizontal,
+                        Height = 10,
+                        RelativeSizeAxes = Axes.X,
+                        Children = new Drawable[]
+                        {
+                            new Container
+                            {
+                                Width = 180,
+                                Height = 1,
+                                Anchor = Anchor.TopCentre,
+                                Origin = Anchor.TopCentre,
+                                Children = new Drawable[]
+                                {
+                                    new Box
+                                    {
+                                        RelativeSizeAxes = Axes.X,
+                                        Colour = Colour4.FromHex("#404040"),
+                                    }
+                                }
+                            }
+                        }
+                    },
+                };
             }
         }
     }

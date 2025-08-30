@@ -3,6 +3,7 @@
 
 using NUnit.Framework;
 using osu.Framework.Graphics;
+using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 using osuTK;
@@ -11,7 +12,11 @@ namespace osu.Game.Tournament.Tests.Components
 {
     public partial class TestSceneDrawablePlayerCard : TournamentTestScene
     {
+        private DrawablePlayerCard playerCard;
+        private TournamentSpriteText winnerTexto;
+
         [Test]
+        //[Ignore("roto")]
         public void TestBasic()
         {
             AddStep("setup", () =>
@@ -29,10 +34,16 @@ namespace osu.Game.Tournament.Tests.Components
 
                 Children = new Drawable[]
                 {
-                    new DrawablePlayerCard(team)
+                    winnerTexto = new TournamentSpriteText
+                    {
+                        Text = "WINNER!",
+                        Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 100),
+                        Margin = new MarginPadding { Top = 300, Left = 200 }
+                    },
+                    playerCard = new DrawablePlayerCard(team, Colour4.Aqua)
                     {
                         Scale = new Vector2(3),
-                    }
+                    },
                 };
             });
         }
