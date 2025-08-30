@@ -1,10 +1,10 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Globalization;
 using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
-using osu.Framework.Extensions;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -139,22 +139,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         },
                         new ControlPanel.HorizontalLine(),
 
-                        //---------------------------------------
-                        /*rollWinnerRed = new TourneyButton
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "ESCRUPULILLO",
-                            BackgroundColour = Colour4.Cyan,
-                            Action = () => executeAction(TeamColour.Red, ChoiceType.Ban, mapSlot)
-                        },
-                        rollWinnerBlue = new TourneyButton
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Yuri Enjoyer",
-                            BackgroundColour = Colour4.HotPink,
-                            Action = () => executeAction(TeamColour.Red, ChoiceType.Ban, mapSlot)
-                        },*/
-
                         // ----------- protects
                         new TournamentSpriteText
                         {
@@ -165,7 +149,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         {
                             RelativeSizeAxes = Axes.X,
                             Text = "Blue Protect",
-                            BackgroundColour = Colour4.Cyan,
                             Action = () => executeAction(TeamColour.Red, ChoiceType.Protect, mapSlot)
                         },
                         blueProtectButton = new TourneyButton
@@ -187,7 +170,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         {
                             RelativeSizeAxes = Axes.X,
                             Text = "Blue Ban",
-                            BackgroundColour = Colour4.Cyan,
                             Action = () => executeAction(TeamColour.Red, ChoiceType.Ban, mapSlot)
                         },
                         blueBanButton = new TourneyButton
@@ -209,7 +191,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         {
                             RelativeSizeAxes = Axes.X,
                             Text = "Blue Pick",
-                            BackgroundColour = Colour4.Cyan,
                             Action = () => executeAction(TeamColour.Red, ChoiceType.Pick, mapSlot)
                         },
                         bluePickButton = new TourneyButton
@@ -270,6 +251,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                 });
 
                 lastPickedMap = targetMap;
+
                 switch (choiceType)
                 {
                     // Protects ---------------------------------------------
@@ -281,6 +263,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                             currentProtect = null;
                             break;
                         }
+
                         if (colour == TeamColour.Red)
                         {
                             redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
@@ -307,6 +290,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                             blueProtectButton.Enabled.Value = false;
                             currentProtect = "blue";
                         }
+
                         break;
                     }
 
@@ -336,6 +320,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         currentBan = "blue";
                         break;
                     }
+
                     // Picks ---------------------------------------------
                     case ChoiceType.Pick when colour == TeamColour.Red:
                         redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
@@ -431,9 +416,11 @@ namespace osu.Game.Tournament.Screens.MapPool
                     case "blue":
                         redProtectButton.Enabled.Value = true;
                         break;
+
                     case "red":
                         blueProtectButton.Enabled.Value = true;
                         break;
+
                     default:
                         blueProtectButton.Enabled.Value = false;
                         redProtectButton.Enabled.Value = false;
@@ -472,9 +459,11 @@ namespace osu.Game.Tournament.Screens.MapPool
                     case "blue":
                         redBanButton.Enabled.Value = true;
                         break;
+
                     case "red":
                         blueBanButton.Enabled.Value = true;
                         break;
+
                     default:
                         blueBanButton.Enabled.Value = false;
                         redBanButton.Enabled.Value = false;
@@ -495,9 +484,11 @@ namespace osu.Game.Tournament.Screens.MapPool
                     case "blue":
                         redPickButton.Enabled.Value = true;
                         break;
+
                     case "red":
                         bluePickButton.Enabled.Value = true;
                         break;
+
                     default:
                         bluePickButton.Enabled.Value = false;
                         redPickButton.Enabled.Value = false;
