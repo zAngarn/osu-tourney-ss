@@ -6,6 +6,7 @@ using osu.Framework.Graphics;
 using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
+using osuTK;
 
 namespace osu.Game.Tournament.Tests.Components
 {
