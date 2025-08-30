@@ -31,7 +31,6 @@ namespace osu.Game.Tournament.Screens.MapPool
         private RoundDisplayV2 roundDisplay = null!;
 
         private string mapSlot = null!;
-        private string mapToDelete = null!;
 
         private OsuButton redBanButton = null!;
         private OsuButton blueBanButton = null!;
@@ -56,12 +55,23 @@ namespace osu.Game.Tournament.Screens.MapPool
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
         {
-            // TODO meter en dummyMatch los dummyTeams
             // Tienen que ser dos dummys distintos porque si no la instancia de TeamFlag es
             // compartida por ambos. 2H para darme cuenta de esto, soy imbécil.
-            var dummyTeam1 = new TournamentTeam { FullName = { Value = "???" } };
-            var dummyTeam2 = new TournamentTeam { FullName = { Value = "???" } };
-            var dummyRound = new TournamentRound { Name = { Value = "???" } };
+            var dummyMatch = new TournamentMatch
+            {
+                Round =
+                {
+                    Value = new TournamentRound { Name = { Value = "???" } }
+                },
+                Team1 =
+                {
+                    Value = new TournamentTeam { FullName = { Value = "???" } }
+                },
+                Team2 =
+                {
+                    Value = new TournamentTeam { FullName = { Value = "???" } }
+                },
+            };
 
             InternalChildren = new Drawable[]
             {
@@ -70,20 +80,20 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Loop = true,
                     RelativeSizeAxes = Axes.Both
                 },
-                roundDisplay = new RoundDisplayV2(dummyRound)
+                roundDisplay = new RoundDisplayV2(dummyMatch.Round.Value)
                 {
                     Anchor = Anchor.TopLeft,
                     Origin = Anchor.TopLeft,
                     Margin = new MarginPadding { Left = 160 }
                 },
-                redPlayer = new DrawablePlayerCard(dummyTeam1, Color4Extensions.FromHex("#ed6dac"))
+                redPlayer = new DrawablePlayerCard(dummyMatch.Team1.Value!, Color4Extensions.FromHex("#ed6dac"))
                 {
                     Anchor = Anchor.TopLeft,
                     Origin = Anchor.TopLeft,
                     Scale = new Vector2(1.4f),
                     Margin = new MarginPadding { Top = 100, Left = 20 }
                 },
-                bluePlayer = new DrawablePlayerCard(dummyTeam2, Color4Extensions.FromHex("#6ddded"))
+                bluePlayer = new DrawablePlayerCard(dummyMatch.Team2.Value!, Color4Extensions.FromHex("#6ddded"))
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
@@ -239,8 +249,8 @@ namespace osu.Game.Tournament.Screens.MapPool
 
         private bool deleteMap(string s)
         {
-            // Se elimina primero el mapa visualmente (redActions, etc) y despues de la lista general (creo que es
-            // la que se guarda despues al bracket) (Dios quiera que si por favor)
+            // Se elimina primero el mapa visualmente (redActions, etc.) y después de la lista general (creo que es
+            // la que se guarda después al bracket) (Dios quiera que si por favor)
             TournamentBeatmapPanelV2 panelToDelete = null!;
             string where = string.Empty;
             int beatmapID = 0;
@@ -338,6 +348,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
                 if (targetMap == null!) return;
 
+                // TODO borrar el comentario de esta línea
                 /*if (CurrentMatch.Value.PicksBansProtects.Any(p => p.BeatmapID == targetMap.ID))
                     return;*/
 
@@ -380,7 +391,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         break;
                     }
 
-                    // Bans
+                    // Bans ---------------------------------------------
                     case ChoiceType.Ban when colour == TeamColour.Red:
                     {
                         redActions.Add(new TournamentBeatmapPanelV2(targetMap.Beatmap, targetMap.Mods, targetMap.Slot)
@@ -416,8 +427,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                             {
                                 AutoSizeAxes = Axes.X,
                                 Height = 100,
-                                Anchor = Anchor.TopRight,
-                                Origin = Anchor.TopRight,
+                                Anchor = Anchor.TopLeft,
+                                Origin = Anchor.TopLeft,
                             });
                         }
 
@@ -528,10 +539,10 @@ namespace osu.Game.Tournament.Screens.MapPool
 
             disableAllButtons();
 
-            // cambia segun la ronda TODO asignable
+            // cambia segun la ronda
             bool hasAllProtects = CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) == 2;
             bool hasAllBans = CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) == 4;
-            bool hasAllPicks = CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Pick) == 12;
+            bool hasAllPicks = CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Pick) == CurrentMatch.Value?.Round.Value.BestOf.Value - 1;
 
             if (!hasAllProtects)
             {
