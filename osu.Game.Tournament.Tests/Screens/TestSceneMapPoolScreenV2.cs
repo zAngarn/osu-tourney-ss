@@ -10,12 +10,12 @@ namespace osu.Game.Tournament.Tests.Screens
 {
     public partial class TestSceneMapPoolScreenV2 : TournamentScreenTestScene
     {
-        private MapPoolScreenV2 screen = null!;
+        private PicksBansScreen screen = null!;
 
         [BackgroundDependencyLoader]
         private void load()
         {
-            Add(screen = new MapPoolScreenV2 { Width = 1.3f });
+            Add(screen = new PicksBansScreen { Width = 1.3f });
         }
 
         [Test]

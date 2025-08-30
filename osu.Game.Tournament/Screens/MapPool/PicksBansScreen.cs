@@ -17,7 +17,7 @@ using osuTK;
 
 namespace osu.Game.Tournament.Screens.MapPool
 {
-    public partial class MapPoolScreenV2 : TournamentMatchScreen
+    public partial class PicksBansScreen : TournamentMatchScreen
     {
         private FillFlowContainer redActions = null!;
         private FillFlowContainer blueActions = null!;
@@ -383,7 +383,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             }
         }
 
-        public static void UpdateWinStateStatic(MapPoolScreenV2 screen, TeamColour colour)
+        public static void UpdateWinStateStatic(PicksBansScreen screen, TeamColour colour)
         {
             screen?.updateWinState(colour);
         }

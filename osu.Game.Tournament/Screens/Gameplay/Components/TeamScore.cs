@@ -44,7 +44,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
         private void scoreChanged(ValueChangedEvent<int?> score)
         {
             counter.Current = score.NewValue ?? 0;
-            MapPoolScreenV2.UpdateWinStateStatic(TournamentSceneManager.MappoolInstance, counterColour);
+            PicksBansScreen.UpdateWinStateStatic(TournamentSceneManager.PicksBansScreenInstance, counterColour);
         }
 
         public partial class TeamScoreStarCounter : StarCounter

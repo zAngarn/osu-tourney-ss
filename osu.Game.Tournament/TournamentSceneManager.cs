@@ -51,16 +51,16 @@ namespace osu.Game.Tournament
         private Container chatContainer = null!;
         private FillFlowContainer buttons = null!;
 
-        private static MapPoolScreenV2 mappoolInstance = null!;
+        private static PicksBansScreen picksBansScreenInstance = null!;
 
-        public static MapPoolScreenV2 MappoolInstance
+        public static PicksBansScreen PicksBansScreenInstance
         {
-            get => mappoolInstance;
+            get => picksBansScreenInstance;
             set
             {
-                if (mappoolInstance == value) return;
+                if (picksBansScreenInstance == value) return;
 
-                mappoolInstance = value;
+                picksBansScreenInstance = value;
             }
         }
 
@@ -111,14 +111,14 @@ namespace osu.Game.Tournament
                                 new RoundEditorScreen(),
                                 new ShowcaseScreen(),
                                 new MapPoolScreen(),
-                                new MapPoolScreenV2(),
+                                new PicksBansScreen(),
                                 new TeamIntroScreen(),
                                 new SeedingScreen(),
                                 new DrawingsScreen(),
                                 new GameplayScreen(),
                                 new TeamWinScreen(),
 
-                                mappoolInstance = new MapPoolScreenV2(),
+                                picksBansScreenInstance = new PicksBansScreen(),
                             }
                         },
                         chatContainer = new Container
@@ -160,7 +160,7 @@ namespace osu.Game.Tournament
                                 new ScreenButton(typeof(SeedingScreen), Key.D) { Text = "Seeding", RequestSelection = SetScreen },
                                 new Separator(),
                                 new ScreenButton(typeof(MapPoolScreen), Key.M) { Text = "Map Pool", RequestSelection = SetScreen },
-                                new ScreenButton(typeof(MapPoolScreenV2), Key.P) { Text = "Picks y Bans", RequestSelection = SetScreen },
+                                new ScreenButton(typeof(PicksBansScreen), Key.P) { Text = "Picks y Bans", RequestSelection = SetScreen },
                                 new ScreenButton(typeof(GameplayScreen), Key.G) { Text = "Gameplay", RequestSelection = SetScreen },
                                 new Separator(),
                                 new ScreenButton(typeof(TeamWinScreen), Key.W) { Text = "Win", RequestSelection = SetScreen },
@@ -168,7 +168,7 @@ namespace osu.Game.Tournament
                                 new ScreenButton(typeof(DrawingsScreen)) { Text = "Drawings", RequestSelection = SetScreen },
                                 new ScreenButton(typeof(ShowcaseScreen)) { Text = "Showcase", RequestSelection = SetScreen },
                                 new Separator(),
-                                new ScreenButton(typeof(MapPoolScreenV2), Key.A) { Text = "Map Pool V2", RequestSelection = SetScreen },
+                                new ScreenButton(typeof(PicksBansScreen), Key.A) { Text = "Map Pool V2", RequestSelection = SetScreen },
                             }
                         },
                     },
