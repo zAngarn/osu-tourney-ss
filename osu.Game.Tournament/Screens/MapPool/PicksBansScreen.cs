@@ -55,6 +55,8 @@ namespace osu.Game.Tournament.Screens.MapPool
         private TeamColour firstBan = TeamColour.Blue;
         private TeamColour firstPick = TeamColour.Blue;
 
+        private BeatmapChoice lastPlayed = null!;
+
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
         {
@@ -360,7 +362,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                 {
                     Team = colour,
                     Type = choiceType,
-                    BeatmapID = targetMap.ID
+                    BeatmapID = targetMap.ID,
+                    Slot = map.ToUpper(CultureInfo.InvariantCulture)
                 });
 
                 lastPickedMap = targetMap;
@@ -514,6 +517,56 @@ namespace osu.Game.Tournament.Screens.MapPool
         public static void UpdateWinStateStatic(PicksBansScreen screen, TeamColour colour)
         {
             screen?.updateWinState(colour);
+        }
+
+        private BeatmapChoice getLastPlayedMap()
+        {
+            BeatmapChoice beatmapChoice;
+
+            if (CurrentMatch.Value?.Round.Value != null)
+            {
+                if (CurrentMatch.Value.PicksBansProtects.Count != 0)
+                {
+                    beatmapChoice = CurrentMatch.Value.PicksBansProtects.Last();
+                    beatmapChoice.TeamName = getTeamNameFromColour(beatmapChoice.Team);
+                }
+                else
+                {
+                    beatmapChoice = new BeatmapChoice
+                    {
+                        TeamName = "fuera de match",
+                        Slot = "warmup",
+                        Team = TeamColour.None,
+                    };
+                }
+            }
+            else
+            {
+                beatmapChoice = new BeatmapChoice
+                {
+                    TeamName = "desconocido",
+                    Slot = "???",
+                    Team = TeamColour.None,
+                };
+            }
+
+            return beatmapChoice;
+        }
+
+        public static BeatmapChoice GetLastPlayedMap(PicksBansScreen screen)
+        {
+            BeatmapChoice beatmapChoice = screen?.getLastPlayedMap()!;
+
+            return beatmapChoice;
+        }
+
+        private string getTeamNameFromColour(TeamColour colour)
+        {
+            string s = string.Empty;
+
+            s = colour == TeamColour.Red ? CurrentMatch.Value!.Team1.Value!.FullName.Value : CurrentMatch.Value!.Team2.Value!.FullName.Value;
+
+            return s;
         }
 
         private void disableAllButtons()

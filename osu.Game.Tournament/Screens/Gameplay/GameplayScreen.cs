@@ -166,7 +166,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
             scheduledContract?.Cancel();
 
-            SongBar.Expanded = false;
+            //SongBar.Expanded = false;
             scoreDisplay.FadeOut(100);
             using (chat.BeginDelayedSequence(500))
                 chat.Expand();
@@ -184,7 +184,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
             using (BeginDelayedSequence(300))
             {
                 scoreDisplay.FadeIn(100);
-                SongBar.Expanded = true;
+                //SongBar.Expanded = true;
             }
         }
 

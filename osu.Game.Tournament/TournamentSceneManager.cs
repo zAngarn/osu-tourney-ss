@@ -51,6 +51,8 @@ namespace osu.Game.Tournament
         private Container chatContainer = null!;
         private FillFlowContainer buttons = null!;
 
+        public static bool IsShowcaseScreen = false;
+
         private static PicksBansScreen picksBansScreenInstance = null!;
 
         public static PicksBansScreen PicksBansScreenInstance
@@ -197,6 +199,8 @@ namespace osu.Game.Tournament
         {
             temporaryScreen?.Expire();
 
+            IsShowcaseScreen = false;
+
             var target = screens.FirstOrDefault(s => s.GetType() == screenType);
 
             if (target == null || currentScreen == target) return;
@@ -237,6 +241,11 @@ namespace osu.Game.Tournament
                 case GameplayScreen:
                     chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
                     chatContainer.ResizeWidthTo(0.5f, 500, Easing.OutQuint);
+                    break;
+
+                case ShowcaseScreen:
+                    IsShowcaseScreen = true;
+                    chatContainer.FadeOut(TournamentScreen.FADE_DELAY);
                     break;
 
                 default:

@@ -20,6 +20,10 @@ namespace osu.Game.Tournament.Models
         public ChoiceType Type;
 
         public int BeatmapID;
+
+        public string Slot = string.Empty;
+
+        public string TeamName = string.Empty;
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
