@@ -10,12 +10,13 @@ using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.MapPool;
+using osuTK;
 
 namespace osu.Game.Tournament.Screens
 {
     public abstract partial class BeatmapInfoScreen : TournamentMatchScreen
     {
-        protected readonly SongBarV2 SongBar;
+        public SongBarV2 SongBar;
 
         protected BeatmapInfoScreen()
         {
@@ -24,6 +25,8 @@ namespace osu.Game.Tournament.Screens
                 Anchor = Anchor.BottomCentre,
                 Origin = Anchor.BottomCentre,
                 Depth = float.MinValue,
+                Scale = new Vector2(0.72f),
+                Margin = new MarginPadding { Left = 369, Bottom = -5 }
             });
         }
 

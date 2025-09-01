@@ -40,6 +40,22 @@ namespace osu.Game.Tournament.Screens.Gameplay
         {
             this.ipc = ipc;
 
+            var dummyMatch = new TournamentMatch
+            {
+                Round =
+                {
+                    Value = new TournamentRound { Name = { Value = "???" } }
+                },
+                Team1 =
+                {
+                    Value = new TournamentTeam { FullName = { Value = "???" } }
+                },
+                Team2 =
+                {
+                    Value = new TournamentTeam { FullName = { Value = "???" } }
+                },
+            };
+
             AddRangeInternal(new Drawable[]
             {
                 new TourneyVideo("gameplay")
@@ -47,15 +63,17 @@ namespace osu.Game.Tournament.Screens.Gameplay
                     Loop = true,
                     RelativeSizeAxes = Axes.Both,
                 },
-                header = new MatchHeader
+                /*new RoundDisplayV2(dummyMatch.Round.Value)
                 {
-                    ShowLogo = false,
-                },
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
+                    Margin = new MarginPadding { Left = 160 }
+                },*/
                 new Container
                 {
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
-                    Y = 110,
+                    Y = 35,
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
                     Children = new[]
@@ -122,13 +140,13 @@ namespace osu.Game.Tournament.Screens.Gameplay
                     }
                 }
             });
+            //SongBar.MoveToOffset(new Vector2(300, 0), 1000, Easing.Out);
 
             LadderInfo.ChromaKeyWidth.BindValueChanged(width => chroma.Width = width.NewValue, true);
 
             warmup.BindValueChanged(w =>
             {
                 warmupButton.Alpha = !w.NewValue ? 0.5f : 1;
-                header.ShowScores = !w.NewValue;
             }, true);
         }
 
@@ -157,7 +175,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
         private TournamentMatchScoreDisplay scoreDisplay = null!;
 
         private TourneyState lastState;
-        private MatchHeader header = null!;
 
         private void contract()
         {

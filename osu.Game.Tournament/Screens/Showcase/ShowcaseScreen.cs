@@ -8,6 +8,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Game.Tournament.Components;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Tournament.Models;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Showcase
@@ -40,6 +41,8 @@ namespace osu.Game.Tournament.Screens.Showcase
                     }
                 }
             });
+
+            SongBar.MoveToOffset(new Vector2(-230, 0), 1000, Easing.Out);
         }
 
         protected override void CurrentMatchChanged(ValueChangedEvent<TournamentMatch?> match)

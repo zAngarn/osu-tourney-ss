@@ -18,7 +18,6 @@ using osu.Game.Models;
 using osu.Game.Tournament.Models;
 using osu.Game.Utils;
 using osuTK;
-using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Components
 {
@@ -79,6 +78,7 @@ namespace osu.Game.Tournament.Components
             {
                 flow = new FillFlowContainer
                 {
+                    Masking = true,
                     Direction = FillDirection.Vertical,
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
@@ -145,6 +145,7 @@ namespace osu.Game.Tournament.Components
                     {
                         new NoUnloadBeatmapSetCover
                         {
+                            Masking = true,
                             RelativeSizeAxes = Axes.Both,
                             OnlineInfo = (beatmap as IBeatmapSetOnlineInfo),
                         },
@@ -156,6 +157,7 @@ namespace osu.Game.Tournament.Components
                         },
                         new Container
                         {
+                            Masking = true,
                             RelativeSizeAxes = Axes.Both,
                             Anchor = Anchor.CentreLeft,
                             Origin = Anchor.CentreLeft,
@@ -164,6 +166,7 @@ namespace osu.Game.Tournament.Components
                             {
                                 new FillFlowContainer
                                 {
+                                    Masking = true,
                                     RelativeSizeAxes = Axes.Both,
                                     Direction = FillDirection.Vertical,
                                     Children = new Drawable[]
@@ -192,6 +195,7 @@ namespace osu.Game.Tournament.Components
                         },
                         new Container
                         {
+                            Masking = true,
                             RelativeSizeAxes = Axes.Both,
                             Height = 0.312f,
                             Anchor = Anchor.BottomCentre,
@@ -200,6 +204,7 @@ namespace osu.Game.Tournament.Components
                             {
                                 new FillFlowContainer
                                 {
+                                    Masking = true,
                                     Anchor = Anchor.CentreLeft,
                                     Origin = Anchor.CentreLeft,
                                     RelativeSizeAxes = Axes.Both,
@@ -231,6 +236,7 @@ namespace osu.Game.Tournament.Components
                                 },
                                 new Container
                                 {
+                                    Masking = true,
                                     Anchor = Anchor.TopRight,
                                     Origin = Anchor.TopRight,
                                     RelativeSizeAxes = Axes.Both,
@@ -239,6 +245,7 @@ namespace osu.Game.Tournament.Components
                                     {
                                         new FillFlowContainer
                                         {
+                                            Masking = true,
                                             RelativeSizeAxes = Axes.Both,
                                             Direction = FillDirection.Horizontal,
                                             Margin = new MarginPadding { Left = 20, Top = 14 },
@@ -246,6 +253,7 @@ namespace osu.Game.Tournament.Components
                                             {
                                                 new FillFlowContainer
                                                 {
+                                                    Masking = true,
                                                     RelativeSizeAxes = Axes.Both,
                                                     Direction = FillDirection.Vertical,
                                                     Children = new Drawable[]
@@ -257,6 +265,7 @@ namespace osu.Game.Tournament.Components
                                                 },
                                                 new FillFlowContainer
                                                 {
+                                                    Masking = true,
                                                     RelativeSizeAxes = Axes.Both,
                                                     Direction = FillDirection.Vertical,
                                                     Margin = new MarginPadding { Left = -900 },
@@ -275,6 +284,7 @@ namespace osu.Game.Tournament.Components
                         },
                         new Container
                         {
+                            Masking = true,
                             RelativeSizeAxes = Axes.Both,
                             Height = 0.357f,
                             Width = 0.149f,
@@ -322,6 +332,7 @@ namespace osu.Game.Tournament.Components
                         },
                         new Container
                         {
+                            Masking = true,
                             RelativeSizeAxes = Axes.Both,
                             Height = 0.07f,
                             Anchor = Anchor.TopCentre,
@@ -332,7 +343,7 @@ namespace osu.Game.Tournament.Components
                                 new Box // barras de puntos
                                 {
                                     RelativeSizeAxes = Axes.Both,
-                                    Colour = Color4.Pink
+                                    Colour = Colour4.FromHex("282828")
                                 },
                             }
                         }
