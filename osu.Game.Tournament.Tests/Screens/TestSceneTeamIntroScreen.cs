@@ -1,7 +1,7 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System.Linq;
+using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Game.Tournament.Models;
@@ -17,12 +17,7 @@ namespace osu.Game.Tournament.Tests.Screens
         [BackgroundDependencyLoader]
         private void load()
         {
-            ladder.CurrentMatch.Value = new TournamentMatch
-            {
-                Team1 = { Value = Ladder.Teams.FirstOrDefault(t => t.Acronym.Value == "USA") },
-                Team2 = { Value = Ladder.Teams.FirstOrDefault(t => t.Acronym.Value == "JPN") },
-                Round = { Value = Ladder.Rounds.FirstOrDefault(g => g.Name.Value == "Finals") }
-            };
+            setMatchDate(TimeSpan.FromMinutes(4));
 
             Add(new TeamIntroScreen
             {
@@ -30,5 +25,14 @@ namespace osu.Game.Tournament.Tests.Screens
                 FillAspectRatio = 16 / 9f
             });
         }
+
+        private void setMatchDate(TimeSpan relativeTime)
+            // Humanizer cannot handle negative timespans.
+            => AddStep($"start time is {relativeTime}", () =>
+            {
+                var match = CreateSampleMatch();
+                match.Date.Value = DateTimeOffset.Now + relativeTime;
+                ladder.CurrentMatch.Value = match;
+            });
     }
 }
