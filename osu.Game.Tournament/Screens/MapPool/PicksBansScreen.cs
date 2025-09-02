@@ -567,6 +567,18 @@ namespace osu.Game.Tournament.Screens.MapPool
             redActions.Clear();
             blueActions.Clear();
 
+            firstProtectBindable.Value = false;
+            firstBanBindable.Value = false;
+            firstPickBindable.Value = false;
+
+            firstProtect = TeamColour.None;
+            firstBan = TeamColour.None;
+            firstPick = TeamColour.None;
+
+            firstProtectCheck.Colour = Colour4.White;
+            firstBanCheck.Colour = Colour4.White;
+            firstPickCheck.Colour = Colour4.White;
+
             computeCurrentState();
         }
 
