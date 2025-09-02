@@ -54,14 +54,14 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
         private void load()
         {
             RelativeSizeAxes = Axes.X;
-            Height = 95;
+            Height = 222; //freedom dive reference???
+            Padding = new MarginPadding{ Top = 20, Horizontal = 45 };
             Children = new Drawable[]
             {
                 new FillFlowContainer
                 {
                     RelativeSizeAxes = Axes.Both,
                     Direction = FillDirection.Vertical,
-                    Padding = new MarginPadding(20),
                     Spacing = new Vector2(5),
                     Children = new Drawable[]
                     {
@@ -71,17 +71,17 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                             Origin = Anchor.TopCentre,
                             Alpha = showLogo ? 1 : 0
                         },
-                        new DrawableTournamentHeaderText
+                        /*new DrawableTournamentHeaderText
                         {
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
-                        },
-                        new MatchRoundDisplay
+                        },*/
+                        /*new MatchRoundDisplay
                         {
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
                             Scale = new Vector2(0.4f)
-                        },
+                        },*/
                     }
                 },
                 teamDisplay1 = new TeamScoreDisplay(TeamColour.Red)

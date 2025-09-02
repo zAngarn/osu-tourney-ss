@@ -51,8 +51,6 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             Flag.Origin = anchor;
             Flag.Anchor = anchor;
 
-            Margin = new MarginPadding(20);
-
             InternalChild = new Container
             {
                 AutoSizeAxes = Axes.Both,
@@ -65,7 +63,6 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                         Spacing = new Vector2(5),
                         Children = new Drawable[]
                         {
-                            Flag,
                             new FillFlowContainer
                             {
                                 AutoSizeAxes = Axes.Both,
@@ -75,6 +72,24 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                 Spacing = new Vector2(5),
                                 Children = new Drawable[]
                                 {
+                                    teamFlag = new DrawableTeamFlag(team, new Vector2(100), 17)
+                                    {
+                                        Anchor = anchor,
+                                        Origin = anchor,
+                                    },
+                                    teamNameText = new TournamentSpriteTextWithBackground(colour)
+                                    {
+                                        Scale = new Vector2(0.7f),
+                                        Margin = new MarginPadding{ Top = 5},
+                                        Origin = anchor,
+                                        Anchor = anchor,
+                                    },
+                                    new DrawableTeamSeed(Team)
+                                    {
+                                        Scale = new Vector2(0.5f),
+                                        Origin = anchor,
+                                        Anchor = anchor,
+                                    },
                                     new FillFlowContainer
                                     {
                                         AutoSizeAxes = Axes.Both,
@@ -90,30 +105,13 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                                 Origin = anchor,
                                                 Anchor = anchor,
                                             },*/
-                                            score = new TeamScore(currentTeamScore, colour, pointsToWin)
+                                            score = new TeamScore(currentTeamScore, colour, 7) //pointsToWin
                                             {
+                                                Margin = new MarginPadding{ Top = 5},
                                                 Origin = anchor,
                                                 Anchor = anchor,
                                             }
                                         }
-                                    },
-                                    teamNameText = new TournamentSpriteTextWithBackground
-                                    {
-                                        Scale = new Vector2(0.5f),
-                                        Origin = anchor,
-                                        Anchor = anchor,
-                                    },
-                                    teamFlag = new DrawableTeamFlag(team, new Vector2(87, 87), 17)
-                                    {
-                                        Anchor = Anchor.TopLeft,
-                                        Origin = Anchor.TopLeft,
-                                        Margin = new MarginPadding { Left = 28, Top = 11 }
-                                    },
-                                    new DrawableTeamSeed(Team)
-                                    {
-                                        Scale = new Vector2(0.5f),
-                                        Origin = anchor,
-                                        Anchor = anchor,
                                     },
                                 }
                             },
