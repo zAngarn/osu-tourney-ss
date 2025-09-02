@@ -483,6 +483,19 @@ namespace osu.Game.Tournament.Screens.MapPool
         protected override void LoadComplete()
         {
             base.LoadComplete();
+            computeCurrentState();
+        }
+
+        protected override void CurrentMatchChanged(ValueChangedEvent<TournamentMatch?> match)
+        {
+            base.CurrentMatchChanged(match);
+            updateDisplay();
+        }
+
+        private void updateDisplay()
+        {
+            redActions.Clear();
+            blueActions.Clear();
 
             computeCurrentState();
         }
