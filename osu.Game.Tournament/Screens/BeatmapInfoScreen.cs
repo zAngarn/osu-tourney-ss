@@ -50,19 +50,22 @@ namespace osu.Game.Tournament.Screens
             SongBar.Beatmap = beatmap.NewValue;
             if (!TournamentSceneManager.IsShowcaseScreen) SongBar.BeatmapChoice = PicksBansScreen.GetLastPlayedMap(TournamentSceneManager.PicksBansScreenInstance);
 
-            if (CurrentMatch.Value?.Round.Value == null) return;
+            if (CurrentMatch.Value?.Round.Value == null) return; // TODO estudiar reaccion con mapas fuera de la pool (maybe its already ok?)
 
-            RoundBeatmap slot = CurrentMatch.Value.Round.Value.Beatmaps.FirstOrDefault(b => b.ID == (beatmap.NewValue?.OnlineID ?? default(int))) ?? new RoundBeatmap
+            if (TournamentSceneManager.IsShowcaseScreen)
             {
-                Slot = "???"
-            };
+                RoundBeatmap slot = CurrentMatch.Value.Round.Value.Beatmaps.FirstOrDefault(b => b.ID == (beatmap.NewValue?.OnlineID ?? default(int))) ?? new RoundBeatmap
+                {
+                    Slot = "???"
+                };
 
-            SongBar.BeatmapChoice = new BeatmapChoice
-            {
-                Slot = slot.Slot,
-                TeamName = "Showcase",
-                Team = TeamColour.None,
-            };
+                SongBar.BeatmapChoice = new BeatmapChoice
+                {
+                    Slot = slot.Slot,
+                    TeamName = "Showcase",
+                    Team = TeamColour.None,
+                };
+            }
         }
     }
 }

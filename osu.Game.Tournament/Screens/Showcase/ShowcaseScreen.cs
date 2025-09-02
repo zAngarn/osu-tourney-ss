@@ -28,15 +28,19 @@ namespace osu.Game.Tournament.Screens.Showcase
                 },
                 new Container
                 {
-                    Padding = new MarginPadding { Bottom = 314 },
+                    Padding = new MarginPadding { Bottom = 226, Top = 20 },
                     RelativeSizeAxes = Axes.Both,
+                    CornerRadius = 20,
+                    Masking = true,
                     Child = new Box
                     {
                         // chroma key area for stable gameplay
                         Name = "chroma",
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        RelativeSizeAxes = Axes.Both,
+                        Width = 900,
+                        Height = 506,
+                        //RelativeSizeAxes = Axes.Both,
                         Colour = new Color4(0, 255, 0, 255),
                     }
                 }
