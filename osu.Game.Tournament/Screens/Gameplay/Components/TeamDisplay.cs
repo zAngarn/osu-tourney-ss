@@ -16,6 +16,8 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
 
         private readonly TournamentSpriteTextWithBackground teamNameText;
 
+        private readonly DrawableTeamFlag teamFlag;
+
         private readonly Bindable<string> teamName = new Bindable<string>("???");
 
         private bool showScore;
@@ -82,12 +84,12 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                         Anchor = anchor,
                                         Children = new Drawable[]
                                         {
-                                            new DrawableTeamHeader(colour)
+                                            /*new DrawableTeamHeader(colour)
                                             {
                                                 Scale = new Vector2(0.75f),
                                                 Origin = anchor,
                                                 Anchor = anchor,
-                                            },
+                                            },*/
                                             score = new TeamScore(currentTeamScore, colour, pointsToWin)
                                             {
                                                 Origin = anchor,
@@ -100,6 +102,12 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                         Scale = new Vector2(0.5f),
                                         Origin = anchor,
                                         Anchor = anchor,
+                                    },
+                                    teamFlag = new DrawableTeamFlag(team, new Vector2(87, 87), 17)
+                                    {
+                                        Anchor = Anchor.TopLeft,
+                                        Origin = Anchor.TopLeft,
+                                        Margin = new MarginPadding { Left = 28, Top = 11 }
                                     },
                                     new DrawableTeamSeed(Team)
                                     {

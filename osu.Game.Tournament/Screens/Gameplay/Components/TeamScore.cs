@@ -2,10 +2,8 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using osu.Framework.Bindables;
-using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
 using osu.Game.Graphics.UserInterface;
@@ -27,11 +25,11 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             bool flip = colour == TeamColour.Blue;
             var anchor = flip ? Anchor.TopRight : Anchor.TopLeft;
 
-            counterColour = colour;
+            counterColour = colour; //TeamColour.Red
 
             AutoSizeAxes = Axes.Both;
 
-            InternalChild = counter = new TeamScoreStarCounter(count)
+            InternalChild = counter = new TeamScoreStarCounter(count, colour) //SCORE COUNTER <<-----
             {
                 Anchor = anchor,
                 Scale = flip ? new Vector2(-1, 1) : Vector2.One,
@@ -49,20 +47,33 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
 
         public partial class TeamScoreStarCounter : StarCounter
         {
-            public TeamScoreStarCounter(int count)
+            private readonly TeamColour teamColour;
+
+            public TeamScoreStarCounter(int count, TeamColour colour)
                 : base(count)
             {
+                teamColour = colour;
             }
 
-            public override Star CreateStar() => new LightSquare();
+            public override Star CreateStar() => new LightSquare(teamColour);
 
             public partial class LightSquare : Star
             {
                 private readonly Box box;
 
-                public LightSquare()
+                public LightSquare(TeamColour teamColour)
                 {
                     Size = new Vector2(22.5f);
+
+                    Color4 boxColour = Color4.White;
+                    if (teamColour == TeamColour.Red)
+                    {
+                         boxColour = Color4.DeepPink;
+                    }
+                    else
+                    {
+                        boxColour = Color4.Cyan;
+                    }
 
                     InternalChildren = new Drawable[]
                     {
@@ -84,20 +95,12 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                         },
                         box = new Box
                         {
-                            Colour = Color4Extensions.FromHex("#FFE8AD"),
+                            Colour = boxColour,
                             RelativeSizeAxes = Axes.Both,
                         },
                     };
 
                     Masking = true;
-                    EdgeEffect = new EdgeEffectParameters
-                    {
-                        Type = EdgeEffectType.Glow,
-                        Colour = Color4Extensions.FromHex("#FFE8AD").Opacity(0.1f),
-                        Hollow = true,
-                        Radius = 20,
-                        Roundness = 10,
-                    };
                 }
 
                 public override void DisplayAt(float scale)
