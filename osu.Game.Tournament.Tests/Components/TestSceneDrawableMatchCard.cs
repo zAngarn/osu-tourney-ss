@@ -5,12 +5,14 @@ using NUnit.Framework;
 using osu.Framework.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
+using osuTK;
 
 namespace osu.Game.Tournament.Tests.Components
 {
     public partial class TestSceneDrawableMatchCard : TournamentTestScene
     {
         private TournamentMatch match = null!;
+        private DrawableMatchCard card = null!;
 
         [Test]
         public void TestBasic()
@@ -23,11 +25,19 @@ namespace osu.Game.Tournament.Tests.Components
                 {
                     Team1Score = { Value = 0 },
                     Team2Score = { Value = 0 },
+                    Round = { Value = new TournamentRound { Name = { Value = "???" }, BestOf = { Value = 13 } } },
                 };
 
                 Children = new Drawable[]
                 {
-                    new DrawableMatchCard(match),
+                    card = new DrawableMatchCard(match)
+                    {
+                        Scale = new Vector2(2f),
+                    },
+                    new TournamentSpriteText
+                    {
+                        Text = match.Round.Value.BestOf.Value.ToString()
+                    }
                 };
             });
         }
@@ -35,10 +45,10 @@ namespace osu.Game.Tournament.Tests.Components
         [Test]
         public void TestDrawableMatchCard()
         {
-            AddStep("start match", () => match.StartMatch());
-            AddStep("change score blue", () => match.Team1Score.Value++);
-            AddStep("change score red", () => match.Team2Score.Value++);
-            AddStep("reset match", () => match.Reset());
+            AddStep("change score red", () => match.Team1Score.Value++);
+            AddStep("change score blue", () => match.Team2Score.Value++);
+            AddStep("show scores", () => card.Started = true);
+            AddStep("hide scores", () => card.Started = false);
         }
     }
 }
