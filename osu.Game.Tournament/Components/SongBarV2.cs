@@ -183,11 +183,26 @@ namespace osu.Game.Tournament.Components
                                             Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 60),
                                             Colour = Colour4.White,
                                         },
-                                        new TournamentSpriteText
+                                        new FillFlowContainer
                                         {
-                                            Text = beatmap.DifficultyName ?? "unknown",
-                                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 30),
-                                            Colour = getColor(beatmapChoice.Slot),
+                                            RelativeSizeAxes = Axes.Both,
+                                            Direction = FillDirection.Horizontal,
+                                            Spacing = new Vector2(14),
+                                            Children = new Drawable[]
+                                            {
+                                                new TournamentSpriteText
+                                                {
+                                                    Colour = getColor(beatmapChoice.Slot),
+                                                    Text = beatmap?.DifficultyName ?? "unknown",
+                                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 30),
+                                                },
+                                                new TournamentSpriteText
+                                                {
+                                                    Colour = Colour4.White,
+                                                    Text = "mapeado por " + (beatmap?.Metadata.Author.Username ?? "unknown"),
+                                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 30),
+                                                },
+                                            }
                                         }
                                     }
                                 }
