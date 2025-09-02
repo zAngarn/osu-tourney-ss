@@ -75,7 +75,26 @@ namespace osu.Game.Graphics.UserInterface
             };
         }
 
+        public StarCounter(Colour4 colour, int starCount = 10)
+        {
+            StarCount = Math.Max(starCount, 0);
+
+            AutoSizeAxes = Axes.Both;
+
+            Children = new Drawable[]
+            {
+                stars = new FillFlowContainer<Star>
+                {
+                    AutoSizeAxes = Axes.Both,
+                    Spacing = new Vector2(star_spacing),
+                    ChildrenEnumerable = Enumerable.Range(0, StarCount).Select(_ => CreateStar(colour))
+                }
+            };
+        }
+
         public virtual Star CreateStar() => new DefaultStar();
+
+        public virtual Star CreateStar(Colour4 colour) => new DefaultStar(colour);
 
         protected override void LoadComplete()
         {
@@ -146,6 +165,21 @@ namespace osu.Game.Graphics.UserInterface
                     Icon = FontAwesome.Solid.Star,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
+                    Colour = Colour4.Cyan,
+                };
+            }
+
+            public DefaultStar(Colour4 colour)
+            {
+                Size = new Vector2(star_size);
+
+                InternalChild = Icon = new SpriteIcon
+                {
+                    Size = new Vector2(star_size),
+                    Icon = FontAwesome.Solid.Star,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Colour = colour,
                 };
             }
 
