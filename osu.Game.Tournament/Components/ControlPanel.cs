@@ -70,7 +70,7 @@ namespace osu.Game.Tournament.Components
             {
                 RelativeSizeAxes = Axes.X;
                 AlwaysPresent = true;
-                Margin = new MarginPadding { Top = 20, Bottom = 10 }; // asi
+                Margin = new MarginPadding { Top = 10, Bottom = 10 }; // asi
                 InternalChildren = new Drawable[]
                 {
                     new FillFlowContainer

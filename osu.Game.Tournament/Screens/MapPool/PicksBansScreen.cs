@@ -8,6 +8,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Graphics;
 using osu.Game.Graphics.UserInterface;
 using osu.Game.Overlays.Settings;
 using osu.Game.Tournament.Components;
@@ -24,6 +25,10 @@ namespace osu.Game.Tournament.Screens.MapPool
 
         private readonly Bindable<string> slot = new Bindable<string>(string.Empty);
         private readonly Bindable<string> toDeletion = new Bindable<string>(string.Empty);
+
+        private readonly Bindable<bool> firstProtectBindable = new Bindable<bool>(false);
+        private readonly Bindable<bool> firstBanBindable = new Bindable<bool>(false);
+        private readonly Bindable<bool> firstPickBindable = new Bindable<bool>(false);
 
         private DrawablePlayerCard redPlayer = null!;
         private DrawablePlayerCard bluePlayer = null!;
@@ -51,11 +56,15 @@ namespace osu.Game.Tournament.Screens.MapPool
         private TeamColour currentBan = TeamColour.None;
         private TeamColour currentPick = TeamColour.None;
 
-        private TeamColour firstProtect = TeamColour.Blue; // TODO asignables
-        private TeamColour firstBan = TeamColour.Blue;
-        private TeamColour firstPick = TeamColour.Blue;
+        private TeamColour firstProtect = TeamColour.None;
+        private TeamColour firstBan = TeamColour.None;
+        private TeamColour firstPick = TeamColour.None;
 
         private BeatmapChoice lastPlayed = null!;
+
+        private SettingsCheckbox firstProtectCheck = null!;
+        private SettingsCheckbox firstBanCheck = null!;
+        private SettingsCheckbox firstPickCheck = null!;
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
@@ -159,11 +168,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         new ControlPanel.HorizontalLine(),
 
                         // ----------- protects
-                        new TournamentSpriteText
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Protects",
-                        },
                         blueProtectButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
@@ -180,11 +184,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         new ControlPanel.HorizontalLine(),
 
                         // ----------- bans
-                        new TournamentSpriteText
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Bans",
-                        },
                         blueBanButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
@@ -201,11 +200,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         new ControlPanel.HorizontalLine(),
 
                         // ----------- picks
-                        new TournamentSpriteText
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Picks",
-                        },
                         bluePickButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
@@ -225,15 +219,89 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Text = "Delete last added beatmap",
                             Action = () => deleteMap(lastPickedMap.Slot),
-                        }
+                        },
+                        new ControlPanel.HorizontalLine(),
+                        new TournamentSpriteText
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Set starting state (click checkboxes)",
+                            Font = OsuFont.Torus.With(weight: FontWeight.Bold)
+                        },
+                        new ControlPanel.Spacer(),
+                        firstProtectCheck = new SettingsCheckbox
+                        {
+                            LabelText = "First protect",
+                            RelativeSizeAxes = Axes.X,
+                            Current = firstProtectBindable,
+                        },
+                        firstBanCheck = new SettingsCheckbox
+                        {
+                            LabelText = "First ban",
+                            RelativeSizeAxes = Axes.X,
+                            Current = firstBanBindable,
+                        },
+                        firstPickCheck = new SettingsCheckbox
+                        {
+                            LabelText = "First pick",
+                            RelativeSizeAxes = Axes.X,
+                            Current = firstPickBindable,
+                        },
                     },
                 },
             };
 
+            firstProtectBindable.BindValueChanged(e =>
+            {
+                if (e.NewValue)
+                {
+                    firstProtectCheck.Colour = Colour4.HotPink;
+                    firstProtect = TeamColour.Red;
+                }
+                else
+                {
+                    firstProtectCheck.Colour = Colour4.FromHex("6ddded");
+                    firstProtect = TeamColour.Blue;
+                }
+
+                computeCurrentState();
+            });
+
+            firstBanBindable.BindValueChanged(e =>
+            {
+                if (e.NewValue)
+                {
+                    firstBanCheck.Colour = Colour4.HotPink;
+                    firstBan = TeamColour.Red;
+                }
+                else
+                {
+                    firstBanCheck.Colour = Colour4.FromHex("6ddded");
+                    firstBan = TeamColour.Blue;
+                }
+
+                computeCurrentState();
+            });
+
+            firstPickBindable.BindValueChanged(e =>
+            {
+                if (e.NewValue)
+                {
+                    firstPickCheck.Colour = Colour4.HotPink;
+                    firstPick = TeamColour.Red;
+                }
+                else
+                {
+                    firstPickCheck.Colour = Colour4.FromHex("6ddded");
+                    firstPick = TeamColour.Blue;
+                }
+
+                computeCurrentState();
+            });
+
             slot.BindValueChanged(slotString => mapSlot = slotString.NewValue.ToUpper(CultureInfo.InvariantCulture));
 
-            // La lógica reside en primero se le da un dummy para que no crashee, despues ese dummy lo
-            // reemplazo por el team real. Es bastante peruano pero qué se le va a hacer.
+            // La lógica reside en primero se le da un dummy para que no crashee, después ese dummy lo
+            // reemplazo por el team real. Es bastante peruano, pero qué se le va a hacer.
             LadderInfo.CurrentMatch.BindValueChanged(match =>
             {
                 TournamentTeam t1 = match.NewValue?.Team1?.Value
@@ -261,6 +329,8 @@ namespace osu.Game.Tournament.Screens.MapPool
             int beatmapID = 0;
 
             bool found = false;
+
+            if (CurrentMatch.Value?.PicksBansProtects.Count == 0) return found;
 
             foreach (TournamentBeatmapPanelV2 b in redActions.OfType<TournamentBeatmapPanelV2>())
             {
@@ -592,6 +662,8 @@ namespace osu.Game.Tournament.Screens.MapPool
 
             bluePickButton.Enabled.Value = false;
             redPickButton.Enabled.Value = false;
+
+            deletionButton.Enabled.Value = false;
         }
 
         private TeamColour getOppositeColour(TeamColour c)
@@ -611,6 +683,10 @@ namespace osu.Game.Tournament.Screens.MapPool
             if (CurrentMatch.Value?.Round.Value == null) return;
 
             disableAllButtons();
+
+            if (firstPick == TeamColour.None || firstBan == TeamColour.None || firstProtect == TeamColour.None) return;
+
+            deletionButton.Enabled.Value = true;
 
             // cambia segun la ronda
             bool hasAllProtects = CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) == 2;
