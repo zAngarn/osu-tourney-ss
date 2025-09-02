@@ -89,6 +89,7 @@ namespace osu.Game.Tournament.Components
             boundReference(match.Team2).BindValueChanged(_ => updateContents());
             boundReference(match.Team1Score).BindValueChanged(_ => updateContents());
             boundReference(match.Team2Score).BindValueChanged(_ => updateContents());
+            boundReference(match.Started).BindValueChanged(_ => Started = true);
         }
 
         protected override void LoadComplete()
