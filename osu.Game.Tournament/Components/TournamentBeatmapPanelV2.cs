@@ -94,7 +94,7 @@ namespace osu.Game.Tournament.Components
                         new NoUnloadBeatmapSetCover
                         {
                             RelativeSizeAxes = Axes.Both,
-                            OnlineInfo = (Beatmap as IBeatmapSetOnlineInfo),
+                            OnlineInfo = Beatmap as IBeatmapSetOnlineInfo,
                         },
                         new FillFlowContainer
                         {

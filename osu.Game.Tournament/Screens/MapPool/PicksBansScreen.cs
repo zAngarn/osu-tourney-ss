@@ -23,6 +23,8 @@ namespace osu.Game.Tournament.Screens.MapPool
         private FillFlowContainer redActions = null!;
         private FillFlowContainer blueActions = null!;
 
+        private Container tiebreakerCardContainer = null!;
+
         private readonly Bindable<string> slot = new Bindable<string>(string.Empty);
         private readonly Bindable<string> toDeletion = new Bindable<string>(string.Empty);
 
@@ -113,6 +115,12 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Origin = Anchor.TopRight,
                     Scale = new Vector2(1.4f),
                     Margin = new MarginPadding { Top = 100, Right = 220 }
+                },
+                tiebreakerCardContainer = new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
                 },
                 new FillFlowContainer
                 {
@@ -607,6 +615,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                     }
                 }
             }
+
+            computeCurrentState();
         }
 
         public static void UpdateWinStateStatic(PicksBansScreen screen, TeamColour colour)
@@ -785,6 +795,26 @@ namespace osu.Game.Tournament.Screens.MapPool
                         redPickButton.Enabled.Value = true;
                     }
                 }
+            }
+
+            if (hasAllPicks && CurrentMatch.Value?.Team1Score.Value == (CurrentMatch.Value?.Round.Value.BestOf.Value - 1) / 2
+                            && CurrentMatch.Value?.Team2Score.Value == (CurrentMatch.Value?.Round.Value.BestOf.Value - 1) / 2)
+            {
+                tiebreakerCardContainer.Add(new TournamentBeatmapPanelV2(CurrentMatch.Value?.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB")!.Beatmap, "TB", "TB")
+                {
+                    Scale = new Vector2(0.73f),
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                    Margin = new MarginPadding { Bottom = 40 },
+                });
+
+                CurrentMatch.Value!.PicksBansProtects.Add(new BeatmapChoice
+                {
+                    Team = TeamColour.None,
+                    Type = ChoiceType.Pick,
+                    BeatmapID = CurrentMatch.Value.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB")!.Beatmap!.OnlineID,
+                    Slot = CurrentMatch.Value?.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB")!.Slot!,
+                });
             }
         }
     }
