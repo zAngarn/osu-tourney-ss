@@ -230,11 +230,6 @@ namespace osu.Game.Tournament
 
             switch (currentScreen)
             {
-                case MapPoolScreen:
-                    chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
-                    chatContainer.ResizeWidthTo(1, 500, Easing.OutQuint);
-                    break;
-
                 case GameplayScreen:
                     chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
                     chatContainer.ResizeWidthTo(0.0f, 500, Easing.OutQuint);
@@ -243,6 +238,11 @@ namespace osu.Game.Tournament
                 case ShowcaseScreen:
                     IsShowcaseScreen = true;
                     chatContainer.FadeOut(TournamentScreen.FADE_DELAY);
+                    break;
+
+                case PicksBansScreen:
+                    chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
+                    chatContainer.ResizeWidthTo(0.24f, 500, Easing.OutQuint);
                     break;
 
                 default:

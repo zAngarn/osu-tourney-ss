@@ -169,7 +169,7 @@ namespace osu.Game.Overlays.Chat
                     RowDimensions = new[] { new Dimension(GridSizeMode.AutoSize) },
                     ColumnDimensions = new[]
                     {
-                        new Dimension(GridSizeMode.Absolute, 45),
+                        new Dimension(GridSizeMode.Absolute, 10),
                         new Dimension(GridSizeMode.Absolute, Spacing + UsernameWidth + Spacing),
                         new Dimension(),
                     },
