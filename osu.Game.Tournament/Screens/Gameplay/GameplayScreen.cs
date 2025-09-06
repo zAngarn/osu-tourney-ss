@@ -50,6 +50,22 @@ namespace osu.Game.Tournament.Screens.Gameplay
         {
             this.ipc = ipc;
 
+            var dummyMatch = new TournamentMatch
+            {
+                Round =
+                {
+                    Value = new TournamentRound { Name = { Value = "???" } }
+                },
+                Team1 =
+                {
+                    Value = new TournamentTeam { FullName = { Value = "???" } }
+                },
+                Team2 =
+                {
+                    Value = new TournamentTeam { FullName = { Value = "???" } }
+                },
+            };
+
             AddRangeInternal(new Drawable[]
             {
                 new TourneyVideo("gameplay")
@@ -138,13 +154,13 @@ namespace osu.Game.Tournament.Screens.Gameplay
                     }
                 }
             });
+            //SongBar.MoveToOffset(new Vector2(300, 0), 1000, Easing.Out);
 
             LadderInfo.ChromaKeyWidth.BindValueChanged(width => chroma.Width = width.NewValue, true);
 
             warmup.BindValueChanged(w =>
             {
                 warmupButton.Alpha = !w.NewValue ? 0.5f : 1;
-                header.ShowScores = !w.NewValue;
             }, true);
         }
 
@@ -183,9 +199,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 return;
 
             scheduledContract?.Cancel();
-
-            SongBar.Expanded = false;
-            //scoreDisplay.FadeOut(100);
             using (chat.BeginDelayedSequence(500))
                 chat.Expand();
         }
@@ -198,12 +211,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
             scheduledContract?.Cancel();
 
             chat.Contract();
-
-            using (BeginDelayedSequence(300))
-            {
-                //scoreDisplay.FadeIn(100);
-                SongBar.Expanded = true;
-            }
         }
 
         private void updateState()
@@ -384,89 +391,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
                 ladder.PlayersPerTeam.BindValueChanged(performLayout, true);
             }
-            /*private void DisplayPicksBansProtects()
-            {
-                new Container
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY },
-                    Children = new Drawable[]
-                    {
-                        new FillFlowContainer
-                        {
-                            new TournamentSpriteTextWithBackground(RedProtectSlot)
-                            {
-                                Scale = new Vector2(0.4f),
-                                Origin = Anchor.TopRight,
-                                Anchor = Anchor.TopRight,
-                            },
-                        }
-                    }
-                };
-                new Container
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Margin = new MarginPadding { Left = distanciaX, Top = distanciaY },
-                    Children = new Drawable[]
-                    {
-                        new FillFlowContainer
-                        {
-                            new TournamentSpriteTextWithBackground(BlueProtectSlot)
-                            {
-                                Scale = new Vector2(0.4f),
-                                Origin = Anchor.TopLeft,
-                                Anchor = Anchor.TopLeft,
-                            },
-                        }
-                    }
-                };
-                new Container
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY + 74 },
-                    Children = new Drawable[]
-                    {
-                        new FillFlowContainer
-                        {
-                            new TournamentSpriteTextWithBackground(RedBansSlot[0])
-                            {
-                                Scale = new Vector2(0.4f),
-                                Origin = Anchor.TopLeft,
-                                Anchor = Anchor.TopLeft,
-                            },
-                            new TournamentSpriteTextWithBackground(RedBansSlot[1])
-                            {
-                                Scale = new Vector2(0.4f),
-                                Origin = Anchor.TopLeft,
-                                Anchor = Anchor.TopLeft,
-                            },
-                        }
-                    }
-                };
-                new Container
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Margin = new MarginPadding { Left = distanciaX, Top = distanciaY + 74 },
-                    Children = new Drawable[]
-                    {
-                        new FillFlowContainer
-                        {
-                            new TournamentSpriteTextWithBackground(BlueBansSlot[0])
-                            {
-                                Scale = new Vector2(0.4f),
-                                Origin = Anchor.TopLeft,
-                                Anchor = Anchor.TopLeft,
-                            },
-                            new TournamentSpriteTextWithBackground(BlueBansSlot[1])
-                            {
-                                Scale = new Vector2(0.4f),
-                                Origin = Anchor.TopLeft,
-                                Anchor = Anchor.TopLeft,
-                            },
-                        }
-                    }
-                };
-            }*/
 
             private void performLayout(ValueChangedEvent<int> playerCount)
             {

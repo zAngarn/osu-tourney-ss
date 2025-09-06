@@ -14,7 +14,6 @@ using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Screens;
-using osu.Game.Tournament.Screens.Drawings;
 using osu.Game.Tournament.Screens.Editors;
 using osu.Game.Tournament.Screens.Gameplay;
 using osu.Game.Tournament.Screens.Ladder;
@@ -50,6 +49,8 @@ namespace osu.Game.Tournament
 
         private Container chatContainer = null!;
         private FillFlowContainer buttons = null!;
+
+        public static bool IsShowcaseScreen = false;
 
         private static PicksBansScreen picksBansScreenInstance = null!;
 
@@ -113,7 +114,6 @@ namespace osu.Game.Tournament
                                 new MapPoolScreen(),
                                 new TeamIntroScreen(),
                                 new SeedingScreen(),
-                                new DrawingsScreen(),
                                 new GameplayScreen(),
                                 new TeamWinScreen(),
 
@@ -164,7 +164,6 @@ namespace osu.Game.Tournament
                                 new Separator(),
                                 new ScreenButton(typeof(TeamWinScreen), Key.W) { Text = "Win", RequestSelection = SetScreen },
                                 new Separator(),
-                                new ScreenButton(typeof(DrawingsScreen)) { Text = "Drawings", RequestSelection = SetScreen },
                                 new ScreenButton(typeof(ShowcaseScreen)) { Text = "Showcase", RequestSelection = SetScreen },
                             }
                         },
@@ -196,6 +195,8 @@ namespace osu.Game.Tournament
         public void SetScreen(Type screenType)
         {
             temporaryScreen?.Expire();
+
+            IsShowcaseScreen = false;
 
             var target = screens.FirstOrDefault(s => s.GetType() == screenType);
 
@@ -229,14 +230,19 @@ namespace osu.Game.Tournament
 
             switch (currentScreen)
             {
-                case MapPoolScreen:
-                    chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
-                    chatContainer.ResizeWidthTo(1, 500, Easing.OutQuint);
-                    break;
-
                 case GameplayScreen:
                     chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
-                    chatContainer.ResizeWidthTo(0.5f, 500, Easing.OutQuint);
+                    chatContainer.ResizeWidthTo(0.0f, 500, Easing.OutQuint);
+                    break;
+
+                case ShowcaseScreen:
+                    IsShowcaseScreen = true;
+                    chatContainer.FadeOut(TournamentScreen.FADE_DELAY);
+                    break;
+
+                case PicksBansScreen:
+                    chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
+                    chatContainer.ResizeWidthTo(0.24f, 500, Easing.OutQuint);
                     break;
 
                 default:

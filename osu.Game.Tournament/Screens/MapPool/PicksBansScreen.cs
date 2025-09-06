@@ -7,6 +7,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Graphics;
 using osu.Game.Graphics.UserInterface;
 using osu.Game.Overlays.Settings;
 using osu.Game.Tournament.Components;
@@ -21,8 +22,14 @@ namespace osu.Game.Tournament.Screens.MapPool
         private FillFlowContainer redActions = null!;
         private FillFlowContainer blueActions = null!;
 
+        private Container tiebreakerCardContainer = null!;
+
         private readonly Bindable<string> slot = new Bindable<string>(string.Empty);
         private readonly Bindable<string> toDeletion = new Bindable<string>(string.Empty);
+
+        private readonly Bindable<bool> firstProtectBindable = new Bindable<bool>(false);
+        private readonly Bindable<bool> firstBanBindable = new Bindable<bool>(false);
+        private readonly Bindable<bool> firstPickBindable = new Bindable<bool>(false);
 
         private DrawablePlayerCard redPlayer = null!;
         private DrawablePlayerCard bluePlayer = null!;
@@ -50,9 +57,15 @@ namespace osu.Game.Tournament.Screens.MapPool
         private TeamColour currentBan = TeamColour.None;
         private TeamColour currentPick = TeamColour.None;
 
-        private TeamColour firstProtect = TeamColour.Blue; // TODO asignables
-        private TeamColour firstBan = TeamColour.Blue;
-        private TeamColour firstPick = TeamColour.Blue;
+        private TeamColour firstProtect = TeamColour.None;
+        private TeamColour firstBan = TeamColour.None;
+        private TeamColour firstPick = TeamColour.None;
+
+        private BeatmapChoice lastPlayed = null!;
+
+        private SettingsCheckbox firstProtectCheck = null!;
+        private SettingsCheckbox firstBanCheck = null!;
+        private SettingsCheckbox firstPickCheck = null!;
 
         public static List<string> BlueProtectsSlot = new List<string>();
         public static List<string> RedProtectsSlot =  new List<string>();
@@ -108,6 +121,12 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Scale = new Vector2(1.4f),
                     Margin = new MarginPadding { Top = 100, Right = 220 }
                 },
+                tiebreakerCardContainer = new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                },
                 new FillFlowContainer
                 {
                     RelativeSizeAxes = Axes.X,
@@ -162,11 +181,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         new ControlPanel.HorizontalLine(),
 
                         // ----------- protects
-                        new TournamentSpriteText
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Protects",
-                        },
                         blueProtectButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
@@ -183,11 +197,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         new ControlPanel.HorizontalLine(),
 
                         // ----------- bans
-                        new TournamentSpriteText
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Bans",
-                        },
                         blueBanButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
@@ -204,11 +213,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         new ControlPanel.HorizontalLine(),
 
                         // ----------- picks
-                        new TournamentSpriteText
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Picks",
-                        },
                         bluePickButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
@@ -228,15 +232,89 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Text = "Delete last added beatmap",
                             Action = () => deleteMap(lastPickedMap.Slot),
-                        }
+                        },
+                        new ControlPanel.HorizontalLine(),
+                        new TournamentSpriteText
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Set starting state (click checkboxes)",
+                            Font = OsuFont.Torus.With(weight: FontWeight.Bold)
+                        },
+                        new ControlPanel.Spacer(),
+                        firstProtectCheck = new SettingsCheckbox
+                        {
+                            LabelText = "First protect",
+                            RelativeSizeAxes = Axes.X,
+                            Current = firstProtectBindable,
+                        },
+                        firstBanCheck = new SettingsCheckbox
+                        {
+                            LabelText = "First ban",
+                            RelativeSizeAxes = Axes.X,
+                            Current = firstBanBindable,
+                        },
+                        firstPickCheck = new SettingsCheckbox
+                        {
+                            LabelText = "First pick",
+                            RelativeSizeAxes = Axes.X,
+                            Current = firstPickBindable,
+                        },
                     },
                 },
             };
 
+            firstProtectBindable.BindValueChanged(e =>
+            {
+                if (e.NewValue)
+                {
+                    firstProtectCheck.Colour = Colour4.HotPink;
+                    firstProtect = TeamColour.Red;
+                }
+                else
+                {
+                    firstProtectCheck.Colour = Colour4.FromHex("6ddded");
+                    firstProtect = TeamColour.Blue;
+                }
+
+                computeCurrentState();
+            });
+
+            firstBanBindable.BindValueChanged(e =>
+            {
+                if (e.NewValue)
+                {
+                    firstBanCheck.Colour = Colour4.HotPink;
+                    firstBan = TeamColour.Red;
+                }
+                else
+                {
+                    firstBanCheck.Colour = Colour4.FromHex("6ddded");
+                    firstBan = TeamColour.Blue;
+                }
+
+                computeCurrentState();
+            });
+
+            firstPickBindable.BindValueChanged(e =>
+            {
+                if (e.NewValue)
+                {
+                    firstPickCheck.Colour = Colour4.HotPink;
+                    firstPick = TeamColour.Red;
+                }
+                else
+                {
+                    firstPickCheck.Colour = Colour4.FromHex("6ddded");
+                    firstPick = TeamColour.Blue;
+                }
+
+                computeCurrentState();
+            });
+
             slot.BindValueChanged(slotString => mapSlot = slotString.NewValue.ToUpper(CultureInfo.InvariantCulture));
 
-            // La lógica reside en primero se le da un dummy para que no crashee, despues ese dummy lo
-            // reemplazo por el team real. Es bastante peruano pero qué se le va a hacer.
+            // La lógica reside en primero se le da un dummy para que no crashee, después ese dummy lo
+            // reemplazo por el team real. Es bastante peruano, pero qué se le va a hacer.
             LadderInfo.CurrentMatch.BindValueChanged(match =>
             {
                 TournamentTeam t1 = match.NewValue?.Team1?.Value
@@ -264,6 +342,8 @@ namespace osu.Game.Tournament.Screens.MapPool
             int beatmapID = 0;
 
             bool found = false;
+
+            if (CurrentMatch.Value?.PicksBansProtects.Count == 0) return found;
 
             foreach (TournamentBeatmapPanelV2 b in redActions.OfType<TournamentBeatmapPanelV2>())
             {
@@ -366,6 +446,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Team = colour,
                     Type = choiceType,
                     BeatmapID = targetMap.ID,
+                    Slot = map.ToUpper(CultureInfo.InvariantCulture)
                 });
 
                 Console.WriteLine($"Team {colour} [{choiceType} {targetMap.Slot}]: {targetMap.ID}");
@@ -491,6 +572,31 @@ namespace osu.Game.Tournament.Screens.MapPool
         protected override void LoadComplete()
         {
             base.LoadComplete();
+            computeCurrentState();
+        }
+
+        protected override void CurrentMatchChanged(ValueChangedEvent<TournamentMatch?> match)
+        {
+            base.CurrentMatchChanged(match);
+            updateDisplay();
+        }
+
+        private void updateDisplay()
+        {
+            redActions.Clear();
+            blueActions.Clear();
+
+            firstProtectBindable.Value = false;
+            firstBanBindable.Value = false;
+            firstPickBindable.Value = false;
+
+            firstProtect = TeamColour.None;
+            firstBan = TeamColour.None;
+            firstPick = TeamColour.None;
+
+            firstProtectCheck.Colour = Colour4.White;
+            firstBanCheck.Colour = Colour4.White;
+            firstPickCheck.Colour = Colour4.White;
 
             computeCurrentState();
         }
@@ -520,6 +626,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                     }
                 }
             }
+
+            computeCurrentState();
         }
 
         public static void UpdateWinStateStatic(PicksBansScreen screen, TeamColour colour)
@@ -540,6 +648,56 @@ namespace osu.Game.Tournament.Screens.MapPool
             if (colour == TeamColour.Red) return RedBansSlot;
             return null;
         }
+        
+        private BeatmapChoice getLastPlayedMap()
+        {
+            BeatmapChoice beatmapChoice;
+
+            if (CurrentMatch.Value?.Round.Value != null)
+            {
+                if (CurrentMatch.Value.PicksBansProtects.Count != 0)
+                {
+                    beatmapChoice = CurrentMatch.Value.PicksBansProtects.Last();
+                    beatmapChoice.TeamName = getTeamNameFromColour(beatmapChoice.Team);
+                }
+                else
+                {
+                    beatmapChoice = new BeatmapChoice
+                    {
+                        TeamName = "fuera de match",
+                        Slot = "warmup",
+                        Team = TeamColour.None,
+                    };
+                }
+            }
+            else
+            {
+                beatmapChoice = new BeatmapChoice
+                {
+                    TeamName = "desconocido",
+                    Slot = "???",
+                    Team = TeamColour.None,
+                };
+            }
+
+            return beatmapChoice;
+        }
+
+        public static BeatmapChoice GetLastPlayedMap(PicksBansScreen screen)
+        {
+            BeatmapChoice beatmapChoice = screen?.getLastPlayedMap()!;
+
+            return beatmapChoice;
+        }
+
+        private string getTeamNameFromColour(TeamColour colour)
+        {
+            string s = string.Empty;
+
+            s = colour == TeamColour.Red ? CurrentMatch.Value!.Team1.Value!.FullName.Value : CurrentMatch.Value!.Team2.Value!.FullName.Value;
+
+            return s;
+        }
 
         private void disableAllButtons()
         {
@@ -551,6 +709,8 @@ namespace osu.Game.Tournament.Screens.MapPool
 
             bluePickButton.Enabled.Value = false;
             redPickButton.Enabled.Value = false;
+
+            deletionButton.Enabled.Value = false;
         }
 
         private TeamColour getOppositeColour(TeamColour c)
@@ -570,6 +730,10 @@ namespace osu.Game.Tournament.Screens.MapPool
             if (CurrentMatch.Value?.Round.Value == null) return;
 
             disableAllButtons();
+
+            if (firstPick == TeamColour.None || firstBan == TeamColour.None || firstProtect == TeamColour.None) return;
+
+            deletionButton.Enabled.Value = true;
 
             // cambia segun la ronda
             bool hasAllProtects = CurrentMatch.Value.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) == 2;
@@ -656,6 +820,26 @@ namespace osu.Game.Tournament.Screens.MapPool
                         redPickButton.Enabled.Value = true;
                     }
                 }
+            }
+
+            if (hasAllPicks && CurrentMatch.Value?.Team1Score.Value == (CurrentMatch.Value?.Round.Value.BestOf.Value - 1) / 2
+                            && CurrentMatch.Value?.Team2Score.Value == (CurrentMatch.Value?.Round.Value.BestOf.Value - 1) / 2)
+            {
+                tiebreakerCardContainer.Add(new TournamentBeatmapPanelV2(CurrentMatch.Value?.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB")!.Beatmap, "TB", "TB")
+                {
+                    Scale = new Vector2(0.73f),
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                    Margin = new MarginPadding { Bottom = 40 },
+                });
+
+                CurrentMatch.Value!.PicksBansProtects.Add(new BeatmapChoice
+                {
+                    Team = TeamColour.None,
+                    Type = ChoiceType.Pick,
+                    BeatmapID = CurrentMatch.Value.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB")!.Beatmap!.OnlineID,
+                    Slot = CurrentMatch.Value?.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB")!.Slot!,
+                });
             }
         }
     }

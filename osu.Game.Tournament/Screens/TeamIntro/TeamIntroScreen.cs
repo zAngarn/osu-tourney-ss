@@ -1,10 +1,12 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 using osuTK;
@@ -51,25 +53,50 @@ namespace osu.Game.Tournament.Screens.TeamIntro
             {
                 new RoundDisplay(match.NewValue)
                 {
-                    Position = new Vector2(100, 100)
+                    Margin = new MarginPadding { Top = 80 }
                 },
-                new DrawableTeamFlag(match.NewValue.Team1.Value)
+                new DrawablePlayerCard(match.NewValue.Team1.Value!, Colour4.FromHex("ed6dac"))
                 {
-                    Position = new Vector2(165, y_flag_offset),
+                    Margin = new MarginPadding { Left = 196, Top = 150 },
+                    Scale = new Vector2(1.5f),
                 },
-                new DrawableTeamWithPlayers(match.NewValue.Team1.Value, TeamColour.Red)
+                new DrawablePlayerCard(match.NewValue.Team2.Value!, Colour4.FromHex("6ddded"))
                 {
-                    Position = new Vector2(165, y_offset),
+                    Margin = new MarginPadding { Left = 512, Top = 150 },
+                    Scale = new Vector2(1.5f),
                 },
-                new DrawableTeamFlag(match.NewValue.Team2.Value)
+                new TournamentSpriteText
                 {
-                    Position = new Vector2(740, y_flag_offset),
+                    Text = "vs",
+                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 80),
+                    Margin = new MarginPadding { Left = 648, Top = 240 },
+                    Shadow = false,
                 },
-                new DrawableTeamWithPlayers(match.NewValue.Team2.Value, TeamColour.Blue)
+                new TournamentSpriteText
                 {
-                    Position = new Vector2(740, y_offset),
+                    Text = "EMPIEZA",
+                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 40),
+                    Margin = new MarginPadding { Left = 615, Top = 610 },
+                    Colour = Colour4.FromHex("757575"),
+                    Shadow = false,
                 },
+                new ScheduleMatchDate(match.NewValue.Date.Value, 40, true)
+                {
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                    Margin = new MarginPadding { Bottom = 70 }
+                }
             };
         }
+    }
+
+    public partial class ScheduleMatchDate : DrawableDate
+    {
+        public ScheduleMatchDate(DateTimeOffset date, float textSize = OsuFont.DEFAULT_FONT_SIZE, bool italic = true)
+            : base(date, textSize, italic)
+        {
+        }
+
+        protected override string Format() => $"{base.Format()}";
     }
 }

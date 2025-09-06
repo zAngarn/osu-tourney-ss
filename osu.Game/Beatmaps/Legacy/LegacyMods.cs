@@ -40,5 +40,6 @@ namespace osu.Game.Beatmaps.Legacy
         Key2 = 1 << 28,
         ScoreV2 = 1 << 29,
         Mirror = 1 << 30,
+        TieBreaker = 1 << 31,
     }
 }
