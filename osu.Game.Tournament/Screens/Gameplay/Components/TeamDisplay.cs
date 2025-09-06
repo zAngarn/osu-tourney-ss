@@ -80,7 +80,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                     teamNameText = new TournamentSpriteTextWithBackground(colour)
                                     {
                                         Scale = new Vector2(0.7f),
-                                        Margin = new MarginPadding{ Top = 5},
+                                        Margin = new MarginPadding { Top = 5 },
                                         Origin = anchor,
                                         Anchor = anchor,
                                     },
@@ -99,15 +99,9 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                         Anchor = anchor,
                                         Children = new Drawable[]
                                         {
-                                            /*new DrawableTeamHeader(colour)
-                                            {
-                                                Scale = new Vector2(0.75f),
-                                                Origin = anchor,
-                                                Anchor = anchor,
-                                            },*/
                                             score = new TeamScore(currentTeamScore, colour, 7) //pointsToWin
                                             {
-                                                Margin = new MarginPadding{ Top = 5},
+                                                Margin = new MarginPadding { Top = 5 },
                                                 Origin = anchor,
                                                 Anchor = anchor,
                                             }

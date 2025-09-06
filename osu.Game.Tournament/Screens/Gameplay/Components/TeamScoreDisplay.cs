@@ -20,6 +20,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
         private readonly Bindable<int?> currentTeamScore = new Bindable<int?>();
 
         private TeamDisplay? teamDisplay;
+
         public bool ShowScore
         {
             get => teamDisplay?.ShowScore ?? false;

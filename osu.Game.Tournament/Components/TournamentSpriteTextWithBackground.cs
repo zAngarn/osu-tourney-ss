@@ -6,7 +6,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
 using osu.Game.Tournament.Models;
-using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Components
 {
@@ -41,7 +40,7 @@ namespace osu.Game.Tournament.Components
         {
             AutoSizeAxes = Axes.Both;
 
-            var textColour = colour == TeamColour.Red ? Color4.DeepPink : Color4.Cyan;
+            var textColour = colour == TeamColour.Red ? Colour4.FromHex("ed6dac") : Colour4.FromHex("6ddded");
 
             InternalChildren = new Drawable[]
             {

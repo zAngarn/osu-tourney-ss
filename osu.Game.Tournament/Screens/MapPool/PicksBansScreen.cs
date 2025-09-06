@@ -61,14 +61,12 @@ namespace osu.Game.Tournament.Screens.MapPool
         private TeamColour firstBan = TeamColour.None;
         private TeamColour firstPick = TeamColour.None;
 
-        private BeatmapChoice lastPlayed = null!;
-
         private SettingsCheckbox firstProtectCheck = null!;
         private SettingsCheckbox firstBanCheck = null!;
         private SettingsCheckbox firstPickCheck = null!;
 
         public static List<string> BlueProtectsSlot = new List<string>();
-        public static List<string> RedProtectsSlot =  new List<string>();
+        public static List<string> RedProtectsSlot = new List<string>();
 
         public static List<string> BlueBansSlot = new List<string>();
         public static List<string> RedBansSlot = new List<string>();
@@ -635,20 +633,22 @@ namespace osu.Game.Tournament.Screens.MapPool
             screen?.updateWinState(colour);
         }
 
-        public static List<string> GetProtectsSlot(TeamColour colour)
+        public static List<string>? GetProtectsSlot(TeamColour colour)
         {
             if (colour == TeamColour.Blue) return BlueProtectsSlot;
             if (colour == TeamColour.Red) return RedProtectsSlot;
+
             return null;
         }
 
-        public static List<string> GetBansSlot(TeamColour colour)
+        public static List<string>? GetBansSlot(TeamColour colour)
         {
             if (colour == TeamColour.Blue) return BlueBansSlot;
             if (colour == TeamColour.Red) return RedBansSlot;
+
             return null;
         }
-        
+
         private BeatmapChoice getLastPlayedMap()
         {
             BeatmapChoice beatmapChoice;

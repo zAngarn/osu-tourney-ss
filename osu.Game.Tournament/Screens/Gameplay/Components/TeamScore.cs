@@ -8,7 +8,6 @@ using osu.Game.Graphics.UserInterface;
 using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.MapPool;
 using osuTK;
-using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Gameplay.Components
 {
@@ -25,7 +24,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
 
             counterColour = colour;
 
-            var starColour = colour == TeamColour.Red ? Color4.DeepPink : Color4.Cyan;
+            var starColour = colour == TeamColour.Red ? Colour4.FromHex("ed6dac") : Colour4.FromHex("6ddded");
 
             AutoSizeAxes = Axes.Both;
 
