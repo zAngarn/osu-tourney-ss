@@ -65,7 +65,7 @@ namespace osu.Game.Tournament.Screens.MapPool
         private SettingsCheckbox firstBanCheck = null!;
         private SettingsCheckbox firstPickCheck = null!;
 
-        public static List<string> BlueProtectsSlot = new List<string>();
+        public static BindableList<string> BlueProtectsSlot = new BindableList<string>();
         public static List<string> RedProtectsSlot = new List<string>();
 
         public static List<string> BlueBansSlot = new List<string>();
@@ -633,10 +633,10 @@ namespace osu.Game.Tournament.Screens.MapPool
             screen?.updateWinState(colour);
         }
 
-        public static List<string>? GetProtectsSlot(TeamColour colour)
+        public static BindableList<string>? GetProtectsSlot(TeamColour colour)
         {
             if (colour == TeamColour.Blue) return BlueProtectsSlot;
-            if (colour == TeamColour.Red) return RedProtectsSlot;
+            //if (colour == TeamColour.Red) return RedProtectsSlot;
 
             return null;
         }

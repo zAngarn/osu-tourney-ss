@@ -40,10 +40,12 @@ namespace osu.Game.Tournament.Screens.Gameplay
         private static int distanciaX = 374;
         private static int distanciaY = -130; //protect como referencia base
 
-        public static readonly List<string> BlueProtectsSlot = PicksBansScreen.GetProtectsSlot(TeamColour.Blue);
-        public static readonly List<string> RedProtectsSlot = PicksBansScreen.GetProtectsSlot(TeamColour.Red);
+        public static readonly BindableList<string> BLUE_PROTECTS_SLOT = PicksBansScreen.GetProtectsSlot(TeamColour.Blue)!;
+        //public static readonly List<string> RedProtectsSlot = PicksBansScreen.GetProtectsSlot(TeamColour.Red);
         public static readonly List<string> BlueBansSlot = PicksBansScreen.GetBansSlot(TeamColour.Blue);
         public static readonly List<string> RedBansSlot = PicksBansScreen.GetBansSlot(TeamColour.Red);
+
+        private Container soyGay = null!;
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
@@ -113,15 +115,11 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         },
                     }
                 },
-                new Container
+                soyGay = new Container
                 {
                     AutoSizeAxes = Axes.X,
                     Origin = Anchor.BottomCentre,
                     Anchor = Anchor.BottomCentre,
-                    Children = new Drawable[]
-                    {
-                        DisplayPicksBansProtects(),
-                    }
                 },
                 new ControlPanel
                 {
@@ -162,6 +160,8 @@ namespace osu.Game.Tournament.Screens.Gameplay
             {
                 warmupButton.Alpha = !w.NewValue ? 0.5f : 1;
             }, true);
+
+            BLUE_PROTECTS_SLOT.bindValueChanged(updateDisplayPicksBansProtects());
         }
 
         RoundBeatmap targetMap = null!;
@@ -278,105 +278,96 @@ namespace osu.Game.Tournament.Screens.Gameplay
             base.Show();
         }
 
-        public Container DisplayPicksBansProtects()
+        public void updateDisplayPicksBansProtects()
+        {
+            if (BLUE_PROTECTS_SLOT.Count == 0 || RedProtectsSlot.Count == 0 || BlueBansSlot.Count == 0 || RedBansSlot.Count == 0) return;
+
+            soyGay.Children = new Drawable[]
             {
-                if (BlueProtectsSlot.Count == 0 || RedProtectsSlot.Count == 0 || BlueBansSlot.Count == 0 || RedBansSlot.Count == 0)
+                // ------------------- RED
+                new Container
                 {
-                    return new Container
-                    {
-
-                    };
-                };
-
-                return new Container
-                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY },
                     Children = new Drawable[]
                     {
-                        // ------------------- RED
-                        new Container
+                        new FillFlowContainer
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY },
-                            Children = new Drawable[]
+                            new TournamentSpriteTextWithBackground(RedProtectsSlot[0])
                             {
-                                new FillFlowContainer
-                                {
-                                    new TournamentSpriteTextWithBackground(RedProtectsSlot[0])
-                                    {
-                                        Scale = new Vector2(0.4f),
-                                        Origin = Anchor.TopRight,
-                                        Anchor = Anchor.TopRight,
-                                    },
-                                }
-                            }
-                        },
-                        new Container
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY + 74 },
-                            Children = new Drawable[]
-                            {
-                                new FillFlowContainer
-                                {
-                                    new TournamentSpriteTextWithBackground(RedBansSlot[0])
-                                    {
-                                        Scale = new Vector2(0.4f),
-                                        Origin = Anchor.TopRight,
-                                        Anchor = Anchor.TopRight,
-                                    },
-                                    new TournamentSpriteTextWithBackground(RedBansSlot[1])
-                                    {
-                                        Scale = new Vector2(0.4f),
-                                        Origin = Anchor.TopRight,
-                                        Anchor = Anchor.TopRight,
-                                    },
-                                }
-                            }
-                        },
-                        // ------------------- BLUE
-                        new Container
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Margin = new MarginPadding { Left = distanciaX, Top = distanciaY },
-                            Children = new Drawable[]
-                            {
-                                new FillFlowContainer
-                                {
-                                    new TournamentSpriteTextWithBackground(BlueProtectsSlot[0])
-                                    {
-                                        Scale = new Vector2(0.4f),
-                                        Origin = Anchor.TopLeft,
-                                        Anchor = Anchor.TopLeft,
-                                    },
-                                }
-                            }
-                        },
-                        new Container
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Margin = new MarginPadding { Left = distanciaX, Top = distanciaY + 74 },
-                            Children = new Drawable[]
-                            {
-                                new FillFlowContainer
-                                {
-                                    new TournamentSpriteTextWithBackground(BlueBansSlot[0])
-                                    {
-                                        Scale = new Vector2(0.4f),
-                                        Origin = Anchor.TopLeft,
-                                        Anchor = Anchor.TopLeft,
-                                    },
-                                    new TournamentSpriteTextWithBackground(BlueBansSlot[1])
-                                    {
-                                        Scale = new Vector2(0.4f),
-                                        Origin = Anchor.TopLeft,
-                                        Anchor = Anchor.TopLeft,
-                                    },
-                                }
-                            }
-                        },
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopRight,
+                                Anchor = Anchor.TopRight,
+                            },
+                        }
                     }
-                };
-            }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY + 74 },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(RedBansSlot[0])
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopRight,
+                                Anchor = Anchor.TopRight,
+                            },
+                            new TournamentSpriteTextWithBackground(RedBansSlot[1])
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopRight,
+                                Anchor = Anchor.TopRight,
+                            },
+                        }
+                    }
+                },
+                // ------------------- BLUE
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = distanciaX, Top = distanciaY },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(BLUE_PROTECTS_SLOT[0])
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                        }
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = distanciaX, Top = distanciaY + 74 },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(BlueBansSlot[0])
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                            new TournamentSpriteTextWithBackground(BlueBansSlot[1])
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                        }
+                    }
+                },
+            };
+        }
 
         private partial class ChromaArea : CompositeDrawable
         {
