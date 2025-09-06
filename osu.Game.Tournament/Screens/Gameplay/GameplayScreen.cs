@@ -1,6 +1,7 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Collections.Generic;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -15,6 +16,7 @@ using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Gameplay.Components;
 using osu.Game.Tournament.Screens.MapPool;
 using osu.Game.Tournament.Screens.TeamWin;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Gameplay
@@ -35,6 +37,14 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
         private Drawable chroma = null!;
 
+        private static int distanciaX = 374;
+        private static int distanciaY = -130; //protect como referencia base
+
+        public static readonly List<string> BlueProtectsSlot = PicksBansScreen.GetProtectsSlot(TeamColour.Blue);
+        public static readonly List<string> RedProtectsSlot = PicksBansScreen.GetProtectsSlot(TeamColour.Red);
+        public static readonly List<string> BlueBansSlot = PicksBansScreen.GetBansSlot(TeamColour.Blue);
+        public static readonly List<string> RedBansSlot = PicksBansScreen.GetBansSlot(TeamColour.Red);
+
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
         {
@@ -47,7 +57,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                     Loop = true,
                     RelativeSizeAxes = Axes.Both,
                 },
-                header = new MatchHeaderV2
+                header = new MatchHeaderV2()
                 {
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
@@ -87,12 +97,16 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         },
                     }
                 },
-                /*scoreDisplay = new TournamentMatchScoreDisplay
+                new Container
                 {
-                    Y = -147,
+                    AutoSizeAxes = Axes.X,
+                    Origin = Anchor.BottomCentre,
                     Anchor = Anchor.BottomCentre,
-                    Origin = Anchor.TopCentre,
-                },*/
+                    Children = new Drawable[]
+                    {
+                        DisplayPicksBansProtects(),
+                    }
+                },
                 new ControlPanel
                 {
                     Children = new Drawable[]
@@ -134,10 +148,11 @@ namespace osu.Game.Tournament.Screens.Gameplay
             }, true);
         }
 
+        RoundBeatmap targetMap = null!;
+
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
             State.BindTo(ipc.State);
             State.BindValueChanged(_ => updateState(), true);
         }
@@ -256,6 +271,106 @@ namespace osu.Game.Tournament.Screens.Gameplay
             base.Show();
         }
 
+        public Container DisplayPicksBansProtects()
+            {
+                if (BlueProtectsSlot.Count == 0 || RedProtectsSlot.Count == 0 || BlueBansSlot.Count == 0 || RedBansSlot.Count == 0)
+                {
+                    return new Container
+                    {
+
+                    };
+                };
+
+                return new Container
+                {
+                    Children = new Drawable[]
+                    {
+                        // ------------------- RED
+                        new Container
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY },
+                            Children = new Drawable[]
+                            {
+                                new FillFlowContainer
+                                {
+                                    new TournamentSpriteTextWithBackground(RedProtectsSlot[0])
+                                    {
+                                        Scale = new Vector2(0.4f),
+                                        Origin = Anchor.TopRight,
+                                        Anchor = Anchor.TopRight,
+                                    },
+                                }
+                            }
+                        },
+                        new Container
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY + 74 },
+                            Children = new Drawable[]
+                            {
+                                new FillFlowContainer
+                                {
+                                    new TournamentSpriteTextWithBackground(RedBansSlot[0])
+                                    {
+                                        Scale = new Vector2(0.4f),
+                                        Origin = Anchor.TopRight,
+                                        Anchor = Anchor.TopRight,
+                                    },
+                                    new TournamentSpriteTextWithBackground(RedBansSlot[1])
+                                    {
+                                        Scale = new Vector2(0.4f),
+                                        Origin = Anchor.TopRight,
+                                        Anchor = Anchor.TopRight,
+                                    },
+                                }
+                            }
+                        },
+                        // ------------------- BLUE
+                        new Container
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Margin = new MarginPadding { Left = distanciaX, Top = distanciaY },
+                            Children = new Drawable[]
+                            {
+                                new FillFlowContainer
+                                {
+                                    new TournamentSpriteTextWithBackground(BlueProtectsSlot[0])
+                                    {
+                                        Scale = new Vector2(0.4f),
+                                        Origin = Anchor.TopLeft,
+                                        Anchor = Anchor.TopLeft,
+                                    },
+                                }
+                            }
+                        },
+                        new Container
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Margin = new MarginPadding { Left = distanciaX, Top = distanciaY + 74 },
+                            Children = new Drawable[]
+                            {
+                                new FillFlowContainer
+                                {
+                                    new TournamentSpriteTextWithBackground(BlueBansSlot[0])
+                                    {
+                                        Scale = new Vector2(0.4f),
+                                        Origin = Anchor.TopLeft,
+                                        Anchor = Anchor.TopLeft,
+                                    },
+                                    new TournamentSpriteTextWithBackground(BlueBansSlot[1])
+                                    {
+                                        Scale = new Vector2(0.4f),
+                                        Origin = Anchor.TopLeft,
+                                        Anchor = Anchor.TopLeft,
+                                    },
+                                }
+                            }
+                        },
+                    }
+                };
+            }
+
         private partial class ChromaArea : CompositeDrawable
         {
             [Resolved]
@@ -269,6 +384,89 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
                 ladder.PlayersPerTeam.BindValueChanged(performLayout, true);
             }
+            /*private void DisplayPicksBansProtects()
+            {
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(RedProtectSlot)
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopRight,
+                                Anchor = Anchor.TopRight,
+                            },
+                        }
+                    }
+                };
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = distanciaX, Top = distanciaY },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(BlueProtectSlot)
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                        }
+                    }
+                };
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = -distanciaX, Top = distanciaY + 74 },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(RedBansSlot[0])
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                            new TournamentSpriteTextWithBackground(RedBansSlot[1])
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                        }
+                    }
+                };
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = distanciaX, Top = distanciaY + 74 },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(BlueBansSlot[0])
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                            new TournamentSpriteTextWithBackground(BlueBansSlot[1])
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                        }
+                    }
+                };
+            }*/
 
             private void performLayout(ValueChangedEvent<int> playerCount)
             {

@@ -1,6 +1,5 @@
-// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
-// See the LICENCE file in the repository root for full licence text.
-
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using osu.Framework.Allocation;
@@ -54,6 +53,12 @@ namespace osu.Game.Tournament.Screens.MapPool
         private TeamColour firstProtect = TeamColour.Blue; // TODO asignables
         private TeamColour firstBan = TeamColour.Blue;
         private TeamColour firstPick = TeamColour.Blue;
+
+        public static List<string> BlueProtectsSlot = new List<string>();
+        public static List<string> RedProtectsSlot =  new List<string>();
+
+        public static List<string> BlueBansSlot = new List<string>();
+        public static List<string> RedBansSlot = new List<string>();
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
@@ -360,8 +365,10 @@ namespace osu.Game.Tournament.Screens.MapPool
                 {
                     Team = colour,
                     Type = choiceType,
-                    BeatmapID = targetMap.ID
+                    BeatmapID = targetMap.ID,
                 });
+
+                Console.WriteLine($"Team {colour} [{choiceType} {targetMap.Slot}]: {targetMap.ID}");
 
                 lastPickedMap = targetMap;
 
@@ -378,6 +385,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentProtect = TeamColour.Blue;
+                        RedProtectsSlot.Add(targetMap.Slot);
                         break;
                     }
 
@@ -391,6 +399,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentProtect = TeamColour.Red;
+                        BlueProtectsSlot.Add(targetMap.Slot);
                         break;
                     }
 
@@ -405,6 +414,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentBan = TeamColour.Blue;
+                        RedBansSlot.Add(targetMap.Slot);
                         break;
                     }
 
@@ -418,6 +428,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentBan = TeamColour.Red;
+                        BlueBansSlot.Add(targetMap.Slot);
                         break;
                     }
 
@@ -514,6 +525,20 @@ namespace osu.Game.Tournament.Screens.MapPool
         public static void UpdateWinStateStatic(PicksBansScreen screen, TeamColour colour)
         {
             screen?.updateWinState(colour);
+        }
+
+        public static List<string> GetProtectsSlot(TeamColour colour)
+        {
+            if (colour == TeamColour.Blue) return BlueProtectsSlot;
+            if (colour == TeamColour.Red) return RedProtectsSlot;
+            return null;
+        }
+
+        public static List<string> GetBansSlot(TeamColour colour)
+        {
+            if (colour == TeamColour.Blue) return BlueBansSlot;
+            if (colour == TeamColour.Red) return RedBansSlot;
+            return null;
         }
 
         private void disableAllButtons()

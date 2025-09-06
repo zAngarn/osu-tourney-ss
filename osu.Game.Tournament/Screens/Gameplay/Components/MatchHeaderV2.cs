@@ -1,6 +1,5 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
-
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -71,17 +70,6 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                             Origin = Anchor.TopCentre,
                             Alpha = showLogo ? 1 : 0
                         },
-                        /*new DrawableTournamentHeaderText
-                        {
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopCentre,
-                        },*/
-                        /*new MatchRoundDisplay
-                        {
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopCentre,
-                            Scale = new Vector2(0.4f)
-                        },*/
                     }
                 },
                 teamDisplay1 = new TeamScoreDisplay(TeamColour.Red)
