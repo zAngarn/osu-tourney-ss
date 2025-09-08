@@ -14,7 +14,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
     {
         private readonly TeamScore score;
 
-        private readonly TournamentSpriteTextWithBackground teamNameText;
+        private readonly TournamentSpriteTextWithBackground teamNameText = new TournamentSpriteTextWithBackground("???");
 
         private readonly DrawableTeamFlag teamFlag;
 
@@ -109,6 +109,43 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                     },
                                 }
                             },
+                        }
+                    },
+                }
+            };
+        }
+
+        public TeamDisplay(TournamentTeam? team, TeamColour colour, Bindable<int?> currentTeamScore, int pointsToWin, bool scores = true)
+            : base(team)
+        {
+            AutoSizeAxes = Axes.Both;
+
+            bool flip = colour == TeamColour.Red;
+
+            MarginPadding margin = colour == TeamColour.Red ? new MarginPadding { Top = 65, Left = 545 } : new MarginPadding { Top = 65, Right = 545 };
+
+            var anchor = flip ? Anchor.TopLeft : Anchor.TopRight;
+
+            InternalChild = new Container
+            {
+                AutoSizeAxes = Axes.Both,
+                Children = new Drawable[]
+                {
+                    new FillFlowContainer
+                    {
+                        AutoSizeAxes = Axes.Both,
+                        Direction = FillDirection.Horizontal,
+                        Spacing = new Vector2(5),
+                        Origin = anchor,
+                        Anchor = anchor,
+                        Children = new Drawable[]
+                        {
+                            score = new TeamScore(currentTeamScore, colour, 7) //pointsToWin
+                            {
+                                Margin = margin,
+                                Origin = anchor,
+                                Anchor = anchor,
+                            }
                         }
                     },
                 }

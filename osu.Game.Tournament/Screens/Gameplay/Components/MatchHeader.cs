@@ -4,17 +4,14 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
-using osuTK;
 
 namespace osu.Game.Tournament.Screens.Gameplay.Components
 {
     public partial class MatchHeader : Container
     {
-        private TeamScoreDisplay teamDisplay1 = null!;
-        private TeamScoreDisplay teamDisplay2 = null!;
-        private DrawableTournamentHeaderLogo logo = null!;
+        private TeamScoreDisplayV2 teamDisplay1 = null!;
+        private TeamScoreDisplayV2 teamDisplay2 = null!;
 
         private bool showScores = true;
 
@@ -33,23 +30,6 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             }
         }
 
-        private bool showLogo = true;
-
-        public bool ShowLogo
-        {
-            get => showLogo;
-            set
-            {
-                if (value == showLogo)
-                    return;
-
-                showLogo = value;
-
-                if (IsLoaded)
-                    updateDisplay();
-            }
-        }
-
         [BackgroundDependencyLoader]
         private void load()
         {
@@ -57,39 +37,12 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             Height = 95;
             Children = new Drawable[]
             {
-                new FillFlowContainer
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Direction = FillDirection.Vertical,
-                    Padding = new MarginPadding(20),
-                    Spacing = new Vector2(5),
-                    Children = new Drawable[]
-                    {
-                        logo = new DrawableTournamentHeaderLogo
-                        {
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopCentre,
-                            Alpha = showLogo ? 1 : 0
-                        },
-                        new DrawableTournamentHeaderText
-                        {
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopCentre,
-                        },
-                        new MatchRoundDisplay
-                        {
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopCentre,
-                            Scale = new Vector2(0.4f)
-                        },
-                    }
-                },
-                teamDisplay1 = new TeamScoreDisplay(TeamColour.Red)
+                teamDisplay1 = new TeamScoreDisplayV2(TeamColour.Red)
                 {
                     Anchor = Anchor.TopLeft,
                     Origin = Anchor.TopLeft,
                 },
-                teamDisplay2 = new TeamScoreDisplay(TeamColour.Blue)
+                teamDisplay2 = new TeamScoreDisplayV2(TeamColour.Blue)
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
@@ -107,8 +60,6 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
         {
             teamDisplay1.ShowScore = showScores;
             teamDisplay2.ShowScore = showScores;
-
-            logo.Alpha = showLogo ? 1 : 0;
         }
     }
 }

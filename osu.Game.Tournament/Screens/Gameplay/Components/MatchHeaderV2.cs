@@ -55,7 +55,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
         {
             RelativeSizeAxes = Axes.X;
             Height = 222; //freedom dive reference???
-            Padding = new MarginPadding{ Top = 20, Horizontal = 45 };
+            Padding = new MarginPadding { Top = 20, Horizontal = 45 };
             Children = new Drawable[]
             {
                 new FillFlowContainer

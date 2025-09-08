@@ -74,7 +74,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                     Loop = true,
                     RelativeSizeAxes = Axes.Both,
                 },
-                header = new MatchHeaderV2()
+                header = new MatchHeaderV2
                 {
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
@@ -182,7 +182,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
             warmup.Value = match.NewValue.Team1Score.Value + match.NewValue.Team2Score.Value == 0;
             scheduledScreenChange?.Cancel();
-            //scheduledScreenChange?.Cancel();
         }
 
         private ScheduledDelegate? scheduledScreenChange;

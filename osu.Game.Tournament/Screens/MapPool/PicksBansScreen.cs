@@ -16,6 +16,7 @@ using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Gameplay;
+using osu.Game.Tournament.Screens.Gameplay.Components;
 using osuTK;
 
 namespace osu.Game.Tournament.Screens.MapPool
@@ -121,6 +122,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
                 },
+                new MatchHeader(),
                 new FillFlowContainer
                 {
                     RelativeSizeAxes = Axes.X,
@@ -172,7 +174,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.X,
                             Current = slot,
                         },
-                        new ControlPanel.HorizontalLine(),
 
                         // ----------- protects
                         blueProtectButton = new TourneyButton
@@ -234,7 +235,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                             Text = "Set starting state (click checkboxes)",
                             Font = OsuFont.Torus.With(weight: FontWeight.Bold)
                         },
-                        new ControlPanel.Spacer(),
                         firstProtectCheck = new SettingsCheckbox
                         {
                             LabelText = "First protect",
@@ -252,6 +252,13 @@ namespace osu.Game.Tournament.Screens.MapPool
                             LabelText = "First pick",
                             RelativeSizeAxes = Axes.X,
                             Current = firstPickBindable,
+                        },
+                        new ControlPanel.HorizontalLine(),
+                        new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Reset Match State",
+                            Action = resetMatch,
                         },
                     },
                 },
@@ -578,12 +585,28 @@ namespace osu.Game.Tournament.Screens.MapPool
         {
             base.CurrentMatchChanged(match);
             updateDisplay();
+
+            if (match.NewValue == null)
+                return;
+
+            match.NewValue.PicksBansProtects.Clear(); // Limpio la lista porque es lo más facil
+        }
+
+        private void resetMatch()
+        {
+            LadderInfo.CurrentMatch.Value?.PicksBansProtects.Clear();
+            updateDisplay();
         }
 
         private void updateDisplay()
         {
             redActions.Clear();
             blueActions.Clear();
+
+            LadderInfo.RedBans.Clear();
+            LadderInfo.BlueBans.Clear();
+            LadderInfo.RedProtects.Clear();
+            LadderInfo.BlueProtects.Clear();
 
             firstProtectBindable.Value = false;
             firstBanBindable.Value = false;
