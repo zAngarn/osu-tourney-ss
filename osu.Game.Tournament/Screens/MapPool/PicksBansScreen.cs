@@ -383,6 +383,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             {
                 var map = CurrentMatch.Value?.PicksBansProtects.FirstOrDefault(b => b.BeatmapID == beatmapID);
                 CurrentMatch.Value?.PicksBansProtects.Remove(map!);
+                deleteFromCollections(map!);
             }
 
             if (found)
@@ -428,6 +429,32 @@ namespace osu.Game.Tournament.Screens.MapPool
             return found;
         }
 
+        private void deleteFromCollections(BeatmapChoice beatmap)
+        {
+            if (beatmap.Team == TeamColour.Red)
+            {
+                if (beatmap.Type == ChoiceType.Protect)
+                {
+                    LadderInfo.RedProtects.Remove(LadderInfo.RedProtects.FirstOrDefault(map => map!.Slot == beatmap.Slot));
+                }
+                else if (beatmap.Type == ChoiceType.Ban)
+                {
+                    LadderInfo.RedBans.Remove(LadderInfo.RedBans.FirstOrDefault(map => map!.Slot == beatmap.Slot));
+                }
+            }
+            else
+            {
+                if (beatmap.Type == ChoiceType.Protect)
+                {
+                    LadderInfo.BlueProtects.Remove(LadderInfo.BlueProtects.FirstOrDefault(map => map!.Slot == beatmap.Slot));
+                }
+                else if (beatmap.Type == ChoiceType.Ban)
+                {
+                    LadderInfo.BlueBans.Remove(LadderInfo.BlueBans.FirstOrDefault(map => map!.Slot == beatmap.Slot));
+                }
+            }
+        }
+
         private void addMap(TeamColour colour, ChoiceType choiceType, string map)
         {
             RoundBeatmap targetMap = null!;
@@ -442,9 +469,8 @@ namespace osu.Game.Tournament.Screens.MapPool
 
                 if (targetMap == null!) return;
 
-                // TODO borrar el comentario de esta línea
-                /*if (CurrentMatch.Value.PicksBansProtects.Any(p => p.BeatmapID == targetMap.ID))
-                    return;*/
+                if (CurrentMatch.Value.PicksBansProtects.Any(p => p.BeatmapID == targetMap.ID))
+                    return;
 
                 // Con esto debería ser compatible con la mappool antigua...
                 CurrentMatch.Value.PicksBansProtects.Add(new BeatmapChoice
