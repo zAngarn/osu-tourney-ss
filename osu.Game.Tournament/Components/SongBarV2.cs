@@ -134,7 +134,7 @@ namespace osu.Game.Tournament.Components
                 srExtra = "*";
             }
 
-            flow.Children = new Drawable[]
+            /*flow.Children = new Drawable[]
             {
                 new Container
                 {
@@ -364,7 +364,7 @@ namespace osu.Game.Tournament.Components
                         }
                     }
                 }
-            };
+            };*/
         }
 
         private Colour4 getTeamColour(TeamColour color)

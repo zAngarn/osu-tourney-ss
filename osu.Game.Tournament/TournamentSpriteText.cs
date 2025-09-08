@@ -12,5 +12,10 @@ namespace osu.Game.Tournament
         {
             Font = OsuFont.Torus;
         }
+        public TournamentSpriteText(string text = "")
+        {
+            Font = OsuFont.Torus;
+            Text = text;
+        }
     }
 }

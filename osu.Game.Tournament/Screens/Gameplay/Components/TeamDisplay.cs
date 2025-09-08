@@ -56,6 +56,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                 AutoSizeAxes = Axes.Both,
                 Children = new Drawable[]
                 {
+
                     new FillFlowContainer
                     {
                         AutoSizeAxes = Axes.Both,

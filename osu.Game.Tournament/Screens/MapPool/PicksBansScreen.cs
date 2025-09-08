@@ -13,6 +13,7 @@ using osu.Game.Overlays.Settings;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
+using osu.Game.Tournament.Screens.Gameplay;
 using osuTK;
 
 namespace osu.Game.Tournament.Screens.MapPool
@@ -64,12 +65,6 @@ namespace osu.Game.Tournament.Screens.MapPool
         private SettingsCheckbox firstProtectCheck = null!;
         private SettingsCheckbox firstBanCheck = null!;
         private SettingsCheckbox firstPickCheck = null!;
-
-        public static BindableList<string> BlueProtectsSlot = new BindableList<string>();
-        public static List<string> RedProtectsSlot = new List<string>();
-
-        public static List<string> BlueBansSlot = new List<string>();
-        public static List<string> RedBansSlot = new List<string>();
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
@@ -310,7 +305,10 @@ namespace osu.Game.Tournament.Screens.MapPool
             });
 
             slot.BindValueChanged(slotString => mapSlot = slotString.NewValue.ToUpper(CultureInfo.InvariantCulture));
-
+            LadderInfo.BlueProtects.BindCollectionChanged((_, _) => GameplayScreen.updateDisplayPicksBansProtects(), true);
+            LadderInfo.BlueBans.BindCollectionChanged((_, _) => GameplayScreen.updateDisplayPicksBansProtects(), true);
+            LadderInfo.RedProtects.BindCollectionChanged((_, _) => GameplayScreen.updateDisplayPicksBansProtects(), true);
+            LadderInfo.RedBans.BindCollectionChanged((_, _) => GameplayScreen.updateDisplayPicksBansProtects(), true);
             // La lógica reside en primero se le da un dummy para que no crashee, después ese dummy lo
             // reemplazo por el team real. Es bastante peruano, pero qué se le va a hacer.
             LadderInfo.CurrentMatch.BindValueChanged(match =>
@@ -464,7 +462,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentProtect = TeamColour.Blue;
-                        RedProtectsSlot.Add(targetMap.Slot);
+                        //RedProtectsSlot.Add(targetMap.Slot);
+                        LadderInfo.RedProtects.Add(targetMap);
                         break;
                     }
 
@@ -478,7 +477,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentProtect = TeamColour.Red;
-                        BlueProtectsSlot.Add(targetMap.Slot);
+                        //BlueProtectsSlot.Add(targetMap.Slot);
+                        LadderInfo.BlueProtects.Add(targetMap);
                         break;
                     }
 
@@ -493,7 +493,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentBan = TeamColour.Blue;
-                        RedBansSlot.Add(targetMap.Slot);
+                        //RedBansSlot.Add(targetMap.Slot);
+                        LadderInfo.RedBans.Add(targetMap);
                         break;
                     }
 
@@ -507,7 +508,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentBan = TeamColour.Red;
-                        BlueBansSlot.Add(targetMap.Slot);
+                        //BlueBansSlot.Add(targetMap.Slot);
+                        LadderInfo.BlueBans.Add(targetMap);
                         break;
                     }
 
@@ -631,22 +633,6 @@ namespace osu.Game.Tournament.Screens.MapPool
         public static void UpdateWinStateStatic(PicksBansScreen screen, TeamColour colour)
         {
             screen?.updateWinState(colour);
-        }
-
-        public static BindableList<string>? GetProtectsSlot(TeamColour colour)
-        {
-            if (colour == TeamColour.Blue) return BlueProtectsSlot;
-            //if (colour == TeamColour.Red) return RedProtectsSlot;
-
-            return null;
-        }
-
-        public static List<string>? GetBansSlot(TeamColour colour)
-        {
-            if (colour == TeamColour.Blue) return BlueBansSlot;
-            if (colour == TeamColour.Red) return RedBansSlot;
-
-            return null;
         }
 
         private BeatmapChoice getLastPlayedMap()
