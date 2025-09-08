@@ -134,7 +134,7 @@ namespace osu.Game.Tournament.Tests
                 Value = new TournamentTeam
                 {
                     Acronym = { Value = "USA" },
-                    FlagName = { Value = "SOR" },
+                    FlagName = { Value = "YUR" },
                     FullName = { Value = "Yuri Enjoyer" },
                     Seed = { Value = "#3" },
                     Players =

@@ -15,6 +15,7 @@ using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Gameplay.Components;
 using osu.Game.Tournament.Screens.MapPool;
 using osu.Game.Tournament.Screens.TeamWin;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Gameplay
@@ -34,6 +35,16 @@ namespace osu.Game.Tournament.Screens.Gameplay
         private TournamentMatchChatDisplay chat { get; set; } = null!;
 
         private Drawable chroma = null!;
+
+        private const int distancia_x = 374;
+        private const int distancia_y = -130; //protect como referencia base
+
+        public static BindableList<RoundBeatmap?> BlueProtects = LadderInfo.BlueProtects;
+        public static BindableList<RoundBeatmap?> BlueBans = LadderInfo.BlueBans;
+        public static BindableList<RoundBeatmap?> RedProtects = LadderInfo.RedProtects;
+        public static BindableList<RoundBeatmap?> RedBans = LadderInfo.RedBans;
+
+        private static Container containerPicksBansProtects = null!;
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
@@ -63,17 +74,17 @@ namespace osu.Game.Tournament.Screens.Gameplay
                     Loop = true,
                     RelativeSizeAxes = Axes.Both,
                 },
-                /*new RoundDisplayV2(dummyMatch.Round.Value)
+                header = new MatchHeaderV2()
                 {
-                    Anchor = Anchor.TopLeft,
-                    Origin = Anchor.TopLeft,
-                    Margin = new MarginPadding { Left = 160 }
-                },*/
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                    ShowLogo = false,
+                },
                 new Container
                 {
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
-                    Y = 35,
+                    Y = 34,
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
                     Children = new[]
@@ -103,11 +114,11 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         },
                     }
                 },
-                scoreDisplay = new TournamentMatchScoreDisplay
+                containerPicksBansProtects = new Container
                 {
-                    Y = -147,
+                    AutoSizeAxes = Axes.X,
+                    Origin = Anchor.BottomCentre,
                     Anchor = Anchor.BottomCentre,
-                    Origin = Anchor.TopCentre,
                 },
                 new ControlPanel
                 {
@@ -148,12 +159,16 @@ namespace osu.Game.Tournament.Screens.Gameplay
             {
                 warmupButton.Alpha = !w.NewValue ? 0.5f : 1;
             }, true);
+
+            LadderInfo.BlueProtects.BindCollectionChanged((sender, args) =>
+            {
+                UpdateDisplayPicksBansProtects();
+            }, true);
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
             State.BindTo(ipc.State);
             State.BindValueChanged(_ => updateState(), true);
         }
@@ -167,14 +182,16 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
             warmup.Value = match.NewValue.Team1Score.Value + match.NewValue.Team2Score.Value == 0;
             scheduledScreenChange?.Cancel();
+            //scheduledScreenChange?.Cancel();
         }
 
         private ScheduledDelegate? scheduledScreenChange;
         private ScheduledDelegate? scheduledContract;
 
-        private TournamentMatchScoreDisplay scoreDisplay = null!;
+        //private TournamentMatchScoreDisplay scoreDisplay = null!;
 
         private TourneyState lastState;
+        private MatchHeaderV2 header = null!;
 
         private void contract()
         {
@@ -182,9 +199,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 return;
 
             scheduledContract?.Cancel();
-
-            //SongBar.Expanded = false;
-            scoreDisplay.FadeOut(100);
             using (chat.BeginDelayedSequence(500))
                 chat.Expand();
         }
@@ -197,12 +211,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
             scheduledContract?.Cancel();
 
             chat.Contract();
-
-            using (BeginDelayedSequence(300))
-            {
-                scoreDisplay.FadeIn(100);
-                //SongBar.Expanded = true;
-            }
         }
 
         private void updateState()
@@ -268,6 +276,98 @@ namespace osu.Game.Tournament.Screens.Gameplay
         {
             updateState();
             base.Show();
+        }
+
+        public static void UpdateDisplayPicksBansProtects()
+        {
+            if (BlueProtects.Count < 1 || RedProtects.Count < 1 || BlueBans.Count < 2 || RedBans.Count < 2) return;
+            //containerPicksBansProtects.Clear();
+
+            containerPicksBansProtects.Children = new Drawable[]
+            {
+                // ------------------- RED
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = -distancia_x, Top = distancia_y },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(RedProtects[0]!.Slot)
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopRight,
+                                Anchor = Anchor.TopRight,
+                            },
+                        }
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = -distancia_x, Top = distancia_y + 74 },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(RedBans[0]!.Slot)
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopRight,
+                                Anchor = Anchor.TopRight,
+                            },
+                            new TournamentSpriteTextWithBackground(RedBans[1]!.Slot)
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopRight,
+                                Anchor = Anchor.TopRight,
+                            },
+                        }
+                    }
+                },
+                // ------------------- BLUE
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = distancia_x, Top = distancia_y },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(BlueProtects[0]!.Slot)
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                        }
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Margin = new MarginPadding { Left = distancia_x, Top = distancia_y + 74 },
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            new TournamentSpriteTextWithBackground(BlueBans[0]!.Slot)
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                            new TournamentSpriteTextWithBackground(BlueBans[1]!.Slot)
+                            {
+                                Scale = new Vector2(0.4f),
+                                Origin = Anchor.TopLeft,
+                                Anchor = Anchor.TopLeft,
+                            },
+                        }
+                    }
+                },
+            };
         }
 
         private partial class ChromaArea : CompositeDrawable

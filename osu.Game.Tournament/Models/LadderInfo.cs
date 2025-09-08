@@ -21,6 +21,13 @@ namespace osu.Game.Tournament.Models
         public BindableList<TournamentRound> Rounds = new BindableList<TournamentRound>();
         public BindableList<TournamentTeam> Teams = new BindableList<TournamentTeam>();
 
+        // Protects y bans para el header del GameplayScreen.cs
+        public static BindableList<RoundBeatmap?> BlueProtects = new BindableList<RoundBeatmap?>();
+        public static BindableList<RoundBeatmap?> RedProtects = new BindableList<RoundBeatmap?>();
+
+        public static BindableList<RoundBeatmap?> BlueBans = new BindableList<RoundBeatmap?>();
+        public static BindableList<RoundBeatmap?> RedBans = new BindableList<RoundBeatmap?>();
+
         // only used for serialisation
         public List<TournamentProgression> Progressions = new List<TournamentProgression>();
 

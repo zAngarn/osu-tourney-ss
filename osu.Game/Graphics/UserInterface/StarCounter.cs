@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Utils;
 using System;
 using System.Linq;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 
 namespace osu.Game.Graphics.UserInterface
@@ -75,7 +76,27 @@ namespace osu.Game.Graphics.UserInterface
             };
         }
 
+        public StarCounter(Colour4 colour, int starCount = 10)
+        {
+            StarCount = Math.Max(starCount, 0);
+
+            AutoSizeAxes = Axes.Both;
+
+            Children = new Drawable[]
+            {
+                stars = new FillFlowContainer<Star>
+                {
+                    AutoSizeAxes = Axes.Both,
+                    Spacing = new Vector2(star_spacing),
+                    ChildrenEnumerable = Enumerable.Range(0, StarCount).Select(_ => CreateStar(colour, true))
+                }
+            };
+        }
+
         public virtual Star CreateStar() => new DefaultStar();
+        public virtual Star CreateStar(Colour4 colour, bool cuadrao) => new Cuadrao(colour);
+
+        public virtual Star CreateStar(Colour4 colour) => new DefaultStar(colour);
 
         protected override void LoadComplete()
         {
@@ -122,6 +143,74 @@ namespace osu.Game.Graphics.UserInterface
             }
         }
 
+        public partial class Cuadrao : Star
+        {
+            private readonly Box box;
+            public Cuadrao(Colour4 colour)
+            {
+                Size = new Vector2(20);
+
+                InternalChildren = new Drawable[]
+                {
+                    new Container
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Masking = true,
+                        BorderColour = colour,
+                        BorderThickness = 3,
+                        CornerRadius = 5,
+                        CornerExponent = 2.5f,
+                        Children = new Drawable[]
+                        {
+                            new Box
+                            {
+                                Colour = Colour4.Transparent,
+                                RelativeSizeAxes = Axes.Both,
+                                AlwaysPresent = true,
+                            },
+                        }
+                    },
+                    new Container
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Masking = true,
+                        BorderColour = colour,
+                        BorderThickness = 3,
+                        CornerRadius = 5,
+                        CornerExponent = 2.5f,
+                        Children = new Drawable[]
+                        {
+                            box = new Box
+                            {
+                                Colour = colour,
+                                RelativeSizeAxes = Axes.Both,
+                            },
+                        }
+                    },
+                };
+            }
+
+            /*public Cuadrao(Colour4 colour)
+            {
+                Size = new Vector2(star_size);
+
+                InternalChild = Icon = new SpriteIcon
+                {
+                    Size = new Vector2(star_size),
+                    Icon = FontAwesome.Solid.Star,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Colour = colour,
+                };
+            }*/
+
+            public override void DisplayAt(float scale)
+            {
+                box.FadeTo(scale, 500, Easing.OutQuint);
+                FadeEdgeEffectTo(0.2f * scale, 500, Easing.OutQuint);
+            }
+        }
+
         public partial class DefaultStar : Star
         {
             private const double scaling_duration = 1000;
@@ -146,6 +235,21 @@ namespace osu.Game.Graphics.UserInterface
                     Icon = FontAwesome.Solid.Star,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
+                    Colour = Colour4.Cyan,
+                };
+            }
+
+            public DefaultStar(Colour4 colour)
+            {
+                Size = new Vector2(star_size);
+
+                InternalChild = Icon = new SpriteIcon
+                {
+                    Size = new Vector2(star_size),
+                    Icon = FontAwesome.Solid.Star,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Colour = colour,
                 };
             }
 
