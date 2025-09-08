@@ -1,5 +1,7 @@
+// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+// See the LICENCE file in the repository root for full licence text.
+
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using osu.Framework.Allocation;
@@ -26,7 +28,6 @@ namespace osu.Game.Tournament.Screens.MapPool
         private Container tiebreakerCardContainer = null!;
 
         private readonly Bindable<string> slot = new Bindable<string>(string.Empty);
-        private readonly Bindable<string> toDeletion = new Bindable<string>(string.Empty);
 
         private readonly Bindable<bool> firstProtectBindable = new Bindable<bool>(false);
         private readonly Bindable<bool> firstBanBindable = new Bindable<bool>(false);
@@ -305,10 +306,12 @@ namespace osu.Game.Tournament.Screens.MapPool
             });
 
             slot.BindValueChanged(slotString => mapSlot = slotString.NewValue.ToUpper(CultureInfo.InvariantCulture));
-            LadderInfo.BlueProtects.BindCollectionChanged((_, _) => GameplayScreen.updateDisplayPicksBansProtects(), true);
-            LadderInfo.BlueBans.BindCollectionChanged((_, _) => GameplayScreen.updateDisplayPicksBansProtects(), true);
-            LadderInfo.RedProtects.BindCollectionChanged((_, _) => GameplayScreen.updateDisplayPicksBansProtects(), true);
-            LadderInfo.RedBans.BindCollectionChanged((_, _) => GameplayScreen.updateDisplayPicksBansProtects(), true);
+
+            LadderInfo.BlueProtects.BindCollectionChanged((_, _) => GameplayScreen.UpdateDisplayPicksBansProtects(), true);
+            LadderInfo.BlueBans.BindCollectionChanged((_, _) => GameplayScreen.UpdateDisplayPicksBansProtects(), true);
+            LadderInfo.RedProtects.BindCollectionChanged((_, _) => GameplayScreen.UpdateDisplayPicksBansProtects(), true);
+            LadderInfo.RedBans.BindCollectionChanged((_, _) => GameplayScreen.UpdateDisplayPicksBansProtects(), true);
+
             // La lógica reside en primero se le da un dummy para que no crashee, después ese dummy lo
             // reemplazo por el team real. Es bastante peruano, pero qué se le va a hacer.
             LadderInfo.CurrentMatch.BindValueChanged(match =>
@@ -462,7 +465,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentProtect = TeamColour.Blue;
-                        //RedProtectsSlot.Add(targetMap.Slot);
                         LadderInfo.RedProtects.Add(targetMap);
                         break;
                     }
@@ -477,7 +479,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentProtect = TeamColour.Red;
-                        //BlueProtectsSlot.Add(targetMap.Slot);
                         LadderInfo.BlueProtects.Add(targetMap);
                         break;
                     }
@@ -493,7 +494,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentBan = TeamColour.Blue;
-                        //RedBansSlot.Add(targetMap.Slot);
                         LadderInfo.RedBans.Add(targetMap);
                         break;
                     }
@@ -508,7 +508,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         });
 
                         currentBan = TeamColour.Red;
-                        //BlueBansSlot.Add(targetMap.Slot);
                         LadderInfo.BlueBans.Add(targetMap);
                         break;
                     }

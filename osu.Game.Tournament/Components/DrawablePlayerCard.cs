@@ -122,7 +122,7 @@ namespace osu.Game.Tournament.Components
                                     Anchor = Anchor.TopRight,
                                     Origin = Anchor.TopRight,
                                     Margin = new MarginPadding { Right = 25, Top = 28 },
-                                    Text = team.Seed.Value ?? "#?",
+                                    Text = "#" + team.Seed.Value ?? "#?",
                                     Font = OsuFont.Torus.With(weight: FontWeight.Bold, fixedWidth: true, size: 20),
                                     Colour = Color4Extensions.FromHex("3d3d3d")
                                 },
