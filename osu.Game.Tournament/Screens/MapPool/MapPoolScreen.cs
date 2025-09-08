@@ -6,34 +6,20 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Input.Events;
 using osu.Framework.Threading;
-using osu.Game.Graphics.UserInterface;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
-using osu.Game.Tournament.Screens.Gameplay;
-using osu.Game.Tournament.Screens.Gameplay.Components;
 using osuTK;
-using osuTK.Graphics;
-using osuTK.Input;
 
 namespace osu.Game.Tournament.Screens.MapPool
 {
     public partial class MapPoolScreen : TournamentMatchScreen
     {
-        private FillFlowContainer<FillFlowContainer<TournamentBeatmapPanel>> mapFlows = null!;
+        private FillFlowContainer<FillFlowContainer<TournamentBeatmapPanelV2>> mapFlows = null!;
 
         [Resolved]
         private TournamentSceneManager? sceneManager { get; set; }
-
-        private TeamColour pickColour;
-        private ChoiceType pickType;
-
-        private OsuButton buttonRedBan = null!;
-        private OsuButton buttonBlueBan = null!;
-        private OsuButton buttonRedPick = null!;
-        private OsuButton buttonBluePick = null!;
 
         private ScheduledDelegate? scheduledScreenChange;
 
@@ -47,14 +33,10 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Loop = true,
                     RelativeSizeAxes = Axes.Both,
                 },
-                new MatchHeader
+                mapFlows = new FillFlowContainer<FillFlowContainer<TournamentBeatmapPanelV2>>
                 {
-                    ShowScores = true,
-                },
-                mapFlows = new FillFlowContainer<FillFlowContainer<TournamentBeatmapPanel>>
-                {
-                    Y = 160,
-                    Spacing = new Vector2(10, 10),
+                    Y = 200,
+                    Spacing = new Vector2(10, 50),
                     Direction = FillDirection.Vertical,
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
@@ -65,44 +47,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     {
                         new TournamentSpriteText
                         {
-                            Text = "Current Mode"
-                        },
-                        buttonRedBan = new TourneyButton
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Red Ban",
-                            Action = () => setMode(TeamColour.Red, ChoiceType.Ban)
-                        },
-                        buttonBlueBan = new TourneyButton
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Blue Ban",
-                            Action = () => setMode(TeamColour.Blue, ChoiceType.Ban)
-                        },
-                        buttonRedPick = new TourneyButton
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Red Pick",
-                            Action = () => setMode(TeamColour.Red, ChoiceType.Pick)
-                        },
-                        buttonBluePick = new TourneyButton
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Blue Pick",
-                            Action = () => setMode(TeamColour.Blue, ChoiceType.Pick)
-                        },
-                        new ControlPanel.Spacer(),
-                        new TourneyButton
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Text = "Reset",
-                            Action = reset
-                        },
-                        new ControlPanel.Spacer(),
-                        new OsuCheckbox
-                        {
-                            LabelText = "Split display by mods",
-                            Current = LadderInfo.SplitMapPoolByMods,
+                            Text = "hola"
                         },
                     },
                 }
@@ -136,84 +81,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                 addForBeatmap(beatmap.NewValue.OnlineID);
         }
 
-        private void setMode(TeamColour colour, ChoiceType choiceType)
-        {
-            pickColour = colour;
-            pickType = choiceType;
-
-            buttonRedBan.Colour = setColour(pickColour == TeamColour.Red && pickType == ChoiceType.Ban);
-            buttonBlueBan.Colour = setColour(pickColour == TeamColour.Blue && pickType == ChoiceType.Ban);
-            buttonRedPick.Colour = setColour(pickColour == TeamColour.Red && pickType == ChoiceType.Pick);
-            buttonBluePick.Colour = setColour(pickColour == TeamColour.Blue && pickType == ChoiceType.Pick);
-
-            static Color4 setColour(bool active) => active ? Color4.White : Color4.Gray;
-        }
-
-        private void setNextMode()
-        {
-            if (CurrentMatch.Value?.Round.Value == null)
-                return;
-
-            int totalBansRequired = CurrentMatch.Value.Round.Value.BanCount.Value * 2;
-
-            TeamColour lastPickColour = CurrentMatch.Value.PicksBansProtects.LastOrDefault()?.Team ?? TeamColour.Red;
-
-            TeamColour nextColour;
-
-            bool hasAllBans = CurrentMatch.Value.PicksBansProtects.Count(p => p.Type == ChoiceType.Ban) >= totalBansRequired;
-
-            if (!hasAllBans)
-            {
-                // Ban phase: switch teams every second ban.
-                nextColour = CurrentMatch.Value.PicksBansProtects.Count % 2 == 1
-                    ? getOppositeTeamColour(lastPickColour)
-                    : lastPickColour;
-            }
-            else
-            {
-                // Pick phase : switch teams every pick, except for the first pick which generally goes to the team that placed the last ban.
-                nextColour = pickType == ChoiceType.Pick
-                    ? getOppositeTeamColour(lastPickColour)
-                    : lastPickColour;
-            }
-
-            setMode(nextColour, hasAllBans ? ChoiceType.Pick : ChoiceType.Ban);
-
-            TeamColour getOppositeTeamColour(TeamColour colour) => colour == TeamColour.Red ? TeamColour.Blue : TeamColour.Red;
-        }
-
-        protected override bool OnMouseDown(MouseDownEvent e)
-        {
-            var maps = mapFlows.Select(f => f.FirstOrDefault(m => m.ReceivePositionalInputAt(e.ScreenSpaceMousePosition)));
-            var map = maps.FirstOrDefault(m => m != null);
-
-            if (map != null)
-            {
-                if (e.Button == MouseButton.Left && map.Beatmap?.OnlineID > 0)
-                    addForBeatmap(map.Beatmap.OnlineID);
-                else
-                {
-                    var existing = CurrentMatch.Value?.PicksBansProtects.FirstOrDefault(p => p.BeatmapID == map.Beatmap?.OnlineID);
-
-                    if (existing != null)
-                    {
-                        CurrentMatch.Value?.PicksBansProtects.Remove(existing);
-                        setNextMode();
-                    }
-                }
-
-                return true;
-            }
-
-            return base.OnMouseDown(e);
-        }
-
-        private void reset()
-        {
-            CurrentMatch.Value?.PicksBansProtects.Clear();
-            setNextMode();
-        }
-
         private void addForBeatmap(int beatmapId)
         {
             if (CurrentMatch.Value?.Round.Value == null)
@@ -227,22 +94,13 @@ namespace osu.Game.Tournament.Screens.MapPool
                 // don't attempt to add if already exists.
                 return;
 
-            CurrentMatch.Value.PicksBansProtects.Add(new BeatmapChoice
-            {
-                Team = pickColour,
-                Type = pickType,
-                BeatmapID = beatmapId
-            });
-
-            setNextMode();
-
             if (LadderInfo.AutoProgressScreens.Value)
             {
-                if (pickType == ChoiceType.Pick && CurrentMatch.Value.PicksBansProtects.Any(i => i.Type == ChoiceType.Pick))
+                /*if (pickType == ChoiceType.Pick && CurrentMatch.Value.PicksBansProtects.Any(i => i.Type == ChoiceType.Pick))
                 {
                     scheduledScreenChange?.Cancel();
                     scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(GameplayScreen)); }, 10000);
-                }
+                }*/
             }
         }
 
@@ -269,7 +127,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
             if (CurrentMatch.Value.Round.Value != null)
             {
-                FillFlowContainer<TournamentBeatmapPanel>? currentFlow = null;
+                FillFlowContainer<TournamentBeatmapPanelV2>? currentFlow = null;
                 string? currentMods = null;
                 int flowCount = 0;
 
@@ -277,7 +135,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                 {
                     if (currentFlow == null || (LadderInfo.SplitMapPoolByMods.Value && currentMods != b.Mods))
                     {
-                        mapFlows.Add(currentFlow = new FillFlowContainer<TournamentBeatmapPanel>
+                        mapFlows.Add(currentFlow = new FillFlowContainer<TournamentBeatmapPanelV2>
                         {
                             Spacing = new Vector2(10, 5),
                             Direction = FillDirection.Full,
@@ -297,11 +155,11 @@ namespace osu.Game.Tournament.Screens.MapPool
                         flowCount = 1;
                     }
 
-                    currentFlow.Add(new TournamentBeatmapPanel(b.Beatmap, b.Mods)
+                    currentFlow.Add(new TournamentBeatmapPanelV2(b.Beatmap, b.Mods, b.Mods + (currentFlow.Count + 1))
                     {
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Height = 42,
+                        Scale = new Vector2(0.73f),
                     });
                 }
             }
