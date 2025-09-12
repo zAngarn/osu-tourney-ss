@@ -16,6 +16,7 @@ using osu.Game.Graphics;
 using osu.Game.Graphics.Backgrounds;
 using osu.Game.Models;
 using osu.Game.Tournament.Models;
+using osu.Game.Tournament.Screens.Gameplay.Components;
 using osu.Game.Utils;
 using osuTK;
 
@@ -320,7 +321,7 @@ namespace osu.Game.Tournament.Components
                                     Margin = new MarginPadding { Right = 20 },
                                     Text = beatmapChoice.Slot ?? "???",
                                     Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 60),
-                                    Colour = getColor(beatmapChoice.Slot),
+                                    Colour = getColor(beatmapChoice.Slot!),
                                     Shadow = false,
                                 },
                                 new TournamentSpriteText
@@ -347,7 +348,7 @@ namespace osu.Game.Tournament.Components
                         },
                         new Container
                         {
-                            Masking = true,
+                            Masking = false,
                             RelativeSizeAxes = Axes.Both,
                             Height = 0.07f,
                             Anchor = Anchor.TopCentre,
@@ -360,8 +361,14 @@ namespace osu.Game.Tournament.Components
                                     RelativeSizeAxes = Axes.Both,
                                     Colour = Colour4.FromHex("282828")
                                 },
+                                new TournamentMatchScoreDisplay
+                                {
+                                    Y = -22,
+                                    Anchor = Anchor.BottomCentre,
+                                    Origin = Anchor.TopCentre,
+                                }
                             }
-                        }
+                        },
                     }
                 }
             };

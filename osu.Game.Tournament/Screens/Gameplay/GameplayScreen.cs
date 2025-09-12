@@ -187,8 +187,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
         private ScheduledDelegate? scheduledScreenChange;
         private ScheduledDelegate? scheduledContract;
 
-        //private TournamentMatchScoreDisplay scoreDisplay = null!;
-
         private TourneyState lastState;
         private MatchHeaderV2 header = null!;
 

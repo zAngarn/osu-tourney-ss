@@ -16,7 +16,7 @@ namespace osu.Game.Screens.Play.HUD
 {
     public partial class MatchScoreDisplay : CompositeDrawable
     {
-        private const float bar_height = 18;
+        private const float bar_height = 22;
         private const float font_size = 50;
 
         public BindableLong Team1Score = new BindableLong();
@@ -38,33 +38,13 @@ namespace osu.Game.Screens.Play.HUD
 
             InternalChildren = new[]
             {
-                new Box
-                {
-                    Name = "top bar red (static)",
-                    RelativeSizeAxes = Axes.X,
-                    Height = bar_height / 4,
-                    Width = 0.5f,
-                    Colour = colours.TeamColourRed,
-                    Anchor = Anchor.TopCentre,
-                    Origin = Anchor.TopRight
-                },
-                new Box
-                {
-                    Name = "top bar blue (static)",
-                    RelativeSizeAxes = Axes.X,
-                    Height = bar_height / 4,
-                    Width = 0.5f,
-                    Colour = colours.TeamColourBlue,
-                    Anchor = Anchor.TopCentre,
-                    Origin = Anchor.TopLeft
-                },
                 score1Bar = new Box
                 {
                     Name = "top bar red",
                     RelativeSizeAxes = Axes.X,
                     Height = bar_height,
                     Width = 0,
-                    Colour = colours.TeamColourRed,
+                    Colour = Colour4.FromHex("ed6dac"),
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopRight
                 },
@@ -74,7 +54,7 @@ namespace osu.Game.Screens.Play.HUD
                     RelativeSizeAxes = Axes.X,
                     Height = bar_height,
                     Width = 0,
-                    Colour = colours.TeamColourBlue,
+                    Colour = Colour4.FromHex("6ddded"),
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopLeft
                 },
@@ -89,12 +69,14 @@ namespace osu.Game.Screens.Play.HUD
                         Score1Text = new MatchScoreCounter
                         {
                             Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopCentre
+                            Origin = Anchor.TopCentre,
+                            Colour = Colour4.FromHex("ed6dac"),
                         },
                         Score2Text = new MatchScoreCounter
                         {
                             Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopCentre
+                            Origin = Anchor.TopCentre,
+                            Colour = Colour4.FromHex("6ddded"),
                         },
                     }
                 },
@@ -103,7 +85,7 @@ namespace osu.Game.Screens.Play.HUD
                     Anchor = Anchor.TopCentre,
                     Margin = new MarginPadding
                     {
-                        Top = bar_height / 4,
+                        Top = bar_height * 2.7f,
                         Horizontal = 8
                     },
                     Alpha = 0
@@ -123,6 +105,17 @@ namespace osu.Game.Screens.Play.HUD
         {
             Score1Text.Current.Value = Team1Score.Value;
             Score2Text.Current.Value = Team2Score.Value;
+
+            if (Team1Score.Value == 0 || Team2Score.Value == 0)
+            {
+                Score1Text.Alpha = 0;
+                Score2Text.Alpha = 0;
+            }
+            else
+            {
+                Score1Text.Alpha = 1;
+                Score2Text.Alpha = 1;
+            }
 
             int comparison = Team1Score.Value.CompareTo(Team2Score.Value);
 
@@ -148,7 +141,7 @@ namespace osu.Game.Screens.Play.HUD
             long diff = Math.Max(Team1Score.Value, Team2Score.Value) - Math.Min(Team1Score.Value, Team2Score.Value);
 
             losingBar.ResizeWidthTo(0, 400, Easing.OutQuint);
-            winningBar.ResizeWidthTo(Math.Min(0.4f, MathF.Pow(diff / 1500000f, 0.5f) / 2), 400, Easing.OutQuint);
+            winningBar.ResizeWidthTo(Math.Min(0.3f, MathF.Pow(diff / 1500000f, 0.5f) / 2), 400, Easing.OutQuint);
 
             scoreDiffText.Alpha = diff != 0 ? 1 : 0;
             scoreDiffText.Current.Value = -diff;
@@ -180,6 +173,7 @@ namespace osu.Game.Screens.Play.HUD
             {
                 displayedSpriteText = s;
                 displayedSpriteText.Spacing = new Vector2(-6);
+                displayedSpriteText.Shadow = true;
                 updateFont(false);
             });
 
