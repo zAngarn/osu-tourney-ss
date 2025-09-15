@@ -96,7 +96,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Loop = true,
                     RelativeSizeAxes = Axes.Both
                 },
-                roundDisplay = new RoundDisplayV2(dummyMatch.Round.Value)
+                roundDisplay = new RoundDisplayV2
                 {
                     Anchor = Anchor.TopLeft,
                     Origin = Anchor.TopLeft,
@@ -329,12 +329,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                 TournamentTeam t2 = match.NewValue?.Team2?.Value
                                     ?? new TournamentTeam { FullName = { Value = "???" } };
 
-                TournamentRound round = match.NewValue?.Round.Value
-                                        ?? new TournamentRound { Name = { Value = "???" } };
-
                 redPlayer.Team = t1;
                 bluePlayer.Team = t2;
-                roundDisplay.Round = round;
                 computeCurrentState();
             }, true);
         }

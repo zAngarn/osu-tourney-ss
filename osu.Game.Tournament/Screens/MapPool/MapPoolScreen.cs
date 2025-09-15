@@ -33,6 +33,12 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Loop = true,
                     RelativeSizeAxes = Axes.Both,
                 },
+                new RoundDisplayV2
+                {
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
+                    Margin = new MarginPadding { Left = 120 }
+                },
                 mapFlows = new FillFlowContainer<FillFlowContainer<TournamentBeatmapPanelV2>>
                 {
                     Y = 200,
@@ -41,16 +47,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
                 },
-                new ControlPanel
-                {
-                    Children = new Drawable[]
-                    {
-                        new TournamentSpriteText
-                        {
-                            Text = "hola"
-                        },
-                    },
-                }
             };
 
             ipc.Beatmap.BindValueChanged(beatmapChanged);
