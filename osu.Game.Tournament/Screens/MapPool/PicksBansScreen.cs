@@ -342,6 +342,8 @@ namespace osu.Game.Tournament.Screens.MapPool
             bool found = false;
             string map = string.Empty;
 
+            if (!LadderInfo.AutoProgressScreens.Value) return;
+
             if (CurrentMatch.Value?.Round.Value == null || beatmap.NewValue == null) return;
 
             // esperamos a que esten los protects y los bans
