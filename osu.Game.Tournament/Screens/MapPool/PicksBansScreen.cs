@@ -333,121 +333,35 @@ namespace osu.Game.Tournament.Screens.MapPool
                 bluePlayer.Team = t2;
                 computeCurrentState();
             }, true);
+
+            ipc.Beatmap.BindValueChanged(beatmapChanged);
         }
 
-        private bool deleteMap(string s)
+        private void beatmapChanged(ValueChangedEvent<TournamentBeatmap?> beatmap)
         {
-            // Se elimina primero el mapa visualmente (redActions, etc.) y después de la lista general (creo que es
-            // la que se guarda después al bracket) (Dios quiera que si por favor)
-            TournamentBeatmapPanelV2 panelToDelete = null!;
-            string where = string.Empty;
-            int beatmapID = 0;
-
             bool found = false;
+            string map = string.Empty;
 
-            if (CurrentMatch.Value?.PicksBansProtects.Count == 0) return found;
+            if (CurrentMatch.Value?.Round.Value == null || beatmap.NewValue == null) return;
 
-            foreach (TournamentBeatmapPanelV2 b in redActions.OfType<TournamentBeatmapPanelV2>())
+            // esperamos a que esten los protects y los bans
+            if (CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) < 2 || CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) < 4) return;
+
+            // si lo que toca es un tb hacemos skip también
+            if (CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Pick) == CurrentMatch.Value?.Round.Value.BestOf.Value - 1) return;
+
+            foreach (var b in CurrentMatch.Value?.Round.Value.Beatmaps!)
             {
-                if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
+                if (beatmap.NewValue.OnlineID == b.ID)
                 {
-                    if (panel.Slot == s)
-                    {
-                        panelToDelete = panel;
-                        where = "red";
-                        beatmapID = panel.Beatmap.OnlineID;
-                        found = true;
-                    }
-                }
-            }
-
-            foreach (TournamentBeatmapPanelV2 b in blueActions.OfType<TournamentBeatmapPanelV2>())
-            {
-                if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
-                {
-                    if (panel.Slot == s)
-                    {
-                        panelToDelete = panel;
-                        where = "blue";
-                        beatmapID = panel.Beatmap.OnlineID;
-                        found = true;
-                    }
+                    found = true;
+                    map = b.Slot;
                 }
             }
 
             if (found)
             {
-                var map = CurrentMatch.Value?.PicksBansProtects.FirstOrDefault(b => b.BeatmapID == beatmapID);
-                CurrentMatch.Value?.PicksBansProtects.Remove(map!);
-                deleteFromCollections(map!);
-            }
-
-            if (found)
-            {
-                if (where == "red")
-                {
-                    redActions.Remove(panelToDelete, true);
-                }
-                else
-                {
-                    blueActions.Remove(panelToDelete, true);
-                }
-
-                found = true;
-            }
-
-            switch (currentPhase)
-            {
-                case ChoiceType.Protect when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) < 1:
-                    currentProtect = firstProtect; // Invertir color sin cambiar fase
-                    break;
-
-                case ChoiceType.Ban when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) == 1:
-                    currentProtect = getOppositeColour(firstProtect); // Invertir color cambiando fase (condicion de contorno)
-                    currentBan = TeamColour.None;
-                    break;
-
-                case ChoiceType.Ban when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) < 3:
-                    currentBan = firstBan;
-                    break;
-
-                case ChoiceType.Pick when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) == 3:
-                    currentBan = getOppositeColour(firstBan);
-                    currentPick = TeamColour.None;
-                    break;
-
-                case ChoiceType.Pick when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Pick) < 12:
-                    currentPick = getOppositeColour(currentPick);
-                    break;
-            }
-
-            computeCurrentState();
-            return found;
-        }
-
-        private void deleteFromCollections(BeatmapChoice beatmap)
-        {
-            if (beatmap.Team == TeamColour.Red)
-            {
-                if (beatmap.Type == ChoiceType.Protect)
-                {
-                    LadderInfo.RedProtects.Remove(LadderInfo.RedProtects.FirstOrDefault(map => map!.Slot == beatmap.Slot));
-                }
-                else if (beatmap.Type == ChoiceType.Ban)
-                {
-                    LadderInfo.RedBans.Remove(LadderInfo.RedBans.FirstOrDefault(map => map!.Slot == beatmap.Slot));
-                }
-            }
-            else
-            {
-                if (beatmap.Type == ChoiceType.Protect)
-                {
-                    LadderInfo.BlueProtects.Remove(LadderInfo.BlueProtects.FirstOrDefault(map => map!.Slot == beatmap.Slot));
-                }
-                else if (beatmap.Type == ChoiceType.Ban)
-                {
-                    LadderInfo.BlueBans.Remove(LadderInfo.BlueBans.FirstOrDefault(map => map!.Slot == beatmap.Slot));
-                }
+                addMap(currentPick, ChoiceType.Pick, map);
             }
         }
 
@@ -595,6 +509,117 @@ namespace osu.Game.Tournament.Screens.MapPool
 
                 computeCurrentState();
             }
+        }
+
+        private void deleteFromCollections(BeatmapChoice beatmap)
+        {
+            if (beatmap.Team == TeamColour.Red)
+            {
+                if (beatmap.Type == ChoiceType.Protect)
+                {
+                    LadderInfo.RedProtects.Remove(LadderInfo.RedProtects.FirstOrDefault(map => map!.Slot == beatmap.Slot));
+                }
+                else if (beatmap.Type == ChoiceType.Ban)
+                {
+                    LadderInfo.RedBans.Remove(LadderInfo.RedBans.FirstOrDefault(map => map!.Slot == beatmap.Slot));
+                }
+            }
+            else
+            {
+                if (beatmap.Type == ChoiceType.Protect)
+                {
+                    LadderInfo.BlueProtects.Remove(LadderInfo.BlueProtects.FirstOrDefault(map => map!.Slot == beatmap.Slot));
+                }
+                else if (beatmap.Type == ChoiceType.Ban)
+                {
+                    LadderInfo.BlueBans.Remove(LadderInfo.BlueBans.FirstOrDefault(map => map!.Slot == beatmap.Slot));
+                }
+            }
+        }
+
+        private bool deleteMap(string s)
+        {
+            // Se elimina primero el mapa visualmente (redActions, etc.) y después de la lista general (creo que es
+            // la que se guarda después al bracket) (Dios quiera que si por favor)
+            TournamentBeatmapPanelV2 panelToDelete = null!;
+            string where = string.Empty;
+            int beatmapID = 0;
+
+            bool found = false;
+
+            if (CurrentMatch.Value?.PicksBansProtects.Count == 0) return found;
+
+            foreach (TournamentBeatmapPanelV2 b in redActions.OfType<TournamentBeatmapPanelV2>())
+            {
+                if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
+                {
+                    if (panel.Slot == s)
+                    {
+                        panelToDelete = panel;
+                        where = "red";
+                        beatmapID = panel.Beatmap.OnlineID;
+                        found = true;
+                    }
+                }
+            }
+
+            foreach (TournamentBeatmapPanelV2 b in blueActions.OfType<TournamentBeatmapPanelV2>())
+            {
+                if (b is TournamentBeatmapPanelV2 panel && panel.Beatmap != null)
+                {
+                    if (panel.Slot == s)
+                    {
+                        panelToDelete = panel;
+                        where = "blue";
+                        beatmapID = panel.Beatmap.OnlineID;
+                        found = true;
+                    }
+                }
+            }
+
+            if (found)
+            {
+                var map = CurrentMatch.Value?.PicksBansProtects.FirstOrDefault(b => b.BeatmapID == beatmapID);
+                CurrentMatch.Value?.PicksBansProtects.Remove(map!);
+                deleteFromCollections(map!);
+
+                if (where == "red")
+                {
+                    redActions.Remove(panelToDelete, true);
+                }
+                else
+                {
+                    blueActions.Remove(panelToDelete, true);
+                }
+            }
+
+            switch (currentPhase)
+            {
+                case ChoiceType.Protect when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) < 1:
+                    currentProtect = firstProtect; // Invertir color sin cambiar fase
+                    break;
+
+                case ChoiceType.Ban when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Protect) == 1:
+                    currentProtect = getOppositeColour(firstProtect); // Invertir color cambiando fase (condicion de contorno)
+                    currentBan = TeamColour.None;
+                    break;
+
+                case ChoiceType.Ban when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) < 3:
+                    currentBan = firstBan;
+                    break;
+
+                case ChoiceType.Pick when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Ban) == 3:
+                    currentBan = getOppositeColour(firstBan);
+                    currentPick = TeamColour.None;
+                    break;
+
+                case ChoiceType.Pick when CurrentMatch.Value?.PicksBansProtects.Count(choice => choice.Type == ChoiceType.Pick) < 12:
+                    currentPick = getOppositeColour(currentPick);
+                    break;
+            }
+
+            computeCurrentState();
+            return found;
         }
 
         protected override void LoadComplete()
