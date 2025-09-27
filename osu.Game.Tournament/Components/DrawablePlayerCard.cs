@@ -45,6 +45,8 @@ namespace osu.Game.Tournament.Components
 
             if(team != null) this.team = team;
 
+            var seedColour = color == Colour4.White ? Colour4.FromHex("3d3d3d") : Colour4.White;
+
             InternalChildren = new Drawable[]
             {
                 new FillFlowContainer
@@ -124,7 +126,7 @@ namespace osu.Game.Tournament.Components
                                     Margin = new MarginPadding { Right = 25, Top = 28 },
                                     Text = "#" + team.Seed.Value ?? "#?",
                                     Font = OsuFont.Torus.With(weight: FontWeight.Bold, fixedWidth: true, size: 20),
-                                    Colour = Color4Extensions.FromHex("3d3d3d")
+                                    Colour = seedColour,
                                 },
                                 teamName = new TournamentSpriteText
                                 {

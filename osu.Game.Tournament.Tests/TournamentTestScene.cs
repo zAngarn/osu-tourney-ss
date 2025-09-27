@@ -8,6 +8,7 @@ using osu.Framework.Platform;
 using osu.Framework.Testing;
 using osu.Framework.Utils;
 using osu.Game.Beatmaps;
+using osu.Game.Models;
 using osu.Game.Overlays;
 using osu.Game.Rulesets;
 using osu.Game.Tests.Visual;
@@ -180,11 +181,15 @@ namespace osu.Game.Tournament.Tests
             {
                 Metadata = new BeatmapMetadata
                 {
-                    Title = "Test Title",
-                    Artist = "Test Artist",
+                    Title = "Aa Kenran no Yume ga Gotoku (Epsilon Remix)",
+                    Artist = "Uinyasu, Occhoko Bunny",
+                    Author = new RealmUser()
+                    {
+                        Username = "GIDZ"
+                    }
                 },
                 OnlineID = RNG.Next(0, 1000000),
-                DifficultyName = "Test Difficulty",
+                DifficultyName = "Extra",
             };
     }
 }

@@ -71,7 +71,7 @@ namespace osu.Game.Tournament.Screens.MapPool
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
         {
-            // Tienen que ser dos dummys distintos porque si no la instancia de TeamFlag es
+            // Tienen que ser dos dummies distintos porque si no la instancia de TeamFlag es
             // compartida por ambos. 2H para darme cuenta de esto, soy imbécil.
             var dummyMatch = new TournamentMatch
             {
