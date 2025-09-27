@@ -5,7 +5,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 using osuTK;
@@ -74,6 +73,10 @@ namespace osu.Game.Tournament.Screens.TeamWin
                 return;
             }
 
+            string scoreString = match.Team1Score.Value + " - " + match.Team2Score.Value;
+
+            var colour = Colour4.FromHex(match.WinnerColour == TeamColour.Blue ? "6ddded" : "ed6dac");
+
             redWinVideo.Alpha = match.WinnerColour == TeamColour.Red ? 1 : 0;
             blueWinVideo.Alpha = match.WinnerColour == TeamColour.Blue ? 1 : 0;
 
@@ -88,13 +91,7 @@ namespace osu.Game.Tournament.Screens.TeamWin
 
             mainContainer.Children = new Drawable[]
             {
-                new DrawableTeamFlag(match.Winner)
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Position = new Vector2(-300, 10),
-                    Scale = new Vector2(2f)
-                },
+                new DrawablePlayerCard(match.Winner, colour) { Scale = new Vector2(2f), X = 200, Y = 220 },
                 new FillFlowContainer
                 {
                     AutoSizeAxes = Axes.Both,
@@ -106,15 +103,15 @@ namespace osu.Game.Tournament.Screens.TeamWin
                     {
                         new RoundDisplay(match)
                         {
-                            Margin = new MarginPadding { Bottom = 30 },
+                            Margin = new MarginPadding { Bottom = 100, Left = -20 },
+                            Scale = new Vector2(1.2f),
                         },
-                        new TournamentSpriteText
+                        /*new TournamentSpriteText
                         {
-                            Text = "WINNER",
-                            Font = OsuFont.Torus.With(size: 100, weight: FontWeight.Bold),
-                            Margin = new MarginPadding { Bottom = 50 },
-                        },
-                        new DrawableTeamWithPlayers(match.Winner, match.WinnerColour)
+                            Text = scoreString,
+                            Font = OsuFont.Torus.With(size: 30, weight: FontWeight.Bold),
+                            Margin = new MarginPadding { Bottom = 0 },
+                        },*/
                     }
                 },
             };
