@@ -99,7 +99,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                         Anchor = anchor,
                                         Children = new Drawable[]
                                         {
-                                            score = new TeamScore(currentTeamScore, colour, 7) //pointsToWin
+                                            score = new TeamScore(currentTeamScore, colour, pointsToWin)
                                             {
                                                 //Margin = new MarginPadding { Top = 5 },
                                                 Origin = anchor,
@@ -140,7 +140,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                         Anchor = anchor,
                         Children = new Drawable[]
                         {
-                            score = new TeamScore(currentTeamScore, colour, 7) //pointsToWin
+                            score = new TeamScore(currentTeamScore, colour, pointsToWin) //pointsToWin
                             {
                                 Margin = margin,
                                 Origin = anchor,
