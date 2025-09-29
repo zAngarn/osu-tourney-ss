@@ -59,6 +59,7 @@ namespace osu.Game.Tournament.Components
 
             Masking = true;
             CornerRadius = 15f;
+            MaskingSmoothness = 0;
 
             AddRangeInternal(new Drawable[]
             {
@@ -84,6 +85,7 @@ namespace osu.Game.Tournament.Components
                     CornerRadius = 15f,
                     Width = 0.8452f, // 355/420
                     Masking = true,
+                    MaskingSmoothness = 0,
                     Children = new Drawable[]
                     {
                         new Box

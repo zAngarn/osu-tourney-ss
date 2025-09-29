@@ -142,6 +142,7 @@ namespace osu.Game.Tournament.Components
                     Width = 992,
                     Height = 314,
                     Masking = true,
+                    MaskingSmoothness = 0,
                     Children = new Drawable[]
                     {
                         new NoUnloadBeatmapSetCover
@@ -149,6 +150,7 @@ namespace osu.Game.Tournament.Components
                             Masking = true,
                             RelativeSizeAxes = Axes.Both,
                             OnlineInfo = (beatmap as IBeatmapSetOnlineInfo),
+                            Margin = new MarginPadding { Left = 1 }
                         },
                         new Box
                         {
