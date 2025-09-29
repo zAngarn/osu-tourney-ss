@@ -189,8 +189,8 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                                             RelativeSizeAxes = Axes.Both,
                                             Colour = accentColour,
                                         },
-                                        new TournamentSpriteText { Shadow = false, Text = "Score", Colour = TournamentGame.TEXT_COLOUR, Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 20), Margin = new MarginPadding { Top = 5, Left = 10 } },
-                                        new TournamentSpriteText { Shadow = false, Text = beatmap.Score.ToString("#,0"), Colour = TournamentGame.TEXT_COLOUR, Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 30), Margin = new MarginPadding { Top = 25, Left = 10 } },
+                                        new TournamentSpriteText { Shadow = false, Text = "Score", Colour = TournamentGame.TEXT_COLOUR, Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 28), Margin = new MarginPadding { Top = 5, Left = 10 } },
+                                        new TournamentSpriteText { Shadow = false, Text = beatmap.Score.ToString("#,0"), Colour = TournamentGame.TEXT_COLOUR, Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 42), Margin = new MarginPadding { Top = 25, Left = 10 } },
                                         new Container
                                         {
                                             Width = 60,
@@ -209,10 +209,10 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                                                 },
                                                 new TournamentSpriteText
                                                 {
-                                                    Text = "#" + beatmap.Seed.Value.ToString("#,0"), Colour = seedColour, Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 32),
+                                                    Text = "#" + beatmap.Seed.Value.ToString("#,0"), Colour = seedColour, Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 45),
                                                     Anchor = Anchor.Centre,
                                                     Origin = Anchor.Centre,
-                                                    Margin = new MarginPadding { Bottom = 2 },
+                                                    Margin = new MarginPadding { Bottom = -4 },
                                                 },
                                             }
                                         }

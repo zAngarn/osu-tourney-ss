@@ -7,6 +7,7 @@ using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Sprites;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
@@ -23,12 +24,26 @@ namespace osu.Game.Tests.Visual.UserInterface
         [BackgroundDependencyLoader]
         private void load()
         {
-            Child = spriteText = new OsuSpriteText
+            Children = new Drawable[]
             {
-                Origin = Anchor.Centre,
-                Anchor = Anchor.Centre,
-                RelativeSizeAxes = Axes.X,
-                AllowMultiline = true,
+                spriteText = new OsuSpriteText
+                {
+                    Origin = Anchor.Centre,
+                    Anchor = Anchor.Centre,
+                    RelativeSizeAxes = Axes.X,
+                    AllowMultiline = true,
+                },
+                new OsuSpriteText
+                {
+                    Origin = Anchor.CentreRight,
+                    Anchor = Anchor.CentreRight,
+                    RelativeSizeAxes = Axes.X,
+                    AllowMultiline = true,
+                    Text = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz",
+                    Font = OsuFont.Poppins.With(size: 56, weight: FontWeight.Regular),
+                    Colour = ColourInfo.GradientHorizontal(Colour4.AliceBlue, Colour4.Aqua)
+                },
             };
         }
 
@@ -42,7 +57,7 @@ namespace osu.Game.Tests.Visual.UserInterface
 
         private void updateFont()
         {
-            FontUsage usage = useAlternates.Value ? OsuFont.TorusAlternate : OsuFont.Torus;
+            FontUsage usage = useAlternates.Value ? OsuFont.Poppins : OsuFont.Torus;
             spriteText.Font = usage.With(size: 40, weight: weight.Value);
         }
 

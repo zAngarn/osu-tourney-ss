@@ -52,7 +52,7 @@ namespace osu.Game.Tournament.Components
                 Text = new TournamentSpriteText
                 {
                     Colour = textColour,
-                    Font = OsuFont.Torus.With(weight: FontWeight.SemiBold, size: 50),
+                    Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 70),
                     Text = text,
                 }
             };

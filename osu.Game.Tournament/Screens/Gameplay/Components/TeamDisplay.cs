@@ -101,7 +101,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                         {
                                             score = new TeamScore(currentTeamScore, colour, 7) //pointsToWin
                                             {
-                                                Margin = new MarginPadding { Top = 5 },
+                                                //Margin = new MarginPadding { Top = 5 },
                                                 Origin = anchor,
                                                 Anchor = anchor,
                                             }

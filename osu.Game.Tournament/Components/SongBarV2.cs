@@ -170,18 +170,20 @@ namespace osu.Game.Tournament.Components
                                     Masking = true,
                                     RelativeSizeAxes = Axes.Both,
                                     Direction = FillDirection.Vertical,
+                                    Spacing = new Vector2(-20f),
                                     Children = new Drawable[]
                                     {
                                         new TournamentSpriteText
                                         {
                                             Text = beatmap.Metadata.Artist ?? "unknown",
-                                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 30),
+                                            Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 42),
                                             Colour = getColor(beatmapChoice.Slot),
+                                            Shadow = true,
                                         },
                                         new TournamentSpriteText
                                         {
                                             Text = beatmap.Metadata.Title ?? "unknown",
-                                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 60),
+                                            Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 84),
                                             Colour = Colour4.White,
                                         },
                                         new FillFlowContainer
@@ -195,13 +197,14 @@ namespace osu.Game.Tournament.Components
                                                 {
                                                     Colour = getColor(beatmapChoice.Slot),
                                                     Text = beatmap?.DifficultyName ?? "unknown",
-                                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 30),
+                                                    Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 42),
+                                                    Shadow = true,
                                                 },
                                                 new TournamentSpriteText
                                                 {
                                                     Colour = Colour4.White,
                                                     Text = "mapeado por " + (beatmap?.Metadata.Author.Username ?? "unknown"),
-                                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 30),
+                                                    Font = OsuFont.Poppins.With(weight: FontWeight.Regular, size: 42),
                                                 },
                                             }
                                         }
@@ -320,7 +323,7 @@ namespace osu.Game.Tournament.Components
                                     Origin = Anchor.TopRight,
                                     Margin = new MarginPadding { Right = 20 },
                                     Text = beatmapChoice.Slot ?? "???",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 60),
+                                    Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 84),
                                     Colour = getColor(beatmapChoice.Slot!),
                                     Shadow = false,
                                 },
@@ -330,7 +333,7 @@ namespace osu.Game.Tournament.Components
                                     Origin = Anchor.TopRight,
                                     Margin = new MarginPadding { Right = 20, Top = 70 },
                                     Text = "Pickeado por:",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 16),
+                                    Font = OsuFont.Poppins.With(weight: FontWeight.Regular, size: 22),
                                     Colour = Colour4.White,
                                     Shadow = false,
                                 },
@@ -340,7 +343,7 @@ namespace osu.Game.Tournament.Components
                                     Origin = Anchor.TopRight,
                                     Margin = new MarginPadding { Right = 20, Top = 85 },
                                     Text = beatmapChoice.TeamName ?? "???",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 16),
+                                    Font = OsuFont.Poppins.With(weight: FontWeight.Regular, size: 22),
                                     Colour = getTeamColour(beatmapChoice.Team),
                                     Shadow = false,
                                 },
@@ -432,12 +435,12 @@ namespace osu.Game.Tournament.Components
     {
         public DiffPiece(Colour4 headerColour, params (string heading, string content)[] tuples)
         {
-            Margin = new MarginPadding { Horizontal = 15, Vertical = 1 };
+            Margin = new MarginPadding { Horizontal = 15, Vertical = -2 };
             AutoSizeAxes = Axes.Both;
 
             static void cp(SpriteText s, bool bold)
             {
-                s.Font = OsuFont.Torus.With(weight: bold ? FontWeight.Bold : FontWeight.Regular, size: 20);
+                s.Font = OsuFont.Poppins.With(weight: bold ? FontWeight.Bold : FontWeight.Regular, size: 28);
             }
 
             for (int i = 0; i < tuples.Length; i++)

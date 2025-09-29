@@ -68,14 +68,14 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                 new TournamentSpriteText
                 {
                     Text = "vs",
-                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 80),
+                    Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 112),
                     Margin = new MarginPadding { Left = 648, Top = 240 },
                     Shadow = false,
                 },
                 new TournamentSpriteText
                 {
                     Text = "EMPIEZA",
-                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 40),
+                    Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 56),
                     Margin = new MarginPadding { Left = 615, Top = 610 },
                     Colour = Colour4.FromHex("757575"),
                     Shadow = false,

@@ -162,7 +162,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                             Anchor = Anchor.CentreLeft,
                             Origin = Anchor.CentreLeft,
                             Text = "vs",
-                            Font = OsuFont.Torus.With(size: 40, weight: FontWeight.Bold),
+                            Font = OsuFont.Poppins.With(size: 56, weight: FontWeight.Bold),
                             Margin = new MarginPadding { Left = 200 },
                         },
                         new DrawablePlayerCard(currentMatch.Value.Team2.Value ?? new TournamentTeam { FullName = { Value = "???" } }, Colour4.FromHex("6ddded"))
@@ -179,7 +179,7 @@ namespace osu.Game.Tournament.Screens.Schedule
                             {
                                 new ScheduleMatchDate(currentMatch.Value.Date.Value)
                                 {
-                                    Font = OsuFont.Torus.With(size: 24, weight: FontWeight.Bold),
+                                    Font = OsuFont.Poppins.With(size: 34, weight: FontWeight.Bold),
                                     Anchor = Anchor.TopCentre,
                                     Origin = Anchor.TopCentre,
                                     Margin = new MarginPadding { Top = 233, Left = 100 }

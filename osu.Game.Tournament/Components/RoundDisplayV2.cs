@@ -19,7 +19,7 @@ namespace osu.Game.Tournament.Components
             currentMatch.BindValueChanged(matchChanged);
             currentMatch.BindTo(ladder.CurrentMatch);
 
-            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 30);
+            Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 42);
             Colour = Colour4.White;
             Shadow = false;
         }

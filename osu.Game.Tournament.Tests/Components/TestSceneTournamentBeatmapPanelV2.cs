@@ -32,7 +32,7 @@ namespace osu.Game.Tournament.Tests.Components
 
         private void success(APIBeatmap beatmap)
         {
-            Add(new TournamentBeatmapPanelV2(new TournamentBeatmap(beatmap), "NM", "NM1")
+            Add(new TournamentBeatmapPanelV2(new TournamentBeatmap(beatmap), "NM", "NM4")
             {
                 Margin = new MarginPadding(10),
                 Scale = new Vector2(2.5f)

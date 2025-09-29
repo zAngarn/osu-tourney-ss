@@ -213,7 +213,8 @@ namespace osu.Game.Tournament.Components
                                             Origin = Anchor.Centre,
                                             Text = match.Team1.Value!.Acronym.ToString() ?? string.Empty,
                                             Colour = Color4Extensions.FromHex("#ed6dac"),
-                                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 24),
+                                            Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 34),
+                                            Margin = new MarginPadding { Top = 5 },
                                         },
                                     }
                                 },
@@ -251,7 +252,8 @@ namespace osu.Game.Tournament.Components
                                             Origin = Anchor.Centre,
                                             Text = match.Team2.Value!.Acronym.ToString() ?? string.Empty,
                                             Colour = Color4Extensions.FromHex("#6ddded"),
-                                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 24),
+                                            Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 34),
+                                            Margin = new MarginPadding { Top = 5 },
                                         },
                                     }
                                 },
@@ -271,7 +273,7 @@ namespace osu.Game.Tournament.Components
                         {
                             Origin = Anchor.Centre,
                             Text = match.Team1Score.Value.ToString() ?? "?",
-                            Font = OsuFont.Torus.With(size: 24, weight: FontWeight.Bold, fixedWidth: true),
+                            Font = OsuFont.Poppins.With(size: 34, weight: FontWeight.Bold, fixedWidth: true),
                             Margin = new MarginPadding { Top = 20 },
                             Colour = team1ScoreText
                         },
@@ -279,14 +281,14 @@ namespace osu.Game.Tournament.Components
                         {
                             Origin = Anchor.Centre,
                             Text = " - ",
-                            Font = OsuFont.Torus.With(size: 24, weight: FontWeight.Bold, fixedWidth: true),
+                            Font = OsuFont.Poppins.With(size: 34, weight: FontWeight.Bold, fixedWidth: true),
                             Margin = new MarginPadding { Top = 20 }
                         },
                         new TournamentSpriteText
                         {
                             Origin = Anchor.Centre,
                             Text = match.Team2Score.Value.ToString() ?? "?",
-                            Font = OsuFont.Torus.With(size: 24, weight: FontWeight.Bold, fixedWidth: true),
+                            Font = OsuFont.Poppins.With(size: 34, weight: FontWeight.Bold, fixedWidth: true),
                             Margin = new MarginPadding { Top = 20 },
                             Colour = team2ScoreText,
                         }
@@ -295,9 +297,9 @@ namespace osu.Game.Tournament.Components
                 new TournamentSpriteText
                 {
                     Origin = Anchor.Centre,
-                    Margin = new MarginPadding { Top = 20, Left = 217 * 2 },
+                    Margin = new MarginPadding { Top = 18, Left = 217 * 2 },
                     Alpha = alphaVersus,
-                    Font = OsuFont.Torus.With(size: 24, weight: FontWeight.Bold),
+                    Font = OsuFont.Poppins.With(size: 34, weight: FontWeight.Bold),
                     Text = "vs"
                 }
             };

@@ -78,6 +78,8 @@ namespace osu.Game.Graphics
 
         public static FontUsage Inter => GetFont(Typeface.Inter, weight: FontWeight.Regular);
 
+        public static FontUsage Poppins => GetFont(Typeface.Poppins, weight: FontWeight.Regular);
+
         /// <summary>
         /// Retrieves a <see cref="FontUsage"/>.
         /// </summary>
@@ -120,6 +122,9 @@ namespace osu.Game.Graphics
 
                 case Typeface.Inter:
                     return @"Inter";
+
+                case Typeface.Poppins:
+                    return @"Poppins";
             }
 
             return null;
@@ -170,6 +175,8 @@ namespace osu.Game.Graphics
         [Description("Torus (alternate)")]
         TorusAlternate,
         Inter,
+
+        Poppins,
     }
 
     public enum FontWeight

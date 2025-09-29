@@ -123,9 +123,9 @@ namespace osu.Game.Tournament.Components
                                 {
                                     Anchor = Anchor.TopRight,
                                     Origin = Anchor.TopRight,
-                                    Margin = new MarginPadding { Right = 25, Top = 28 },
+                                    Margin = new MarginPadding { Right = 22, Top = 28 },
                                     Text = "#" + team.Seed.Value ?? "#?",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, fixedWidth: true, size: 20),
+                                    Font = OsuFont.Poppins.With(weight: FontWeight.Bold, fixedWidth: true, size: 28),
                                     Colour = seedColour,
                                 },
                                 teamName = new TournamentSpriteText
@@ -134,27 +134,27 @@ namespace osu.Game.Tournament.Components
                                     Origin = Anchor.TopLeft,
                                     Margin = new MarginPadding { Left = 28, Top = 100 },
                                     Text = team.FullName.Value ?? "???",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 20),
+                                    Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 28),
                                     Colour = color,
                                 },
                                 avgRank = new TournamentSpriteText
                                 {
                                     Anchor = Anchor.BottomRight,
                                     Origin = Anchor.BottomRight,
-                                    Margin = new MarginPadding { Right = 10 },
+                                    Margin = new MarginPadding { Right = 10, Top = 10 },
                                     Text = team.AverageRank > 0 ? $"#{team.AverageRank}" : "#???",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 40),
+                                    Font = OsuFont.Poppins.With(weight: FontWeight.Regular, size: 56),
                                     Colour = Color4Extensions.FromHex("3d3d3d")
                                 },
                                 countryRank = new TournamentSpriteText
                                 {
                                     Anchor = Anchor.BottomRight,
                                     Origin = Anchor.BottomRight,
-                                    Margin = new MarginPadding { Right = 10, Bottom = 30 },
+                                    Margin = new MarginPadding { Right = 10, Bottom = 40 },
                                     Text = team.Players?.FirstOrDefault() != null
                                         ? $"#{team.Players.First().CountryRank} ES"
                                         : "#???",
-                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 20),
+                                    Font = OsuFont.Poppins.With(weight: FontWeight.Bold, size: 28),
                                     Colour = color
                                 },
                             }

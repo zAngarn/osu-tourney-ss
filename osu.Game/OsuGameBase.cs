@@ -499,6 +499,9 @@ namespace osu.Game
             AddFont(Resources, @"Fonts/Venera/Venera-Bold");
             AddFont(Resources, @"Fonts/Venera/Venera-Black");
 
+            AddFont(Resources, @"Fonts/Poppins/Poppins-Regular");
+            AddFont(Resources, @"Fonts/Poppins/Poppins-Bold");
+
             Fonts.AddStore(new OsuIcon.OsuIconStore(Textures));
         }
 
