@@ -48,7 +48,7 @@ namespace osu.Game.Tournament.Screens
         {
             SongBar.FadeInFromZero(300, Easing.OutQuint);
             SongBar.Beatmap = beatmap.NewValue;
-            if (!TournamentSceneManager.IsShowcaseScreen) SongBar.BeatmapChoice = PicksBansScreen.GetLastPlayedMap(TournamentSceneManager.PicksBansScreenInstance);
+            if (!TournamentSceneManager.IsShowcaseScreen) SongBar.BeatmapChoice = PicksBansScreen.GetLastPlayedMap(TournamentSceneManager.PicksBansScreenInstance, beatmap.NewValue.OnlineID);
 
             if (CurrentMatch.Value?.Round.Value == null) return; // TODO estudiar reaccion con mapas fuera de la pool (maybe its already ok?)
 

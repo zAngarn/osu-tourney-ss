@@ -381,7 +381,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
                 if (targetMap == null!) return;
 
-                if (CurrentMatch.Value.PicksBansProtects.Any(p => p.BeatmapID == targetMap.ID))
+                if (CurrentMatch.Value.PicksBansProtects.Any(p => p.BeatmapID == targetMap.ID && p.Type != ChoiceType.Protect))
                     return;
 
                 // Con esto debería ser compatible con la mappool antigua...
@@ -706,7 +706,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             screen?.updateWinState(colour);
         }
 
-        private BeatmapChoice getLastPlayedMap()
+        private BeatmapChoice getLastPlayedMap(int beatmapID)
         {
             BeatmapChoice beatmapChoice;
 
@@ -714,15 +714,21 @@ namespace osu.Game.Tournament.Screens.MapPool
             {
                 if (CurrentMatch.Value.PicksBansProtects.Count != 0)
                 {
+                    RoundBeatmap slot = CurrentMatch.Value.Round.Value.Beatmaps.FirstOrDefault(b => b.ID == beatmapID) ?? new RoundBeatmap
+                    {
+                        Slot = "???"
+                    };
+
                     beatmapChoice = CurrentMatch.Value.PicksBansProtects.Last();
                     beatmapChoice.TeamName = getTeamNameFromColour(beatmapChoice.Team);
+                    beatmapChoice.Slot = slot.Slot;
                 }
                 else
                 {
                     beatmapChoice = new BeatmapChoice
                     {
                         TeamName = "fuera de match",
-                        Slot = "warmup",
+                        Slot = "???",
                         Team = TeamColour.None,
                     };
                 }
@@ -740,9 +746,9 @@ namespace osu.Game.Tournament.Screens.MapPool
             return beatmapChoice;
         }
 
-        public static BeatmapChoice GetLastPlayedMap(PicksBansScreen screen)
+        public static BeatmapChoice GetLastPlayedMap(PicksBansScreen screen, int beatmapID)
         {
-            BeatmapChoice beatmapChoice = screen?.getLastPlayedMap()!;
+            BeatmapChoice beatmapChoice = screen?.getLastPlayedMap(beatmapID)!;
 
             return beatmapChoice;
         }
