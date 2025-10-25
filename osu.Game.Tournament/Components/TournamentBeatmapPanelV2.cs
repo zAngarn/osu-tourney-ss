@@ -221,7 +221,7 @@ namespace osu.Game.Tournament.Components
 
         public void UpdateState(TeamColour colour)
         {
-            Colour4 colorGradiente = Colour4.FromHex(colour == TeamColour.Blue ? "ed6dac" : "6ddded");
+            Colour4 colorGradiente = Colour4.FromHex(colour == TeamColour.Blue ? "6ddded" : "ed6dac");
 
             content.Add(new Box
             {

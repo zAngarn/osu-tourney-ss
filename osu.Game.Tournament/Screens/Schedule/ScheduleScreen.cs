@@ -122,14 +122,14 @@ namespace osu.Game.Tournament.Screens.Schedule
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Width = 0.33f,
-                                    ChildrenEnumerable = recent.Select(p => new ScheduleMatch(p)),
+                                    ChildrenEnumerable = recent.Select(p => new ScheduleMatch(p, true)),
                                     Margin = new MarginPadding { Top = 225, Left = -55 }
                                 },
                                 new ScheduleContainer("")
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Width = 0.33f,
-                                    ChildrenEnumerable = upcoming.Select(p => new ScheduleMatch(p)),
+                                    ChildrenEnumerable = upcoming.Select(p => new ScheduleMatch(p, false)),
                                     Margin = new MarginPadding { Top = 225, Left = 12 }
                                 },
                                 comingUpNext = new ScheduleContainer("")
@@ -193,9 +193,12 @@ namespace osu.Game.Tournament.Screens.Schedule
 
         public partial class ScheduleMatch : CompositeDrawable
         {
-            public ScheduleMatch(TournamentMatch match, bool showTimestamp = true)
+            public ScheduleMatch(TournamentMatch match, bool showScores, bool showTimestamp = true)
             {
-                AddInternal(new DrawableMatchCard(match));
+                var card = new DrawableMatchCard(match);
+                card.Started = showScores;
+
+                AddInternal(card);
                 Scale = new Vector2(0.75f);
 
                 if (showTimestamp)

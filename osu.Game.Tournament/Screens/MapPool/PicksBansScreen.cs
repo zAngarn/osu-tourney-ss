@@ -96,12 +96,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Loop = true,
                     RelativeSizeAxes = Axes.Both
                 },
-                roundDisplay = new RoundDisplayV2
-                {
-                    Anchor = Anchor.TopLeft,
-                    Origin = Anchor.TopLeft,
-                    Margin = new MarginPadding { Left = 160 }
-                },
                 redPlayer = new DrawablePlayerCard(dummyMatch.Team1.Value!, Color4Extensions.FromHex("#ed6dac"))
                 {
                     Anchor = Anchor.TopLeft,
@@ -888,7 +882,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             if (hasAllPicks && CurrentMatch.Value?.Team1Score.Value == (CurrentMatch.Value?.Round.Value.BestOf.Value - 1) / 2
                             && CurrentMatch.Value?.Team2Score.Value == (CurrentMatch.Value?.Round.Value.BestOf.Value - 1) / 2)
             {
-                tiebreakerCardContainer.Add(new TournamentBeatmapPanelV2(CurrentMatch.Value?.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB")!.Beatmap, "TB", "TB")
+                tiebreakerCardContainer.Add(new TournamentBeatmapPanelV2(CurrentMatch.Value?.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB1")!.Beatmap, "TB", "TB1")
                 {
                     Scale = new Vector2(0.73f),
                     Anchor = Anchor.BottomCentre,
@@ -900,8 +894,8 @@ namespace osu.Game.Tournament.Screens.MapPool
                 {
                     Team = TeamColour.None,
                     Type = ChoiceType.Pick,
-                    BeatmapID = CurrentMatch.Value.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB")!.Beatmap!.OnlineID,
-                    Slot = CurrentMatch.Value?.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB")!.Slot!,
+                    BeatmapID = CurrentMatch.Value.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB1")!.Beatmap!.OnlineID,
+                    Slot = CurrentMatch.Value?.Round.Value.Beatmaps.FirstOrDefault(x => x.Slot == "TB1")!.Slot!,
                 });
             }
         }
