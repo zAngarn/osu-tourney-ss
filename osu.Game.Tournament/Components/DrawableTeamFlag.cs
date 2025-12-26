@@ -19,13 +19,24 @@ namespace osu.Game.Tournament.Components
         private readonly TournamentTeam? team;
 
         [UsedImplicitly]
-        private Bindable<string>? flag;
+        public Bindable<string>? Flag;
 
         private Sprite? flagSprite;
+        private readonly Vector2 size;
+        private readonly float cornerRadius;
 
-        public DrawableTeamFlag(TournamentTeam? team)
+        public DrawableTeamFlag(TournamentTeam? team, Vector2 size, float cornerRadius)
         {
             this.team = team;
+            this.size = size;
+            this.cornerRadius = cornerRadius;
+        }
+
+        public DrawableTeamFlag(TournamentTeam? team) // por compatibilidad y tal
+        {
+            this.team = team;
+            size = new Vector2(75, 54);
+            cornerRadius = 5;
         }
 
         [BackgroundDependencyLoader]
@@ -33,9 +44,9 @@ namespace osu.Game.Tournament.Components
         {
             if (team == null) return;
 
-            Size = new Vector2(75, 54);
+            Size = size;
             Masking = true;
-            CornerRadius = 5;
+            CornerRadius = cornerRadius;
             Children = new Drawable[]
             {
                 new Box
@@ -52,7 +63,7 @@ namespace osu.Game.Tournament.Components
                 },
             };
 
-            (flag = team.FlagName.GetBoundCopy()).BindValueChanged(_ => flagSprite.Texture = textures.Get($@"Flags/{team.FlagName}"), true);
+            (Flag = team.FlagName.GetBoundCopy()).BindValueChanged(_ => flagSprite.Texture = textures.Get($@"Flags/{team.FlagName}"), true);
         }
     }
 }
