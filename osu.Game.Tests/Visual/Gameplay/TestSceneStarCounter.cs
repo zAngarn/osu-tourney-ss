@@ -26,7 +26,7 @@ namespace osu.Game.Tests.Visual.Gameplay
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 Direction = FillDirection.Vertical,
-                Spacing = new Vector2(20),
+                Spacing = new Vector2(50),
                 Children = new Drawable[]
                 {
                     starCounter = new StarCounter(),

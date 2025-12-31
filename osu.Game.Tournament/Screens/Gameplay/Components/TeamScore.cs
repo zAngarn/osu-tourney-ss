@@ -25,9 +25,11 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             bool flip = colour == TeamColour.Blue;
             var anchor = flip ? Anchor.TopRight : Anchor.TopLeft;
 
+            var counterColor1 = Colour4.FromHex(colour == TeamColour.Red ? "#FF714D" : "#4DDBFF");
+
             AutoSizeAxes = Axes.Both;
 
-            InternalChild = counter = new TeamScoreStarCounter(count)
+            InternalChild = counter = new StarCounter(counterColor1, count)
             {
                 Anchor = anchor,
                 Scale = flip ? new Vector2(-1, 1) : Vector2.One,

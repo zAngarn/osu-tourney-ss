@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Utils;
 using System;
 using System.Linq;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 
 namespace osu.Game.Graphics.UserInterface
@@ -28,7 +29,7 @@ namespace osu.Game.Graphics.UserInterface
         /// </summary>
         protected virtual double AnimationDelay => 80;
 
-        private const float star_spacing = 4;
+        private const float star_spacing = 47;
 
         public virtual FillDirection Direction
         {
@@ -75,7 +76,26 @@ namespace osu.Game.Graphics.UserInterface
             };
         }
 
+        public StarCounter(Colour4 colour, int starCount = 10)
+        {
+            StarCount = Math.Max(starCount, 0);
+
+            AutoSizeAxes = Axes.Both;
+
+            Children = new Drawable[]
+            {
+                stars = new FillFlowContainer<Star>
+                {
+                    AutoSizeAxes = Axes.Both,
+                    Spacing = new Vector2(star_spacing),
+                    ChildrenEnumerable = Enumerable.Range(0, StarCount).Select(_ => CreateStar(colour))
+                }
+            };
+        }
+
         public virtual Star CreateStar() => new DefaultStar();
+
+        public virtual Star CreateStar(Colour4 colour) => new Redondel(colour);
 
         protected override void LoadComplete()
         {
@@ -119,6 +139,74 @@ namespace osu.Game.Graphics.UserInterface
 
                 using (star.BeginDelayedSequence(delay))
                     star.DisplayAt(getStarScale(i, newValue));
+            }
+        }
+
+        public partial class Redondel : Star
+        {
+            private readonly Drawable point;
+
+            public Redondel(Colour4 colour)
+            {
+                InternalChildren = new Drawable[]
+                {
+                    new Container
+                    {
+                        Width = 40,
+                        Height = 40,
+                        CornerRadius = 20f,
+                        Masking = true,
+                        Children = new Drawable[]
+                        {
+                            new Box
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Colour = colour,
+                            },
+                            new Container
+                            {
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                RelativeSizeAxes = Axes.Both,
+                                Width = 30f / 40f,
+                                Height = 30f / 40f,
+                                Masking = true,
+                                CornerRadius = 15f,
+                                Children = new Drawable[]
+                                {
+                                    new Box
+                                    {
+                                        RelativeSizeAxes = Axes.Both,
+                                        Colour = Colour4.FromHex("#262626")
+                                    },
+                                    new Container
+                                    {
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        RelativeSizeAxes = Axes.Both,
+                                        Width = 24f / 30f,
+                                        Height = 24f / 30f,
+                                        Masking = true,
+                                        CornerRadius = 12f,
+                                        Children = new Drawable[]
+                                        {
+                                            point = new Box
+                                            {
+                                                RelativeSizeAxes = Axes.Both,
+                                                Colour = colour
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+            }
+
+            public override void DisplayAt(float scale)
+            {
+                point.FadeTo(scale, 500, Easing.OutQuint);
             }
         }
 
