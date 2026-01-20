@@ -51,6 +51,8 @@ namespace osu.Game.Tournament
         private Container chatContainer = null!;
         private FillFlowContainer buttons = null!;
 
+        private static TransitionScreen transitionScreen = null!;
+
         public TournamentSceneManager()
         {
             RelativeSizeAxes = Axes.Both;
@@ -102,7 +104,8 @@ namespace osu.Game.Tournament
                                 new SeedingScreen(),
                                 new DrawingsScreen(),
                                 new GameplayScreen(),
-                                new TeamWinScreen()
+                                new TeamWinScreen(),
+                                transitionScreen = new TransitionScreen()
                             }
                         },
                         chatContainer = new Container
@@ -209,7 +212,16 @@ namespace osu.Game.Tournament
             }
 
             screens.ChangeChildDepth(currentScreen, depth--);
-            currentScreen.Show();
+            screens.ChangeChildDepth(transitionScreen, float.MinValue);
+
+            transitionScreen.Show();
+            transitionScreen.TransitionVideo.Reset();
+
+            Scheduler.AddDelayed(() =>
+            {
+                currentScreen.Show();
+                transitionScreen?.Hide();
+            }, 3000);
 
             switch (currentScreen)
             {
