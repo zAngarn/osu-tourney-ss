@@ -116,6 +116,22 @@ namespace osu.Game.Beatmaps
             return bindable;
         }
 
+        // dalas review
+        public IBindable<StarDifficulty> GetBindableDifficultyArtesanal(IBeatmapInfo beatmapInfo, IRulesetInfo ruleset, List<Mod> mods, CancellationToken cancellationToken = default, int computationDelay = 0)
+        {
+            var bindable = new BindableStarDifficulty(beatmapInfo, cancellationToken)
+            {
+                Value = new StarDifficulty(beatmapInfo.StarRating, 0)
+            };
+
+            updateBindable(bindable, ruleset, mods, cancellationToken, computationDelay);
+
+            lock (bindableUpdateLock)
+                trackedBindables.Add(bindable);
+
+            return bindable;
+        }
+
         /// <summary>
         /// Retrieves the difficulty of a <see cref="IBeatmapInfo"/>.
         /// </summary>

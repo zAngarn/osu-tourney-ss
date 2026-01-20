@@ -1,7 +1,9 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -31,6 +33,18 @@ namespace osu.Game.Tournament.Components
 
         [Resolved]
         private IBindable<RulesetInfo> ruleset { get; set; } = null!;
+
+        [Resolved]
+        private BeatmapManager beatmapManager { get; set; } = null!;
+
+        [Resolved]
+        private BeatmapDifficultyCache difficultyCache { get; set; } = null!;
+
+        private CancellationTokenSource? starDifficultyCancellationSource;
+
+        private IBindable<StarDifficulty>? starDifficultyBindable;
+
+        private TournamentSpriteText starRating = null!;
 
         public IBeatmapInfo? Beatmap
         {
@@ -134,11 +148,10 @@ namespace osu.Game.Tournament.Components
             double bpm = FormatUtils.RoundBPM(beatmap.BPM, rate);
             double length = beatmap.Length / rate;
 
-            string srExtra = "";
-
-            if (convertedMods.Any(x => x is ModHardRock) || convertedMods.Any(x => x is ModDoubleTime))
+            if (beatmap.Metadata.Title != "no beatmap selected")
             {
-                srExtra = "*";
+                var localInfo = beatmapManager.QueryOnlineBeatmapId(beatmap.OnlineID);
+                beatmap = localInfo;
             }
 
             (string heading, string content)[] stats;
@@ -202,7 +215,13 @@ namespace osu.Game.Tournament.Components
                                         Children = new Drawable[]
                                         {
                                             new DiffPiece(stats),
-                                            new DiffPiece(("Star Rating", $"{beatmap.StarRating.FormatStarRating()}{srExtra}"))
+                                            //new DiffPiece(("Star Rating", $"{starDifficultyBindable.Value.Stars.FormatStarRating()}{srExtra}"))
+                                            starRating = new TournamentSpriteText
+                                            {
+                                                Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 15),
+                                                Text = "Calculating...",
+                                                Margin = new MarginPadding { Left = 10 },
+                                            },
                                         }
                                     },
                                     new FillFlowContainer
@@ -254,6 +273,28 @@ namespace osu.Game.Tournament.Components
                     Origin = Anchor.BottomRight,
                 }
             };
+
+            computeStarRating(rulesetInstance.RulesetInfo, convertedMods);
+        }
+
+        private void computeStarRating(IRulesetInfo ruleset, List<Mod> mods)
+        {
+            starDifficultyCancellationSource?.Cancel();
+            starDifficultyCancellationSource = new CancellationTokenSource();
+
+            if (beatmap == null)
+                return;
+
+            starDifficultyBindable = difficultyCache.GetBindableDifficultyArtesanal(beatmap, ruleset, mods, starDifficultyCancellationSource.Token, 150);
+            starDifficultyBindable.BindValueChanged(starDifficulty =>
+            {
+                starRating.Text = starDifficulty.NewValue.Stars.FormatStarRating();
+
+                if (beatmap is not BeatmapInfo)
+                {
+                    starRating.Text = starDifficulty.NewValue.Stars.FormatStarRating() + " [*]";
+                }
+            }, true);
         }
 
         public partial class DiffPiece : TextFlowContainer
