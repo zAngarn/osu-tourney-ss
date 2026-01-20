@@ -215,13 +215,25 @@ namespace osu.Game.Tournament.Components
                                         Children = new Drawable[]
                                         {
                                             new DiffPiece(stats),
-                                            //new DiffPiece(("Star Rating", $"{starDifficultyBindable.Value.Stars.FormatStarRating()}{srExtra}"))
-                                            starRating = new TournamentSpriteText
+                                            new FillFlowContainer
                                             {
-                                                Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 15),
-                                                Text = "Calculating...",
-                                                Margin = new MarginPadding { Left = 10 },
-                                            },
+                                                Direction = FillDirection.Horizontal,
+                                                Children = new Drawable[]
+                                                {
+                                                    new TournamentSpriteText
+                                                    {
+                                                        Font = OsuFont.Torus.With(weight: FontWeight.Regular, size: 15),
+                                                        Text = "Star Rating",
+                                                        Margin = new MarginPadding { Left = 15 },
+                                                    },
+                                                    starRating = new TournamentSpriteText
+                                                    {
+                                                        Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 15),
+                                                        Text = "0.00",
+                                                        Margin = new MarginPadding { Left = 5 },
+                                                    },
+                                                }
+                                            }
                                         }
                                     },
                                     new FillFlowContainer
