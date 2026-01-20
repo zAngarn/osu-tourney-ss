@@ -163,6 +163,8 @@ namespace osu.Game.Tournament.Screens.Editors
 
                     private readonly Bindable<string> mods = new Bindable<string>(string.Empty);
 
+                    private readonly Bindable<string> slot = new Bindable<string>(string.Empty);
+
                     private readonly Container drawableContainer;
 
                     public RoundBeatmapRow(TournamentRound team, RoundBeatmap beatmap)
@@ -202,10 +204,10 @@ namespace osu.Game.Tournament.Screens.Editors
                                     },
                                     new SettingsTextBox
                                     {
-                                        LabelText = "Mods",
+                                        LabelText = "Slot",
                                         RelativeSizeAxes = Axes.None,
-                                        Width = 200,
-                                        Current = mods,
+                                        Width = 100,
+                                        Current = slot,
                                     },
                                     drawableContainer = new Container
                                     {
@@ -263,8 +265,14 @@ namespace osu.Game.Tournament.Screens.Editors
                             API.Queue(req);
                         }, true);
 
+                        slot.Value = Model.Slot;
                         mods.Value = Model.Mods;
-                        mods.BindValueChanged(modString => Model.Mods = modString.NewValue);
+
+                        slot.BindValueChanged(slotString =>
+                        {
+                            Model.Slot = slotString.NewValue;
+                            Model.Mods = slotString.NewValue[..2];
+                        });
                     }
 
                     private void updatePanel() => Schedule(() =>
@@ -273,11 +281,10 @@ namespace osu.Game.Tournament.Screens.Editors
 
                         if (Model.Beatmap != null)
                         {
-                            drawableContainer.Child = new TournamentBeatmapPanel(Model.Beatmap, Model.Mods)
+                            drawableContainer.Child = new SS26BeatmapPanel(Model.Beatmap, Model.Slot)
                             {
                                 Anchor = Anchor.CentreLeft,
                                 Origin = Anchor.CentreLeft,
-                                Width = 300
                             };
                         }
                     });
