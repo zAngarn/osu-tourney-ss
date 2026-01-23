@@ -37,7 +37,7 @@ namespace osu.Game.Overlays
         /// <summary>
         /// The <see cref="Anchor"/> to anchor the content to if it does not overflow.
         /// </summary>
-        public Anchor NonOverflowingContentAnchor { get; init; } = Anchor.TopLeft;
+        public Anchor NonOverflowingContentAnchor { get; init; } = Anchor.TopCentre;
 
         public Func<Drawable>? CreateContent
         {

@@ -20,7 +20,7 @@ namespace osu.Game.Tournament.Tests.Components
                 {
                     Margin = new MarginPadding(80)
                 },
-                new SS26SlotPill("DT2", Colour4.FromHex("262626"))
+                new SS26SlotPill("DT2", Colour4.FromHex("262626"), Colour4.Aqua)
                 {
                     Margin = new MarginPadding(140)
                 },

@@ -19,6 +19,8 @@ namespace osu.Game.Tournament.Components
                 new Container
                 {
                     Width = 43,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
                     Height = 24,
                     CornerRadius = 12,
                     Masking = true,
@@ -42,24 +44,24 @@ namespace osu.Game.Tournament.Components
             };
         }
 
-        public SS26SlotPill(string slot, Colour4 txtColor)
+        // un poco multiusos porque se usa ese elemento a lo largo del cliente (creo)
+        public SS26SlotPill(string slot, Colour4 txtColor, Colour4 bgColor)
         {
-            var bgColor1 = getColor(slot[..2]);
-
             InternalChildren = new Drawable[]
             {
                 new Container
                 {
-                    Width = 43,
-                    Height = 24,
-                    CornerRadius = 12,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    AutoSizeAxes = Axes.Both,
                     Masking = true,
+                    CornerRadius = 12,
                     Children = new Drawable[]
                     {
                         new Box
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Colour = bgColor1
+                            Colour = bgColor
                         },
                         new TournamentSpriteText
                         {
@@ -67,6 +69,7 @@ namespace osu.Game.Tournament.Components
                             Colour = txtColor,
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
+                            Padding = new MarginPadding { Left = 8, Right = 8, Top = 3, Bottom = 3 },
                             Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
                         }
                     }
