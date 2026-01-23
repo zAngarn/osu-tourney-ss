@@ -24,7 +24,7 @@ namespace osu.Game.Tournament.Tests.Components
         [BackgroundDependencyLoader]
         private void load()
         {
-            var req = new GetBeatmapRequest(new APIBeatmap { OnlineID = 3588631 });
+            var req = new GetBeatmapRequest(new APIBeatmap { OnlineID = 3260996 });
             req.Success += success;
             api.Queue(req);
         }

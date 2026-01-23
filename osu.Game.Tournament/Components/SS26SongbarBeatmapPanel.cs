@@ -86,12 +86,15 @@ namespace osu.Game.Tournament.Components
                     Width = 500 / 520f,
                     Height = 500 / 520f,
                     CornerRadius = 250f,
+
                     Children = new Drawable[]
                     {
                         new NoUnloadBeatmapSetCover
                         {
                             RelativeSizeAxes = Axes.Both,
                             OnlineInfo = Beatmap as IBeatmapSetOnlineInfo,
+                            FillMode = FillMode.Fill,
+                            FillAspectRatio = 1f,
                         },
                         new Container
                         {
@@ -104,46 +107,91 @@ namespace osu.Game.Tournament.Components
                             CornerRadius = 200f,
                             Margin = new MarginPadding { Bottom = -40f },
 
-                            Child = new BufferedContainer
+                            Children = new Drawable[]
                             {
-                                RelativeSizeAxes = Axes.Both,
-                                Padding = new MarginPadding(-100),  // importante para blur suave en bordes redondeados
-
-                                Children = new Drawable[]
+                                new BufferedContainer
                                 {
-                                    // La portada VA DENTRO del buffer → esto es lo que se va a blurrear
-                                    new NoUnloadBeatmapSetCover
+                                    RelativeSizeAxes = Axes.Both,
+                                    Padding = new MarginPadding(-10),
+
+                                    Child = new NoUnloadBeatmapSetCover
                                     {
                                         RelativeSizeAxes = Axes.Both,
                                         OnlineInfo = Beatmap as IBeatmapSetOnlineInfo,
-                                    },
-
-                                    // El "vidrio" oscuro encima, semitransparente
-                                    new Box
+                                        FillMode = FillMode.Fill,
+                                        FillAspectRatio = 1f,
+                                    }
+                                }.WithEffect(new BlurEffect
+                                {
+                                    Sigma = new Vector2(16f),
+                                    Placement = EffectPlacement.Behind
+                                }),
+                                new Circle
+                                {
+                                    RelativeSizeAxes = Axes.Both,
+                                    Colour = Colour4.FromHex("262626").Opacity(0.65f),
+                                },
+                                new CircularContainer
+                                {
+                                    Size = new Vector2(400),
+                                    BorderThickness = 4,
+                                    BorderColour = getColor(mod),
+                                    Masking = true,
+                                    Child = new Box
                                     {
                                         RelativeSizeAxes = Axes.Both,
-                                        Colour = Colour4.FromHex("262626").Opacity(0.65f),  // baja opacity para que se vea más el blur debajo
-                                    },
+                                        Colour = Colour4.White.Opacity(0)
+                                    }
                                 }
-                            }.WithEffect(new BlurEffect
-                            {
-                                Sigma = new Vector2(8f), // prueba 5f, 7f, 9f y ve cuál te gusta más
-                                Placement = EffectPlacement.InFront
-                            })
-                        },
+                            }
+                        }
                     }
-                },
+                }
             });
         }
 
-        public partial class NoUnloadBeatmapSetCover : UpdateableOnlineBeatmapSetCover
+        private Colour4 getColor(string mod)
         {
-            // As covers are displayed on stream, we want them to load as soon as possible.
-            protected override double LoadDelay => 0;
+            Colour4 color;
 
-            // Use DelayedLoadWrapper to avoid content unloading when switching away to another screen.
-            protected override DelayedLoadWrapper CreateDelayedLoadWrapper(Func<Drawable> createContentFunc, double timeBeforeLoad)
-                => new DelayedLoadWrapper(createContentFunc(), timeBeforeLoad);
+            switch (mod)
+            {
+                case "NM":
+                    color = Colour4.FromHex("659EEB");
+                    break;
+
+                case "HR":
+                    color = Colour4.FromHex("E06050");
+                    break;
+
+                case "HD":
+                    color = Colour4.FromHex("FFB844");
+                    break;
+
+                case "DT":
+                    color = Colour4.FromHex("8E7CBA");
+                    break;
+
+                case "TB":
+                    color = Colour4.FromHex("AEAEAE");
+                    break;
+
+                default:
+                    color = Colour4.FromHex("659EEB"); // Mismo que NM. ¿Por qué? Porque me sale del nabo
+                    break;
+            }
+
+            return color;
         }
+    }
+
+    public partial class NoUnloadBeatmapSetCover : UpdateableOnlineBeatmapSetCover
+    {
+        // As covers are displayed on stream, we want them to load as soon as possible.
+        protected override double LoadDelay => 0;
+
+        // Use DelayedLoadWrapper to avoid content unloading when switching away to another screen.
+        protected override DelayedLoadWrapper CreateDelayedLoadWrapper(Func<Drawable> createContentFunc, double timeBeforeLoad)
+            => new DelayedLoadWrapper(createContentFunc(), timeBeforeLoad);
     }
 }
