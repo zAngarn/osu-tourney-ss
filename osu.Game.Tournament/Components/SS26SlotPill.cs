@@ -45,6 +45,7 @@ namespace osu.Game.Tournament.Components
         }
 
         // un poco multiusos porque se usa ese elemento a lo largo del cliente (creo)
+        // TournamentSpriteTextWithBackground si fuese bueno
         public SS26SlotPill(string slot, Colour4 txtColor, Colour4 bgColor)
         {
             InternalChildren = new Drawable[]
