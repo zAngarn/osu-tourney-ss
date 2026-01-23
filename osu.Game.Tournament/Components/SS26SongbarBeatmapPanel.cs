@@ -27,6 +27,7 @@ namespace osu.Game.Tournament.Components
         private readonly string mod;
 
         private MarqueeContainer artista = null!;
+
         private MarqueeContainer titulo = null!;
         //private MarqueeContainer dificultad = null!;
 
@@ -141,7 +142,7 @@ namespace osu.Game.Tournament.Components
                                 {
                                     Size = new Vector2(400),
                                     BorderThickness = 4,
-                                    BorderColour = getColor(mod),
+                                    BorderColour = TournamentGameBase.GetColor(mod),
                                     Masking = true,
                                     Child = new Box
                                     {
@@ -208,31 +209,31 @@ namespace osu.Game.Tournament.Components
                                 },
                             }
                         }*/, // TODO stub
-                        new BurbujitaEstadistica("CS", (Beatmap.Difficulty.CircleSize.ToString(CultureInfo.InvariantCulture)) ?? "0", getColor(mod))
+                        new BurbujitaEstadistica("CS", (Beatmap!.Difficulty.CircleSize.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = -80, Left = -190 },
                         },
-                        new BurbujitaEstadistica("HP", (Beatmap.Difficulty.DrainRate.ToString(CultureInfo.InvariantCulture)) ?? "0", getColor(mod))
+                        new BurbujitaEstadistica("HP", (Beatmap!.Difficulty.DrainRate.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = 0, Left = -350 },
                         },
-                        new BurbujitaEstadistica("AR", (Beatmap.Difficulty.ApproachRate.ToString(CultureInfo.InvariantCulture)) ?? "0", getColor(mod))
+                        new BurbujitaEstadistica("AR", (Beatmap!.Difficulty.ApproachRate.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = -80, Right = -190 },
                         },
-                        new BurbujitaEstadistica("OD", (Beatmap.Difficulty.OverallDifficulty.ToString(CultureInfo.InvariantCulture)) ?? "0", getColor(mod))
+                        new BurbujitaEstadistica("OD", (Beatmap!.Difficulty.OverallDifficulty.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = 0, Right = -350 },
                         },
-                        new SS26SlotPill(Beatmap.DifficultyName, Colour4.FromHex("262626"), getColor(slot[..2]))
+                        new SS26SlotPill(Beatmap.DifficultyName, Colour4.FromHex("262626"), TournamentGameBase.GetColor(slot[..2]))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
@@ -252,7 +253,7 @@ namespace osu.Game.Tournament.Components
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.TopCentre,
-                Colour = getColor(mod),
+                Colour = TournamentGameBase.GetColor(mod),
                 Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 24),
                 Text = Beatmap?.Metadata?.Artist ?? "desconocido",
             };
@@ -274,40 +275,6 @@ namespace osu.Game.Tournament.Components
                 Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
                 Text = Beatmap?.DifficultyName ?? "desconocido",
             };*/
-        }
-
-        private Colour4 getColor(string mod)
-        {
-            Colour4 color;
-
-            switch (mod)
-            {
-                case "NM":
-                    color = Colour4.FromHex("659EEB");
-                    break;
-
-                case "HR":
-                    color = Colour4.FromHex("E06050");
-                    break;
-
-                case "HD":
-                    color = Colour4.FromHex("FFB844");
-                    break;
-
-                case "DT":
-                    color = Colour4.FromHex("8E7CBA");
-                    break;
-
-                case "TB":
-                    color = Colour4.FromHex("AEAEAE");
-                    break;
-
-                default:
-                    color = Colour4.FromHex("659EEB"); // Mismo que NM. ¿Por qué? Porque me sale del nabo
-                    break;
-            }
-
-            return color;
         }
     }
 

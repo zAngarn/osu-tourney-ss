@@ -12,7 +12,7 @@ namespace osu.Game.Tournament.Components
     {
         public SS26SlotPill(string slot)
         {
-            var bgColor1 = getColor(slot[..2]);
+            var bgColor1 = TournamentGameBase.GetColor(slot[..2]);
 
             InternalChildren = new Drawable[]
             {
@@ -76,40 +76,6 @@ namespace osu.Game.Tournament.Components
                     }
                 }
             };
-        }
-
-        private Colour4 getColor(string mod)
-        {
-            Colour4 color;
-
-            switch (mod)
-            {
-                case "NM":
-                    color = Colour4.FromHex("659EEB");
-                    break;
-
-                case "HR":
-                    color = Colour4.FromHex("E06050");
-                    break;
-
-                case "HD":
-                    color = Colour4.FromHex("FFB844");
-                    break;
-
-                case "DT":
-                    color = Colour4.FromHex("8E7CBA");
-                    break;
-
-                case "TB":
-                    color = Colour4.FromHex("AEAEAE");
-                    break;
-
-                default:
-                    color = Colour4.FromHex("659EEB"); // Mismo que NM. ¿Por qué? Porque me sale del nabo
-                    break;
-            }
-
-            return color;
         }
     }
 }

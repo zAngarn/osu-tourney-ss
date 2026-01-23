@@ -102,7 +102,7 @@ namespace osu.Game.Tournament.Components
                         new Box
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Colour = getColor(mod),
+                            Colour = TournamentGameBase.GetColor(mod),
                         },
                         new TournamentSpriteText
                         {
@@ -125,7 +125,7 @@ namespace osu.Game.Tournament.Components
                     {
                         new TournamentSpriteText
                         {
-                            Colour = getColor(mod),
+                            Colour = TournamentGameBase.GetColor(mod),
                             Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 12),
                             Text = Beatmap?.Metadata?.Artist ?? "desconocido",
                         },
@@ -137,47 +137,13 @@ namespace osu.Game.Tournament.Components
                         },
                         new TournamentSpriteText
                         {
-                            Colour = getColor(mod),
+                            Colour = TournamentGameBase.GetColor(mod),
                             Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 12),
                             Text = Beatmap?.DifficultyName ?? "desconocido",
                         }
                     }
                 },
             });
-        }
-
-        private Colour4 getColor(string mod)
-        {
-            Colour4 color;
-
-            switch (mod)
-            {
-                case "NM":
-                    color = Colour4.FromHex("659EEB");
-                    break;
-
-                case "HR":
-                    color = Colour4.FromHex("E06050");
-                    break;
-
-                case "HD":
-                    color = Colour4.FromHex("FFB844");
-                    break;
-
-                case "DT":
-                    color = Colour4.FromHex("8E7CBA");
-                    break;
-
-                case "TB":
-                    color = Colour4.FromHex("AEAEAE");
-                    break;
-
-                default:
-                    color = Colour4.FromHex("659EEB"); // Mismo que NM. ¿Por qué? Porque me sale del nabo
-                    break;
-            }
-
-            return color;
         }
 
         public partial class NoUnloadBeatmapSetCover : UpdateableOnlineBeatmapSetCover
