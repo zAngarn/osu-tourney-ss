@@ -43,20 +43,10 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
             AddRangeInternal(new Drawable[]
             {
-                new TourneyVideo("gameplay")
-                {
-                    Loop = true,
-                    RelativeSizeAxes = Axes.Both,
-                },
-                header = new MatchHeader
-                {
-                    ShowLogo = false,
-                },
                 new Container
                 {
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
-                    Y = 110,
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
                     Children = new[]
@@ -88,7 +78,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 },
                 scoreDisplay = new TournamentMatchScoreDisplay
                 {
-                    Y = -147,
+                    Y = -265,
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.TopCentre,
                 },
@@ -126,7 +116,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
             LadderInfo.ChromaKeyWidth.BindValueChanged(width => chroma.Width = width.NewValue, true);
 
-            warmup.BindValueChanged(w => header.ShowScores = !w.NewValue, true);
+            //warmup.BindValueChanged(w => header.ShowScores = !w.NewValue, true);
         }
 
         protected override void LoadComplete()
@@ -162,8 +152,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 return;
 
             scheduledContract?.Cancel();
-
-            SongBar.Expanded = false;
             scoreDisplay.FadeOut(100);
             using (chat.BeginDelayedSequence(500))
                 chat.Expand();
@@ -180,8 +168,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
             using (BeginDelayedSequence(300))
             {
-                scoreDisplay.FadeIn(100);
-                SongBar.Expanded = true;
+                //scoreDisplay.FadeIn(100);
             }
         }
 

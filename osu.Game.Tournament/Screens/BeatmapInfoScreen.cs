@@ -13,15 +13,17 @@ namespace osu.Game.Tournament.Screens
 {
     public abstract partial class BeatmapInfoScreen : TournamentMatchScreen
     {
-        protected readonly SongBar SongBar;
+        protected readonly SS26Songbar SongBar;
 
         protected BeatmapInfoScreen()
         {
-            AddInternal(SongBar = new SongBar
+            AddInternal(SongBar = new SS26Songbar
             {
+                Y = -128,
+                X = -393,
                 Anchor = Anchor.BottomRight,
                 Origin = Anchor.BottomRight,
-                Depth = float.MinValue,
+                Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
             });
         }
 

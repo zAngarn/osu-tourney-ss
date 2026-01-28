@@ -27,7 +27,7 @@ namespace osu.Game.Tournament.Screens.Showcase
                 },
                 new Container
                 {
-                    Padding = new MarginPadding { Bottom = SongBar.HEIGHT },
+                    Padding = new MarginPadding { Bottom = 360 },
                     RelativeSizeAxes = Axes.Both,
                     Child = new Box
                     {
