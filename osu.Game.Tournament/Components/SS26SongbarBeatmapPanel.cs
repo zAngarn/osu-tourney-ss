@@ -1,7 +1,6 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System;
 using System.Globalization;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -20,16 +19,21 @@ namespace osu.Game.Tournament.Components
 {
     public partial class SS26SongbarBeatmapPanel : CompositeDrawable
     {
-        public readonly IBeatmapInfo? Beatmap;
+        public readonly IBeatmapInfo? beatmap;
 
         private string slot;
-
         private readonly string mod;
+        private readonly string length;
+        private readonly double bpm;
+
+        private readonly BeatmapDifficulty adjustedDifficulty;
 
         private MarqueeContainer artista = null!;
 
         private MarqueeContainer titulo = null!;
         //private MarqueeContainer dificultad = null!;
+
+        private StarRatingDisplay starRatingDisplay = null!;
 
         public string Slot
         {
@@ -41,13 +45,19 @@ namespace osu.Game.Tournament.Components
             }
         }
 
+        private readonly IBindable<StarDifficulty> sr;
+
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
 
-        public SS26SongbarBeatmapPanel(IBeatmapInfo? beatmap, string slot)
+        public SS26SongbarBeatmapPanel(IBeatmapInfo? beatmap, string slot, BeatmapDifficulty adjustedDifficulty, double bpm, string length, IBindable<StarDifficulty> sr)
         {
-            Beatmap = beatmap;
+            this.beatmap = beatmap;
             mod = slot[..2];
             this.slot = slot;
+            this.adjustedDifficulty = adjustedDifficulty;
+            this.sr = sr;
+            this.length = length;
+            this.bpm = bpm;
 
             Width = 520;
             Height = 520;
@@ -61,7 +71,7 @@ namespace osu.Game.Tournament.Components
             Masking = true;
             CornerRadius = 260f;
 
-            AddRangeInternal(new Drawable[]
+            InternalChildren = new Drawable[]
             {
                 new FillFlowContainer
                 {
@@ -96,10 +106,10 @@ namespace osu.Game.Tournament.Components
                     CornerRadius = 250f,
                     Children = new Drawable[]
                     {
-                        new NoUnloadBeatmapSetCover
+                        new SS26BeatmapPanel.NoUnloadBeatmapSetCover
                         {
                             RelativeSizeAxes = Axes.Both,
-                            OnlineInfo = Beatmap as IBeatmapSetOnlineInfo,
+                            OnlineInfo = beatmap as IBeatmapSetOnlineInfo,
                             FillMode = FillMode.Fill,
                             FillAspectRatio = 1f,
                         },
@@ -121,13 +131,13 @@ namespace osu.Game.Tournament.Components
                                     RelativeSizeAxes = Axes.Both,
                                     Padding = new MarginPadding(-10),
 
-                                    Child = new NoUnloadBeatmapSetCover
+                                    Child = new SS26BeatmapPanel.NoUnloadBeatmapSetCover
                                     {
                                         RelativeSizeAxes = Axes.Both,
-                                        OnlineInfo = Beatmap as IBeatmapSetOnlineInfo,
+                                        OnlineInfo = beatmap as IBeatmapSetOnlineInfo,
                                         FillMode = FillMode.Fill,
                                         FillAspectRatio = 1f,
-                                    }
+                                    },
                                 }.WithEffect(new BlurEffect
                                 {
                                     Sigma = new Vector2(16f),
@@ -189,51 +199,32 @@ namespace osu.Game.Tournament.Components
                                     OverflowSpacing = 50,
                                 },
                             }
-                        }
-                        /*new Container
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.TopCentre,
-                            Height = 100 / 500f,
-                            Width = 200 / 500f,
-                            Masking = true,
-                            Margin = new MarginPadding { Top = -60f },
-                            Children = new Drawable[]
-                            {
-                                dificultad = new MarqueeContainer
-                                {
-                                    Anchor = Anchor.Centre,
-                                    Origin = Anchor.TopCentre,
-                                    OverflowSpacing = 50,
-                                },
-                            }
-                        }*/, // TODO stub
-                        new BurbujitaEstadistica("CS", (Beatmap!.Difficulty.CircleSize.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
+                        },
+                        new BurbujitaEstadistica("CS", (adjustedDifficulty.CircleSize.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = -80, Left = -190 },
                         },
-                        new BurbujitaEstadistica("HP", (Beatmap!.Difficulty.DrainRate.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
+                        new BurbujitaEstadistica("HP", (adjustedDifficulty.DrainRate.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = 0, Left = -350 },
                         },
-                        new BurbujitaEstadistica("AR", (Beatmap!.Difficulty.ApproachRate.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
+                        new BurbujitaEstadistica("AR", (adjustedDifficulty.ApproachRate.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = -80, Right = -190 },
                         },
-                        new BurbujitaEstadistica("OD", (Beatmap!.Difficulty.OverallDifficulty.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
+                        new BurbujitaEstadistica("OD", (adjustedDifficulty.OverallDifficulty.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = 0, Right = -350 },
                         },
-                        new SS26SlotPill(Beatmap.DifficultyName, Colour4.FromHex("262626"), TournamentGameBase.GetColor(slot[..2]))
+                        new SS26SlotPill(beatmap!.DifficultyName, Colour4.FromHex("262626"), TournamentGameBase.GetColor(slot[..2]))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
@@ -244,10 +235,23 @@ namespace osu.Game.Tournament.Components
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = -105f },
+                        },
+                        new FillFlowContainer
+                        {
+                            Direction = FillDirection.Horizontal,
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            Margin = new MarginPadding { Top = 70f, Left = -180f },
+                            Children = new Drawable[]
+                            {
+                                new SS26MapStatPill(Colour4.FromHex("#282828"), TournamentGameBase.GetColor(mod), length, OsuIcon.Clock),
+                                starRatingDisplay = new StarRatingDisplay(default),
+                                new SS26MapStatPill(Colour4.FromHex("#282828"), TournamentGameBase.GetColor(mod), bpm.ToString(CultureInfo.InvariantCulture), OsuIcon.Metronome)
+                            }
                         }
                     }
                 },
-            });
+            };
 
             artista.CreateContent = () => new TournamentSpriteText
             {
@@ -255,7 +259,7 @@ namespace osu.Game.Tournament.Components
                 Origin = Anchor.TopCentre,
                 Colour = TournamentGameBase.GetColor(mod),
                 Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 24),
-                Text = Beatmap?.Metadata?.Artist ?? "desconocido",
+                Text = beatmap?.Metadata?.Artist ?? "desconocido",
             };
 
             titulo.CreateContent = () => new TournamentSpriteText
@@ -264,7 +268,7 @@ namespace osu.Game.Tournament.Components
                 Origin = Anchor.TopCentre,
                 Colour = Colour4.White,
                 Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 36),
-                Text = Beatmap?.Metadata?.Title ?? "desconocido",
+                Text = beatmap?.Metadata?.Title ?? "desconocido",
             };
 
             /*dificultad.CreateContent = () => new TournamentSpriteText
@@ -275,17 +279,12 @@ namespace osu.Game.Tournament.Components
                 Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
                 Text = Beatmap?.DifficultyName ?? "desconocido",
             };*/
+
+            sr.BindValueChanged(starDifficulty =>
+            {
+                starRatingDisplay.Current.Value = starDifficulty.NewValue;
+            }, true);
         }
-    }
-
-    public partial class NoUnloadBeatmapSetCover : UpdateableOnlineBeatmapSetCover
-    {
-        // As covers are displayed on stream, we want them to load as soon as possible.
-        protected override double LoadDelay => 0;
-
-        // Use DelayedLoadWrapper to avoid content unloading when switching away to another screen.
-        protected override DelayedLoadWrapper CreateDelayedLoadWrapper(Func<Drawable> createContentFunc, double timeBeforeLoad)
-            => new DelayedLoadWrapper(createContentFunc(), timeBeforeLoad);
     }
 
     public partial class BurbujitaEstadistica : CompositeDrawable

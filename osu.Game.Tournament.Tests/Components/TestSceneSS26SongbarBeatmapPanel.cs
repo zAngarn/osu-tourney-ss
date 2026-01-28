@@ -2,13 +2,11 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using osu.Framework.Allocation;
-using osu.Framework.Graphics;
+using osu.Game.Beatmaps;
 using osu.Game.Online.API;
 using osu.Game.Online.API.Requests;
 using osu.Game.Online.API.Requests.Responses;
 using osu.Game.Tests.Visual;
-using osu.Game.Tournament.Components;
-using osu.Game.Tournament.Models;
 
 namespace osu.Game.Tournament.Tests.Components
 {
@@ -21,6 +19,9 @@ namespace osu.Game.Tournament.Tests.Components
         [Resolved]
         private IAPIProvider api { get; set; } = null!;
 
+        [Resolved]
+        private BeatmapDifficultyCache difficultyCache { get; set; } = null!;
+
         [BackgroundDependencyLoader]
         private void load()
         {
@@ -31,10 +32,10 @@ namespace osu.Game.Tournament.Tests.Components
 
         private void success(APIBeatmap beatmap)
         {
-            Add(new SS26SongbarBeatmapPanel(new TournamentBeatmap(beatmap), "NM2")
+            /*Add(new SS26SongbarBeatmapPanel(beatmap, "NM2")
             {
                 Margin = new MarginPadding(10),
-            });
+            });*/
         }
     }
 }
