@@ -1,6 +1,8 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
+using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Utils;
@@ -14,13 +16,24 @@ namespace osu.Game.Tournament.Tests.Components
         [Cached(Type = typeof(MatchIPCInfo))]
         private MatchIPCInfo matchInfo = new MatchIPCInfo();
 
-        public TestSceneMatchScoreDisplay()
+        private TournamentMatchScoreDisplay display1 = null!;
+
+        [SetUp]
+        public void SetUp()
         {
-            Add(new TournamentMatchScoreDisplay
+            Add(display1 = new TournamentMatchScoreDisplay
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
             });
+        }
+
+        [Test]
+        public void TestMatchScoreDisplay()
+        {
+            AddStep("mason", () => Console.WriteLine("mason"));
+            AddStep("win animation", () => display1.AnimateWin());
+            AddStep("reset win animation", () => display1.ResetWinTransforms());
         }
 
         protected override void LoadComplete()

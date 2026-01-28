@@ -199,6 +199,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         CurrentMatch.Value.Team1Score.Value++;
                     else
                         CurrentMatch.Value.Team2Score.Value++;
+                    // TODO poner animacion de Win de la barra aquí
                 }
 
                 switch (State.Value)
@@ -212,7 +213,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
                             // if we've returned to idle and the last screen was ranking
                             // we should automatically proceed after a short delay
-                            if (lastState == TourneyState.Ranking && !warmup.Value)
+                            if (lastState == TourneyState.Ranking && !warmup.Value) // TODO poner reset de animacion de Win de la barra aquí
                             {
                                 if (CurrentMatch.Value?.Completed.Value == true)
                                     scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(TeamWinScreen)); }, delay_before_progression);
