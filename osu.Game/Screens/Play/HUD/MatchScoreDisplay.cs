@@ -184,7 +184,7 @@ namespace osu.Game.Screens.Play.HUD
                     Anchor = Anchor.TopCentre,
                     Margin = new MarginPadding
                     {
-                        Top = bar_height / 4,
+                        Top = 0,
                         Horizontal = 8
                     },
                     Alpha = 0
@@ -251,6 +251,7 @@ namespace osu.Game.Screens.Play.HUD
                 using (BeginDelayedSequence(200))
                 {
                     winningBar.ResizeWidthTo(0, 500, Easing.OutQuint);
+                    scoreDiffText.FadeOut(300, Easing.OutQuint);
                     redHeadScoreCounter.MoveToOffset(new Vector2(0, 0.5f), 100, Easing.OutQuint);
                     blueHeadScoreCounter.MoveToOffset(new Vector2(0, 0.5f), 100, Easing.OutQuint);
 
@@ -277,6 +278,7 @@ namespace osu.Game.Screens.Play.HUD
                 using (BeginDelayedSequence(200))
                 {
                     winningBar.ResizeWidthTo(0, 500, Easing.OutQuint);
+                    scoreDiffText.FadeOut(300, Easing.OutQuint);
                     blueHeadScoreCounter.MoveToOffset(new Vector2(0, 0.5f), 100, Easing.OutQuint);
                     redHeadScoreCounter.MoveToOffset(new Vector2(0, 0.5f), 100, Easing.OutQuint);
 
@@ -327,11 +329,12 @@ namespace osu.Game.Screens.Play.HUD
                     score2Bar.FadeIn(500, Easing.OutQuint);
                 }
 
-                using (BeginDelayedSequence(5000))
+                using (BeginDelayedSequence(2000))
                 {
                     updateScores();
                     Team1Score.BindValueChanged(_ => updateScores());
                     Team2Score.BindValueChanged(_ => updateScores(), true);
+                    scoreDiffText.FadeIn(300, Easing.OutQuint);
                 }
             }
 
@@ -341,8 +344,10 @@ namespace osu.Game.Screens.Play.HUD
         protected override void UpdateAfterChildren()
         {
             base.UpdateAfterChildren();
-            Score1Text.X = -Math.Max(5 + Score1Text.DrawWidth / 2, score1Bar.DrawWidth);
-            Score2Text.X = Math.Max(5 + Score2Text.DrawWidth / 2, score2Bar.DrawWidth);
+            Score1Text.X = -160;
+            Score2Text.X = 160;
+            Score1Text.Y = -8;
+            Score2Text.Y = -8;
 
             redHeadScoreCounter.X = -score1Bar.DrawWidth;
             blueHeadScoreCounter.X = score2Bar.DrawWidth;
@@ -371,8 +376,8 @@ namespace osu.Game.Screens.Play.HUD
 
             private void updateFont(bool winning)
                 => displayedSpriteText.Font = winning
-                    ? OsuFont.Torus.With(weight: FontWeight.Bold, size: font_size, fixedWidth: true)
-                    : OsuFont.Torus.With(weight: FontWeight.Regular, size: font_size * 0.8f, fixedWidth: true);
+                    ? OsuFont.Torus.With(weight: FontWeight.Bold, size: font_size * 0.8f, fixedWidth: true)
+                    : OsuFont.Torus.With(weight: FontWeight.Regular, size: font_size * 0.6f, fixedWidth: true);
         }
 
         private partial class MatchScoreDiffCounter : CommaSeparatedScoreCounter
