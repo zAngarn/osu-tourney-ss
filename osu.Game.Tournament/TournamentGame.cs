@@ -16,6 +16,7 @@ using osu.Game.Graphics.Cursor;
 using osu.Game.Graphics.UserInterface;
 using osu.Game.Overlays;
 using osu.Game.Tournament.Models;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Tournament
@@ -27,6 +28,8 @@ namespace osu.Game.Tournament
 
         public static readonly Color4 COLOUR_RED = new OsuColour().TeamColourRed;
         public static readonly Color4 COLOUR_BLUE = new OsuColour().TeamColourBlue;
+
+        public static readonly Vector2 FACTOR_DE_REESCALADO_1080 = new Vector2(1366 / 1920f);
 
         public static readonly Color4 ELEMENT_BACKGROUND_COLOUR = Color4Extensions.FromHex("#fff");
         public static readonly Color4 ELEMENT_FOREGROUND_COLOUR = Color4Extensions.FromHex("#000");
