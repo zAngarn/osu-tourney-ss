@@ -82,6 +82,13 @@ namespace osu.Game.Tournament.Screens.Gameplay
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.TopCentre,
                 },
+                header = new MatchHeader
+                {
+                    Y = -265,
+                    ShowScores = true,
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.TopCentre,
+                },
                 new ControlPanel
                 {
                     Children = new Drawable[]
