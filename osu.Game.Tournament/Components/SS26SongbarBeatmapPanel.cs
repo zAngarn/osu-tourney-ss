@@ -19,7 +19,7 @@ namespace osu.Game.Tournament.Components
 {
     public partial class SS26SongbarBeatmapPanel : CompositeDrawable
     {
-        public readonly IBeatmapInfo? beatmap;
+        public readonly IBeatmapInfo? Beatmap;
 
         private string slot;
         private readonly string mod;
@@ -51,13 +51,15 @@ namespace osu.Game.Tournament.Components
 
         public SS26SongbarBeatmapPanel(IBeatmapInfo? beatmap, string slot, BeatmapDifficulty adjustedDifficulty, double bpm, string length, IBindable<StarDifficulty> sr)
         {
-            this.beatmap = beatmap;
+            Beatmap = beatmap;
             mod = slot[..2];
             this.slot = slot;
             this.adjustedDifficulty = adjustedDifficulty;
             this.sr = sr;
             this.length = length;
             this.bpm = bpm;
+
+            var test = beatmap as IBeatmapSetOnlineInfo;
 
             Width = 520;
             Height = 520;
@@ -109,7 +111,7 @@ namespace osu.Game.Tournament.Components
                         new SS26BeatmapPanel.NoUnloadBeatmapSetCover
                         {
                             RelativeSizeAxes = Axes.Both,
-                            OnlineInfo = beatmap as IBeatmapSetOnlineInfo,
+                            OnlineInfo = Beatmap as IBeatmapSetOnlineInfo,
                             FillMode = FillMode.Fill,
                             FillAspectRatio = 1f,
                         },
@@ -134,7 +136,7 @@ namespace osu.Game.Tournament.Components
                                     Child = new SS26BeatmapPanel.NoUnloadBeatmapSetCover
                                     {
                                         RelativeSizeAxes = Axes.Both,
-                                        OnlineInfo = beatmap as IBeatmapSetOnlineInfo,
+                                        OnlineInfo = Beatmap as IBeatmapSetOnlineInfo,
                                         FillMode = FillMode.Fill,
                                         FillAspectRatio = 1f,
                                     },
@@ -224,7 +226,7 @@ namespace osu.Game.Tournament.Components
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = 0, Right = -350 },
                         },
-                        new SS26SlotPill(beatmap!.DifficultyName, Colour4.FromHex("262626"), TournamentGameBase.GetColor(slot[..2]))
+                        new SS26SlotPill(Beatmap!.DifficultyName, Colour4.FromHex("262626"), TournamentGameBase.GetColor(slot[..2]))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
@@ -262,7 +264,7 @@ namespace osu.Game.Tournament.Components
                 Origin = Anchor.TopCentre,
                 Colour = TournamentGameBase.GetColor(mod),
                 Font = OsuFont.BalooDa.With(weight: FontWeight.Black, size: 24),
-                Text = beatmap?.Metadata?.Artist ?? "desconocido",
+                Text = Beatmap?.Metadata?.Artist ?? "desconocido",
             };
 
             titulo.CreateContent = () => new TournamentSpriteText
@@ -271,7 +273,7 @@ namespace osu.Game.Tournament.Components
                 Origin = Anchor.TopCentre,
                 Colour = Colour4.White,
                 Font = OsuFont.BalooDa.With(weight: FontWeight.Black, size: 36),
-                Text = beatmap?.Metadata?.Title ?? "desconocido",
+                Text = Beatmap?.Metadata?.Title ?? "desconocido",
             };
 
             /*dificultad.CreateContent = () => new TournamentSpriteText

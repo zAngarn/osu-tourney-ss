@@ -1,7 +1,6 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System.Globalization;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -146,7 +145,7 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             teamName.BindValueChanged(name =>
             {
                 teamNameText.Text = name.NewValue;
-                teamRankText.Text = $"#{Team?.AverageRank.ToString(CultureInfo.InvariantCulture) ?? "#0"}";
+                teamRankText.Text = $"#{Team?.AverageRank.ToString("####") ?? "0"}";
             }, true);
         }
 

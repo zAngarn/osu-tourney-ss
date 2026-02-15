@@ -41,7 +41,7 @@ namespace osu.Game.Tournament.Components
             get => beatmap;
             set
             {
-                if (beatmap == value)
+                if (beatmap == value || beatmap?.MD5Hash == null)
                     return;
 
                 beatmap = value;
@@ -49,7 +49,7 @@ namespace osu.Game.Tournament.Components
             }
         }
 
-        private string slot = "NM2";
+        private string slot = "???";
 
         public string Slot
         {

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -43,6 +44,13 @@ namespace osu.Game.Tournament.Screens
         {
             SongBar.FadeInFromZero(300, Easing.OutQuint);
             SongBar.Beatmap = beatmap.NewValue;
+
+            if (beatmap.NewValue == null || CurrentMatch.Value?.Round.Value == null) return;
+
+            foreach (RoundBeatmap? map in CurrentMatch.Value.Round.Value.Beatmaps.Where(map => map.ID == beatmap.NewValue.OnlineID))
+            {
+                SongBar.Slot = map.Slot;
+            }
         }
     }
 }

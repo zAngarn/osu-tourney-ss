@@ -85,7 +85,7 @@ namespace osu.Game.Tournament.Models
 
         string IBeatmapInfo.Hash => throw new NotImplementedException();
 
-        string IBeatmapInfo.MD5Hash => throw new NotImplementedException();
+        string IBeatmapInfo.MD5Hash => null!;
 
         IRulesetInfo IBeatmapInfo.Ruleset => Ruleset;
 
