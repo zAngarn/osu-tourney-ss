@@ -111,6 +111,7 @@ namespace osu.Game.Tournament.Components
                             Colour = Colour4.White,
                             Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
                             Text = slot,
+                            Margin = new MarginPadding { Bottom = 5f },
                         }
                     }
                 },
@@ -119,7 +120,7 @@ namespace osu.Game.Tournament.Components
                     RelativeSizeAxes = Axes.Both,
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
-                    Margin = new MarginPadding { Left = 55f, Top = 10f },
+                    Margin = new MarginPadding { Left = 55f, Top = 5f },
                     Direction = FillDirection.Vertical,
                     Children = new Drawable[]
                     {
@@ -128,18 +129,21 @@ namespace osu.Game.Tournament.Components
                             Colour = TournamentGameBase.GetColor(mod),
                             Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 12),
                             Text = Beatmap?.Metadata?.Artist ?? "desconocido",
+                            Shadow = true,
                         },
                         new TournamentSpriteText
                         {
                             Colour = Colour4.White,
                             Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
                             Text = Beatmap?.Metadata?.Title ?? "desconocido",
+                            Shadow = true
                         },
                         new TournamentSpriteText
                         {
                             Colour = TournamentGameBase.GetColor(mod),
                             Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 12),
                             Text = Beatmap?.DifficultyName ?? "desconocido",
+                            Shadow = true
                         }
                     }
                 },

@@ -206,7 +206,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
                             // if we've returned to idle and the last screen was ranking
                             // we should automatically proceed after a short delay
-                            if (lastState == TourneyState.Ranking && !warmup.Value) // TODO poner reset de animacion de Win de la barra aquí
+                            if (lastState == TourneyState.Ranking && !warmup.Value)
                             {
                                 /*if (CurrentMatch.Value?.Completed.Value == true)
                                     scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(TeamWinScreen)); }, delay_before_progression);
