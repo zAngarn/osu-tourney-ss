@@ -21,7 +21,6 @@ using osu.Game.Tournament.Screens.Ladder;
 using osu.Game.Tournament.Screens.MapPool;
 using osu.Game.Tournament.Screens.Schedule;
 using osu.Game.Tournament.Screens.Setup;
-using osu.Game.Tournament.Screens.Showcase;
 using osu.Game.Tournament.Screens.TeamIntro;
 using osu.Game.Tournament.Screens.TeamWin;
 using osuTK;
@@ -98,7 +97,6 @@ namespace osu.Game.Tournament
                                 new LadderEditorScreen(),
                                 new TeamEditorScreen(),
                                 new RoundEditorScreen(),
-                                new ShowcaseScreen(),
                                 new MapPoolScreen(),
                                 new TeamIntroScreen(),
                                 new SeedingScreen(),
@@ -152,7 +150,6 @@ namespace osu.Game.Tournament
                                 new ScreenButton(typeof(TeamWinScreen), Key.W) { Text = "Win", RequestSelection = SetScreen },
                                 new Separator(),
                                 new ScreenButton(typeof(DrawingsScreen)) { Text = "Drawings", RequestSelection = SetScreen },
-                                new ScreenButton(typeof(ShowcaseScreen)) { Text = "Showcase", RequestSelection = SetScreen },
                             }
                         },
                     },
