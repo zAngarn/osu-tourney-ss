@@ -13,8 +13,6 @@ using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Gameplay.Components;
-using osu.Game.Tournament.Screens.MapPool;
-using osu.Game.Tournament.Screens.TeamWin;
 using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Gameplay
@@ -193,7 +191,8 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         CurrentMatch.Value.Team1Score.Value++;
                     else
                         CurrentMatch.Value.Team2Score.Value++;
-                    // TODO poner animacion de Win de la barra aquí
+
+                    scoreDisplay.AnimateWin();
                 }
 
                 switch (State.Value)
@@ -209,10 +208,15 @@ namespace osu.Game.Tournament.Screens.Gameplay
                             // we should automatically proceed after a short delay
                             if (lastState == TourneyState.Ranking && !warmup.Value) // TODO poner reset de animacion de Win de la barra aquí
                             {
-                                if (CurrentMatch.Value?.Completed.Value == true)
+                                /*if (CurrentMatch.Value?.Completed.Value == true)
                                     scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(TeamWinScreen)); }, delay_before_progression);
                                 else if (CurrentMatch.Value?.Completed.Value == false)
-                                    scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(MapPoolScreen)); }, delay_before_progression);
+                                    scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(MapPoolScreen)); }, delay_before_progression);*/
+
+                                using (BeginDelayedSequence(delay_before_progression))
+                                {
+                                    scoreDisplay.ResetWinTransforms();
+                                }
                             }
                         }
 
