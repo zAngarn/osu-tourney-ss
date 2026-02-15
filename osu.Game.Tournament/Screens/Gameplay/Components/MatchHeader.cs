@@ -76,12 +76,6 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
                         },
-                        new MatchRoundDisplay
-                        {
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopCentre,
-                            Scale = new Vector2(0.4f)
-                        },
                     }
                 },
                 teamDisplay1 = new TeamScoreDisplay(TeamColour.Red)
