@@ -245,7 +245,10 @@ namespace osu.Game.Tournament.Components
                             Children = new Drawable[]
                             {
                                 new SS26MapStatPill(Colour4.FromHex("#282828"), TournamentGameBase.GetColor(mod), length, OsuIcon.Clock),
-                                starRatingDisplay = new StarRatingDisplay(default),
+                                starRatingDisplay = new StarRatingDisplay(default)
+                                {
+                                    Margin = new MarginPadding { Top = 3f },
+                                },
                                 new SS26MapStatPill(Colour4.FromHex("#282828"), TournamentGameBase.GetColor(mod), bpm.ToString(CultureInfo.InvariantCulture), OsuIcon.Metronome)
                             }
                         }
@@ -258,7 +261,7 @@ namespace osu.Game.Tournament.Components
                 Anchor = Anchor.Centre,
                 Origin = Anchor.TopCentre,
                 Colour = TournamentGameBase.GetColor(mod),
-                Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 24),
+                Font = OsuFont.BalooDa.With(weight: FontWeight.Black, size: 24),
                 Text = beatmap?.Metadata?.Artist ?? "desconocido",
             };
 
@@ -267,7 +270,7 @@ namespace osu.Game.Tournament.Components
                 Anchor = Anchor.Centre,
                 Origin = Anchor.TopCentre,
                 Colour = Colour4.White,
-                Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 36),
+                Font = OsuFont.BalooDa.With(weight: FontWeight.Black, size: 36),
                 Text = beatmap?.Metadata?.Title ?? "desconocido",
             };
 
@@ -276,7 +279,7 @@ namespace osu.Game.Tournament.Components
                 Anchor = Anchor.Centre,
                 Origin = Anchor.TopCentre,
                 Colour = getColor(mod),
-                Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
+                Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
                 Text = Beatmap?.DifficultyName ?? "desconocido",
             };*/
 
@@ -313,7 +316,7 @@ namespace osu.Game.Tournament.Components
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                             Colour = Colour4.White,
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
+                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
                             Text = encabezado,
                             Margin = new MarginPadding { Bottom = 18 },
                         },
@@ -322,9 +325,9 @@ namespace osu.Game.Tournament.Components
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                             Colour = Colour4.White,
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
+                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
                             Text = contexto,
-                            Margin = new MarginPadding { Top = 18 },
+                            Margin = new MarginPadding { Top = 12 },
                         }
                     }
                 }

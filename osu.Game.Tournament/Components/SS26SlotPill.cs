@@ -37,7 +37,8 @@ namespace osu.Game.Tournament.Components
                             Colour = Colour4.White,
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
+                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
+                            Margin = new MarginPadding { Bottom = 6f },
                         }
                     }
                 }
@@ -70,8 +71,9 @@ namespace osu.Game.Tournament.Components
                             Colour = txtColor,
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
-                            Padding = new MarginPadding { Left = 8, Right = 8, Top = 3, Bottom = 3 },
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
+                            Padding = new MarginPadding { Left = 8, Right = 8, Top = 0, Bottom = 0 },
+                            Margin = new MarginPadding { Bottom = 6f },
+                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
                         }
                     }
                 }

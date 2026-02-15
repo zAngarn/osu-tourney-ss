@@ -109,7 +109,7 @@ namespace osu.Game.Tournament.Components
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                             Colour = Colour4.White,
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
+                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
                             Text = slot,
                         }
                     }
@@ -126,19 +126,19 @@ namespace osu.Game.Tournament.Components
                         new TournamentSpriteText
                         {
                             Colour = TournamentGameBase.GetColor(mod),
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 12),
+                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 12),
                             Text = Beatmap?.Metadata?.Artist ?? "desconocido",
                         },
                         new TournamentSpriteText
                         {
                             Colour = Colour4.White,
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 16),
+                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
                             Text = Beatmap?.Metadata?.Title ?? "desconocido",
                         },
                         new TournamentSpriteText
                         {
                             Colour = TournamentGameBase.GetColor(mod),
-                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 12),
+                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 12),
                             Text = Beatmap?.DifficultyName ?? "desconocido",
                         }
                     }

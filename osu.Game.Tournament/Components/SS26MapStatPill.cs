@@ -60,9 +60,9 @@ namespace osu.Game.Tournament.Components
                                 {
                                     Anchor = Anchor.Centre,
                                     Origin = Anchor.Centre,
-                                    Margin = new MarginPadding { Bottom = 1.5f },
+                                    Margin = new MarginPadding { Bottom = 6f },
                                     Spacing = new Vector2(-1.4f),
-                                    Font = OsuFont.Torus.With(size: 14.4f, weight: FontWeight.Bold, fixedWidth: true),
+                                    Font = OsuFont.BalooDa.With(size: 14.4f, weight: FontWeight.Bold, fixedWidth: true),
                                     Shadow = false,
                                     Text = texto,
                                     Colour = txtColour,
