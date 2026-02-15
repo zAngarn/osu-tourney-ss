@@ -1,9 +1,11 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Globalization;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 using osuTK;
@@ -14,7 +16,9 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
     {
         private readonly TeamScore score;
 
-        private readonly TournamentSpriteTextWithBackground teamNameText;
+        private readonly TournamentSpriteText teamNameText;
+
+        private readonly TournamentSpriteText teamRankText;
 
         private readonly Bindable<string> teamName = new Bindable<string>("???");
 
@@ -42,14 +46,23 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
 
             bool flip = colour == TeamColour.Red;
 
+            Colour4 color = Colour4.FromHex("#FF714D");
+            MarginPadding marginPaddingScores = new MarginPadding { Left = -20, Top = 14 };
+
+            if (colour == TeamColour.Blue)
+            {
+                color = Colour4.FromHex("4DDBFF");
+                marginPaddingScores = new MarginPadding { Right = -20, Top = 14 };
+            }
+
             var anchor = flip ? Anchor.TopLeft : Anchor.TopRight;
 
             Flag.RelativeSizeAxes = Axes.None;
-            Flag.Scale = new Vector2(0.8f);
             Flag.Origin = anchor;
+            Flag.Scale = TournamentGame.FACTOR_DE_REESCALADO_1080;
             Flag.Anchor = anchor;
 
-            Margin = new MarginPadding(20);
+            Margin = new MarginPadding(55);
 
             InternalChild = new Container
             {
@@ -70,9 +83,25 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                 Direction = FillDirection.Vertical,
                                 Origin = anchor,
                                 Anchor = anchor,
-                                Spacing = new Vector2(5),
+                                Spacing = new Vector2(-5),
                                 Children = new Drawable[]
                                 {
+                                    teamNameText = new TournamentSpriteText
+                                    {
+                                        Font = OsuFont.BalooDa.With(weight: FontWeight.Black, size: 36),
+                                        Colour = color,
+                                        Origin = anchor,
+                                        Anchor = anchor,
+                                        Margin = new MarginPadding { Top = 30 }
+                                    },
+                                    teamRankText = new TournamentSpriteText
+                                    {
+                                        Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 48),
+                                        Colour = Colour4.White,
+                                        Origin = anchor,
+                                        Anchor = anchor,
+                                        Margin = new MarginPadding { Top = -10 },
+                                    },
                                     new FillFlowContainer
                                     {
                                         AutoSizeAxes = Axes.Both,
@@ -82,32 +111,21 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                                         Anchor = anchor,
                                         Children = new Drawable[]
                                         {
-                                            new DrawableTeamHeader(colour)
-                                            {
-                                                Scale = new Vector2(0.75f),
-                                                Origin = anchor,
-                                                Anchor = anchor,
-                                            },
                                             score = new TeamScore(currentTeamScore, colour, pointsToWin)
                                             {
                                                 Origin = anchor,
                                                 Anchor = anchor,
+                                                Margin = marginPaddingScores,
                                             }
                                         }
                                     },
-                                    teamNameText = new TournamentSpriteTextWithBackground
-                                    {
-                                        Scale = new Vector2(0.5f),
-                                        Origin = anchor,
-                                        Anchor = anchor,
-                                    },
-                                    new DrawableTeamSeed(Team)
-                                    {
-                                        Scale = new Vector2(0.5f),
-                                        Origin = anchor,
-                                        Anchor = anchor,
-                                    },
                                 }
+                            },
+                            new DrawableTeamSeed(Team)
+                            {
+                                Scale = new Vector2(0.5f),
+                                Origin = anchor,
+                                Anchor = anchor,
                             },
                         }
                     },
@@ -125,7 +143,11 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             if (Team != null)
                 teamName.BindTo(Team.FullName);
 
-            teamName.BindValueChanged(name => teamNameText.Text.Text = name.NewValue, true);
+            teamName.BindValueChanged(name =>
+            {
+                teamNameText.Text = name.NewValue;
+                teamRankText.Text = $"#{Team?.AverageRank.ToString(CultureInfo.InvariantCulture) ?? "#0"}";
+            }, true);
         }
 
         private void updateDisplay()

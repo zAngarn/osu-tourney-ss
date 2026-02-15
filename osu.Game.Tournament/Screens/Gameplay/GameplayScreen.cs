@@ -84,7 +84,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 },
                 header = new MatchHeader
                 {
-                    Y = -265,
+                    Y = -280,
                     ShowScores = true,
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.TopCentre,
