@@ -202,25 +202,25 @@ namespace osu.Game.Tournament.Components
                                 },
                             }
                         },
-                        new BurbujitaEstadistica("CS", (adjustedDifficulty.CircleSize.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
+                        new BurbujitaEstadistica("CS", (adjustedDifficulty.CircleSize.ToString("##.##")) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = -80, Left = -190 },
                         },
-                        new BurbujitaEstadistica("HP", (adjustedDifficulty.DrainRate.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
+                        new BurbujitaEstadistica("HP", (adjustedDifficulty.DrainRate.ToString("##.##")) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = 0, Left = -350 },
                         },
-                        new BurbujitaEstadistica("AR", (adjustedDifficulty.ApproachRate.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
+                        new BurbujitaEstadistica("AR", (adjustedDifficulty.ApproachRate.ToString("##.##")) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,
                             Margin = new MarginPadding { Top = -80, Right = -190 },
                         },
-                        new BurbujitaEstadistica("OD", (adjustedDifficulty.OverallDifficulty.ToString(CultureInfo.InvariantCulture)) ?? "0", TournamentGameBase.GetColor(mod))
+                        new BurbujitaEstadistica("OD", (adjustedDifficulty.OverallDifficulty.ToString("##.##")) ?? "0", TournamentGameBase.GetColor(mod))
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.TopCentre,

@@ -63,11 +63,14 @@ namespace osu.Game.Tournament.Components
 
         private LegacyMods mods;
 
+        private bool peru;
+
         public LegacyMods Mods
         {
             set
             {
                 mods = value;
+                peru = true;
                 refreshContent();
             }
         }
@@ -226,7 +229,9 @@ namespace osu.Game.Tournament.Components
             var rulesetInstance = ruleset.Value.CreateInstance();
             var convertedMods = rulesetInstance.ConvertFromLegacyMods(mods).ToList();
             var adjustedDifficulty = rulesetInstance.GetAdjustedDisplayDifficulty(beatmap, convertedMods);
-            computeStarRating(rulesetInstance.RulesetInfo, convertedMods);
+            if (peru) computeStarRating(rulesetInstance.RulesetInfo, convertedMods);
+
+            peru = false;
 
             double rate = ModUtils.CalculateRateWithMods(convertedMods);
             double bpm = FormatUtils.RoundBPM(beatmap.BPM, rate);

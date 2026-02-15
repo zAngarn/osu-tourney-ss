@@ -5,6 +5,7 @@ using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.Legacy;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
@@ -15,6 +16,8 @@ namespace osu.Game.Tournament.Screens
     public abstract partial class BeatmapInfoScreen : TournamentMatchScreen
     {
         protected readonly SS26Songbar SongBar;
+
+        private IBeatmapInfo? currentBeatmap;
 
         protected BeatmapInfoScreen()
         {
@@ -38,6 +41,7 @@ namespace osu.Game.Tournament.Screens
         private void modsChanged(ValueChangedEvent<LegacyMods> mods)
         {
             SongBar.Mods = mods.NewValue;
+            SongBar.Beatmap = currentBeatmap;
         }
 
         private void beatmapChanged(ValueChangedEvent<TournamentBeatmap?> beatmap)
@@ -45,11 +49,14 @@ namespace osu.Game.Tournament.Screens
             SongBar.FadeInFromZero(300, Easing.OutQuint);
             SongBar.Beatmap = beatmap.NewValue;
 
+            currentBeatmap = beatmap.NewValue;
+
             if (beatmap.NewValue == null || CurrentMatch.Value?.Round.Value == null) return;
 
             foreach (RoundBeatmap? map in CurrentMatch.Value.Round.Value.Beatmaps.Where(map => map.ID == beatmap.NewValue.OnlineID))
             {
                 SongBar.Slot = map.Slot;
+                SongBar.Beatmap = beatmap.NewValue;
             }
         }
     }
