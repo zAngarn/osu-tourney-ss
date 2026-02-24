@@ -1,6 +1,7 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using System.Diagnostics;
 using System.Linq;
 using osu.Framework.Allocation;
@@ -14,6 +15,7 @@ using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Ladder.Components;
+using osu.Game.Utils;
 using osuTK;
 
 namespace osu.Game.Tournament.Screens.TeamIntro
@@ -66,12 +68,62 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                         {
                             LabelText = "Show specific team",
                             Current = currentTeam,
-                        }
+                        },
+                        new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Next team (Seed reveal)",
+                            Action = advanceToNextSeedTeam
+                        },
                     }
                 }
             };
 
             currentTeam.BindValueChanged(teamChanged, true);
+        }
+
+        private Colour4 getColourForSeed(int currentSeed, int minSeed, int maxSeed)
+        {
+            if (minSeed == maxSeed)
+                return OsuColour.STAR_DIFFICULTY_SPECTRUM[0].Item2;
+
+            int clampedSeed = Math.Clamp(currentSeed, minSeed, maxSeed);
+
+            float t = 1f - ((float)(clampedSeed - minSeed) / (maxSeed - minSeed));
+
+            const float min_spectrum = 0.1f;
+            const float max_spectrum = 7.0f;
+            float mappedValue = min_spectrum + t * (max_spectrum - min_spectrum);
+
+            return ColourUtils.SampleFromLinearGradient(OsuColour.STAR_DIFFICULTY_SPECTRUM, mappedValue);
+        }
+
+        private void advanceToNextSeedTeam()
+        {
+            var sortedTeams = LadderInfo.Teams
+                                        .Where(t => !string.IsNullOrEmpty(t.Seed?.Value))
+                                        .OrderByDescending(t => int.TryParse(t.Seed.Value, out int seedNumber) ? seedNumber : 0)
+                                        .ToList();
+
+            if (!sortedTeams.Any())
+                return;
+
+            if (currentTeam.Value == null)
+            {
+                currentTeam.Value = sortedTeams.First();
+                return;
+            }
+
+            int currentIndex = sortedTeams.IndexOf(currentTeam.Value);
+
+            if (currentIndex == -1 || currentIndex == sortedTeams.Count - 1)
+            {
+                currentTeam.Value = sortedTeams.First();
+            }
+            else
+            {
+                currentTeam.Value = sortedTeams[currentIndex + 1];
+            }
         }
 
         private void teamChanged(ValueChangedEvent<TournamentTeam?> team) => updateTeamDisplay();
@@ -110,7 +162,10 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                 return;
             }
 
-            Colour4 accentColor = Colour4.FromHex("#4291FB");
+            int currentSeedValue = int.Parse(currentTeam.Value.Seed.Value);
+            int totalTeams = LadderInfo.Teams.Count > 1 ? LadderInfo.Teams.Count : 32;
+
+            Colour4 accentColor = getColourForSeed(currentSeedValue, 1, totalTeams);
 
             var bestBeatmap = currentTeam.Value.SeedingResults
                                          .SelectMany(seeding => seeding.Beatmaps)
@@ -292,7 +347,7 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                         AutoSizeAxes = Axes.Y,
                         Direction = FillDirection.Vertical,
                         Spacing = new Vector2(5),
-                        Width = 300,
+                        Width = 320,
                         Children = new Drawable[]
                         {
                             new TournamentSpriteText
