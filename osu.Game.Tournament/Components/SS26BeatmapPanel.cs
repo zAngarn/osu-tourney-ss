@@ -12,6 +12,7 @@ using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.Drawables;
 using osu.Game.Graphics;
 using osu.Game.Tournament.Models;
+using osuTK;
 
 namespace osu.Game.Tournament.Components
 {
@@ -19,7 +20,11 @@ namespace osu.Game.Tournament.Components
     {
         public readonly IBeatmapInfo? Beatmap;
 
+        private Container scoreContainer = null!;
+
         private string slot;
+
+        private int score;
 
         private readonly string mod;
 
@@ -35,11 +40,12 @@ namespace osu.Game.Tournament.Components
 
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
 
-        public SS26BeatmapPanel(IBeatmapInfo? beatmap, string slot)
+        public SS26BeatmapPanel(IBeatmapInfo? beatmap, string slot, int score = 0)
         {
             Beatmap = beatmap;
             mod = slot[..2];
             this.slot = slot;
+            this.score = score;
 
             Width = 350;
             Height = 50;
@@ -147,7 +153,64 @@ namespace osu.Game.Tournament.Components
                         }
                     }
                 },
+                scoreContainer = new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Children = new Drawable[]
+                    {
+                        new FillFlowContainer
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Direction = FillDirection.Horizontal,
+                            Children = new Drawable[]
+                            {
+                                new Box
+                                {
+                                    RelativeSizeAxes = Axes.Both,
+                                    Colour = Colour4.FromHex("#00000000"),
+                                    Width = 1 / 3f
+                                },
+                                new Box
+                                {
+                                    RelativeSizeAxes = Axes.Both,
+                                    Colour = ColourInfo.GradientHorizontal(Colour4.FromHex("#26262600"), Colour4.FromHex("#262626ff")),
+                                    Width = 2 / 3f
+                                },
+                            }
+                        },
+                        new FillFlowContainer
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Margin = new MarginPadding { Left = 240f, Top = 5f },
+                            Direction = FillDirection.Vertical,
+                            Spacing = new Vector2(-5),
+                            Children = new Drawable[]
+                            {
+                                new TournamentSpriteText
+                                {
+                                    Colour = TournamentGameBase.GetColor(mod),
+                                    Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 12),
+                                    Text = "Score",
+                                    Shadow = true,
+                                },
+                                new TournamentSpriteText
+                                {
+                                    Colour = Colour4.White,
+                                    Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 24),
+                                    Text = score.ToString("#,0"),
+                                    Shadow = true
+                                },
+                            }
+                        }
+                    },
+                }
             });
+
+            if (score == 0) scoreContainer.Alpha = 0;
         }
 
         public partial class NoUnloadBeatmapSetCover : UpdateableOnlineBeatmapSetCover

@@ -21,8 +21,11 @@ namespace osu.Game.Tournament.Tests.Screens
             {
                 new TournamentTeam
                 {
-                    FullName = { Value = @"Japan" },
-                    Acronym = { Value = "JPN" },
+                    FullName = { Value = @"ESCRUPULILLO" },
+                    Acronym = { Value = "ESC" },
+                    FlagName = { Value = "ESC" },
+                    Players = { new TournamentUser { OnlineID = 111111, Rank = 12345 } },
+                    Seed = { Value = "#1" },
                     SeedingResults =
                     {
                         new SeedingResult

@@ -34,14 +34,17 @@ namespace osu.Game.Tournament.Screens.TeamIntro
 
             InternalChildren = new Drawable[]
             {
-                new TourneyVideo("seeding")
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Loop = true,
-                },
                 mainContainer = new Container
                 {
                     RelativeSizeAxes = Axes.Both,
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.FromHex("#282828")
+                        }
+                    }
                 },
                 new ControlPanel
                 {
@@ -107,10 +110,77 @@ namespace osu.Game.Tournament.Screens.TeamIntro
                 return;
             }
 
+            Colour4 accentColor = Colour4.FromHex("#4291FB");
+
             mainContainer.Children = new Drawable[]
             {
-                new LeftInfo(currentTeam.Value) { Position = new Vector2(55, 150), },
-                new RightInfo(currentTeam.Value) { Position = new Vector2(500, 150), },
+                new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.FromHex("#282828")
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 1275f / 1920f,
+                    Height = 615f / 1080f,
+                    CornerRadius = 96f,
+                    Masking = true,
+                    Anchor = Anchor.TopRight,
+                    Origin = Anchor.TopRight,
+                    Margin = new MarginPadding { Right = -135, Top = -135 },
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = accentColor,
+                        }
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 735f / 1920f,
+                    Height = 405f / 1080f,
+                    CornerRadius = 96f,
+                    Masking = true,
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
+                    Margin = new MarginPadding { Left = -135, Top = -135 },
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = accentColor,
+                        }
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 1525f / 1920f,
+                    Height = 405f / 1080f,
+                    CornerRadius = 96f,
+                    Masking = true,
+                    Anchor = Anchor.BottomRight,
+                    Origin = Anchor.BottomRight,
+                    Margin = new MarginPadding { Right = -135, Bottom = -135 },
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = accentColor,
+                        }
+                    }
+                },
+                new DrawableTeamCard(currentTeam.Value, accentColor, 100)
+                {
+                    Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
+                    Margin = new MarginPadding { Top = 70, Left = 70 },
+                }
             };
         });
 

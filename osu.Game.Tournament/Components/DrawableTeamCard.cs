@@ -32,7 +32,7 @@ namespace osu.Game.Tournament.Components
         private readonly TournamentSpriteText avgRank;
         public readonly DrawableTeamFlag TeamFlag;
 
-        public DrawableTeamCard(TournamentTeam team, Colour4 color)
+        public DrawableTeamCard(TournamentTeam team, Colour4 color, int corte = 0)
         {
             Margin = new MarginPadding(10);
             this.team = team;
@@ -42,7 +42,7 @@ namespace osu.Game.Tournament.Components
                 new Container
                 {
                     Width = 350,
-                    Height = 505,
+                    Height = 505 - corte,
                     Masking = true,
                     CornerRadius = 20f,
                     Children = new Drawable[]
@@ -57,7 +57,7 @@ namespace osu.Game.Tournament.Components
                             Margin = new MarginPadding(10),
                             RelativeSizeAxes = Axes.Both,
                             Width = 300f / 350f,
-                            Height = 475f / 505f,
+                            Height = (475f - corte) / (505f - corte),
                             CornerRadius = 15f,
                             Masking = true,
                             Origin = Anchor.BottomRight,
@@ -76,7 +76,7 @@ namespace osu.Game.Tournament.Components
                             Margin = new MarginPadding(10),
                             RelativeSizeAxes = Axes.Both,
                             Width = 300f / 350f,
-                            Height = 475f / 505f,
+                            Height = (475f - corte) / (505f - corte),
                             CornerRadius = 15f,
                             Origin = Anchor.BottomRight,
                             Anchor = Anchor.BottomRight,
@@ -87,7 +87,7 @@ namespace osu.Game.Tournament.Components
                                     RelativeSizeAxes = Axes.Both,
                                     Colour = color,
                                     Width = 90f / 300f,
-                                    Height = 90f / 475f,
+                                    Height = 90f / (475f - corte),
                                     Anchor = Anchor.TopLeft,
                                     Origin = Anchor.TopLeft,
                                 },
@@ -95,7 +95,7 @@ namespace osu.Game.Tournament.Components
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Width = 180f / 300f,
-                                    Height = 180f / 475f,
+                                    Height = 180f / (475f - corte),
                                     Anchor = Anchor.TopLeft,
                                     Origin = Anchor.TopLeft,
                                     Masking = true,
@@ -135,7 +135,8 @@ namespace osu.Game.Tournament.Components
                                                     Colour = Colour4.FromHex("#262626"),
                                                     Text = team.Seed.Value ?? "???",
                                                     Shadow = false,
-                                                    Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 24),
+                                                    Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 24),
+                                                    Margin = new MarginPadding { Bottom = 6 },
                                                 }
                                             }
                                         }
@@ -156,14 +157,14 @@ namespace osu.Game.Tournament.Components
                                             Colour = color,
                                             Shadow = false,
                                             Text = team.FullName.Value ?? "???",
-                                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 32),
+                                            Font = OsuFont.BalooDa.With(weight: FontWeight.Black, size: 32),
                                         },
                                         avgRank = new TournamentSpriteText
                                         {
                                             Colour = Colour4.White,
                                             Shadow = false,
                                             Text = "#" + team.AverageRank.ToString(CultureInfo.InvariantCulture),
-                                            Font = OsuFont.Torus.With(weight: FontWeight.Bold, size: 40),
+                                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 40),
                                         }
                                     }
                                 }
