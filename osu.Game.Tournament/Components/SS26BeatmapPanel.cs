@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using Humanizer;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -24,7 +25,7 @@ namespace osu.Game.Tournament.Components
 
         private string slot;
 
-        private int score;
+        private string score;
 
         private readonly string mod;
 
@@ -40,7 +41,7 @@ namespace osu.Game.Tournament.Components
 
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
 
-        public SS26BeatmapPanel(IBeatmapInfo? beatmap, string slot, int score = 0)
+        public SS26BeatmapPanel(IBeatmapInfo? beatmap, string slot, string score = "0")
         {
             Beatmap = beatmap;
             mod = slot[..2];
@@ -201,7 +202,7 @@ namespace osu.Game.Tournament.Components
                                 {
                                     Colour = Colour4.White,
                                     Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 24),
-                                    Text = score.ToString("#,0"),
+                                    Text = score.FormatWith("#,0"),
                                     Shadow = true
                                 },
                             }
@@ -210,7 +211,7 @@ namespace osu.Game.Tournament.Components
                 }
             });
 
-            if (score == 0) scoreContainer.Alpha = 0;
+            if (score == "0") scoreContainer.Alpha = 0;
         }
 
         public partial class NoUnloadBeatmapSetCover : UpdateableOnlineBeatmapSetCover

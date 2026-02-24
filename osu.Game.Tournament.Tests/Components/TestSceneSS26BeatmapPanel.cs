@@ -38,7 +38,7 @@ namespace osu.Game.Tournament.Tests.Components
                 Scale = new Vector2(2.5f)
             });
 
-            Add(new SS26BeatmapPanel(new TournamentBeatmap(beatmap), "NM2", 1200000)
+            Add(new SS26BeatmapPanel(new TournamentBeatmap(beatmap), "NM2", "1200000")
             {
                 Margin = new MarginPadding { Top = 200 },
                 Scale = new Vector2(2.5f)
