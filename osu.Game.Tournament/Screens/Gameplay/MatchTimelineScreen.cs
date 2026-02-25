@@ -31,6 +31,9 @@ namespace osu.Game.Tournament.Screens.MapPool
         private readonly Bindable<bool> firstBanBindable = new Bindable<bool>(false);
         private readonly Bindable<bool> firstPickBindable = new Bindable<bool>(false);
 
+        private readonly Bindable<int?> team1Score = new Bindable<int?>();
+        private readonly Bindable<int?> team2Score = new Bindable<int?>();
+
         private DrawableTeamCard redPlayer = null!;
         private DrawableTeamCard bluePlayer = null!;
 
@@ -215,6 +218,26 @@ namespace osu.Game.Tournament.Screens.MapPool
                         new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
+                            Text = "Force Red Win",
+                            BackgroundColour = Colour4.HotPink,
+                            Action = () => forceWinner(TeamColour.Red)
+                        },
+                        new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Force Blue Win",
+                            Action = () => forceWinner(TeamColour.Blue)
+                        },
+                        new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Deshacer último ganador",
+                            Action = undoLastWinner
+                        },
+                        new ControlPanel.Spacer(),
+                        new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
                             Text = "Reset Match State",
                             Action = resetMatch,
                         },
@@ -277,6 +300,48 @@ namespace osu.Game.Tournament.Screens.MapPool
             ipc.Beatmap.BindValueChanged(beatmapChanged);
         }
 
+        private void onScoreChanged(TeamColour team, int? oldScore, int? newScore)
+        {
+            // Si la puntuación es null, asumimos que es 0
+            int oldVal = oldScore ?? 0;
+            int newVal = newScore ?? 0;
+
+            // Solo asignamos si el score ha SUBIDO (ignora si el ref resta puntos)
+            if (newVal <= oldVal) return;
+
+            // Buscamos el primer Pick cronológico que todavía no tenga un ganador asignado
+            var activePick = CurrentMatch.Value?.PicksBans
+                                         .FirstOrDefault(p => p.Type == ChoiceType.Pick && p.Winner.Value == null);
+
+            if (activePick != null)
+            {
+                activePick.Winner.Value = team; // Esto dispara el evento visual automáticamente
+            }
+        }
+
+        private void forceWinner(TeamColour team)
+        {
+            var activePick = CurrentMatch.Value?.PicksBans
+                                         .FirstOrDefault(p => p.Type == ChoiceType.Pick && p.Winner.Value == null);
+
+            if (activePick != null)
+            {
+                activePick.Winner.Value = team;
+            }
+        }
+
+        private void undoLastWinner()
+        {
+            // Buscamos el ÚLTIMO pick que YA tenga un ganador asignado
+            var lastResolvedPick = CurrentMatch.Value?.PicksBans
+                                               .LastOrDefault(p => p.Type == ChoiceType.Pick && p.Winner.Value != null);
+
+            if (lastResolvedPick != null)
+            {
+                lastResolvedPick.Winner.Value = null; // Quita el ganador y oculta el cartel visual
+            }
+        }
+
         private void beatmapChanged(ValueChangedEvent<TournamentBeatmap?> beatmap)
         {
             bool found = false;
@@ -324,14 +389,15 @@ namespace osu.Game.Tournament.Screens.MapPool
                 if (CurrentMatch.Value.PicksBans.Any(p => p.BeatmapID == targetMap.ID))
                     return;
 
-                // Con esto debería ser compatible con la mappool antigua...
-                CurrentMatch.Value.PicksBans.Add(new BeatmapChoice
+                var choice = new BeatmapChoice
                 {
                     Team = colour,
                     Type = choiceType,
                     BeatmapID = targetMap.ID,
                     Slot = map.ToUpper(CultureInfo.InvariantCulture)
-                });
+                };
+
+                CurrentMatch.Value.PicksBans.Add(choice);
 
                 Console.WriteLine($"Team {colour} [{choiceType} {targetMap.Slot}]: {targetMap.ID}");
 
@@ -342,7 +408,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     // Bans ---------------------------------------------
                     case ChoiceType.Ban when colour == TeamColour.Red:
                     {
-                        redActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot)
+                        redActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot, "0", choice)
                         {
                             Anchor = Anchor.TopLeft,
                             Origin = Anchor.TopLeft,
@@ -356,7 +422,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
                     case ChoiceType.Ban when colour == TeamColour.Blue:
                     {
-                        blueActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot)
+                        blueActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot, "0", choice)
                         {
                             Anchor = Anchor.TopRight,
                             Origin = Anchor.TopRight,
@@ -371,7 +437,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     // Picks ---------------------------------------------
                     case ChoiceType.Pick when colour == TeamColour.Red:
 
-                        redActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot)
+                        redActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot, "0", choice)
                         {
                             Anchor = Anchor.TopLeft,
                             Origin = Anchor.TopLeft,
@@ -383,7 +449,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
                     case ChoiceType.Pick when colour == TeamColour.Blue:
 
-                        blueActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot)
+                        blueActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot, "0", choice)
                         {
                             Anchor = Anchor.TopRight,
                             Origin = Anchor.TopRight,
@@ -493,6 +559,18 @@ namespace osu.Game.Tournament.Screens.MapPool
         protected override void CurrentMatchChanged(ValueChangedEvent<TournamentMatch?> match)
         {
             base.CurrentMatchChanged(match);
+
+            if (match.NewValue == null) return;
+
+            team1Score.UnbindBindings();
+            team2Score.UnbindBindings();
+
+            team1Score.BindTo(match.NewValue.Team1Score);
+            team2Score.BindTo(match.NewValue.Team2Score);
+
+            team1Score.BindValueChanged(score => onScoreChanged(TeamColour.Red, score.OldValue, score.NewValue));
+            team2Score.BindValueChanged(score => onScoreChanged(TeamColour.Blue, score.OldValue, score.NewValue));
+
             updateDisplay();
 
             match.NewValue?.PicksBans.Clear(); // Limpio la lista porque es lo más facil

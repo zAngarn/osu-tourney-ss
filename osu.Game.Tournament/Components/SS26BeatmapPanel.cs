@@ -21,11 +21,15 @@ namespace osu.Game.Tournament.Components
     {
         public readonly IBeatmapInfo? Beatmap;
 
+        public BeatmapChoice? Choice;
+
         private Container scoreContainer = null!;
 
         private Container winLabelContainer = null!;
 
         private TournamentSpriteText winLabelText = null!;
+
+        public bool HasWinner { get; private set; } = false;
 
         private string slot;
 
@@ -43,14 +47,17 @@ namespace osu.Game.Tournament.Components
             }
         }
 
+        private readonly Bindable<TeamColour?> winnerBindable = new Bindable<TeamColour?>();
+
         private readonly Bindable<TournamentMatch?> currentMatch = new Bindable<TournamentMatch?>();
 
-        public SS26BeatmapPanel(IBeatmapInfo? beatmap, string slot, string score = "0")
+        public SS26BeatmapPanel(IBeatmapInfo? beatmap, string slot, string score = "0", BeatmapChoice? choice = null)
         {
             Beatmap = beatmap;
             mod = slot[..2];
             this.slot = slot;
             this.score = score;
+            this.Choice = choice;
 
             Width = 350;
             Height = 50;
@@ -193,21 +200,21 @@ namespace osu.Game.Tournament.Components
                         new Box
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Colour = Colour4.FromHex("26262666")
+                            Colour = Colour4.FromHex("26262699")
                         },
                         new FillFlowContainer
                         {
                             RelativeSizeAxes = Axes.Both,
                             Anchor = Anchor.CentreLeft,
                             Origin = Anchor.CentreLeft,
-                            Margin = new MarginPadding { Left = 240f, Top = 5f },
+                            Margin = new MarginPadding { Left = 200f, Top = 5f },
                             Direction = FillDirection.Vertical,
                             Spacing = new Vector2(-5),
                             Children = new Drawable[]
                             {
                                 new TournamentSpriteText
                                 {
-                                    Colour = TournamentGameBase.GetColor(mod),
+                                    Colour = Colour4.White,
                                     Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 12),
                                     Text = "Ganado por",
                                     Shadow = true,
@@ -256,10 +263,24 @@ namespace osu.Game.Tournament.Components
             winLabelContainer.Alpha = 0;
 
             if (score == "0") scoreContainer.Alpha = 0;
+
+            if (Choice != null)
+            {
+                winnerBindable.BindTo(Choice.Winner);
+                winnerBindable.BindValueChanged(winner => SetWinState(winner.NewValue), true);
+            }
         }
 
-        public void SetWinState(TeamColour colour)
+        public void SetWinState(TeamColour? colour)
         {
+            HasWinner = true;
+
+            if (colour == null)
+            {
+                winLabelContainer.Alpha = 0; // Ocultamos el cartel si no hay ganador
+                return;
+            }
+
             if (colour == TeamColour.Red)
             {
                 winLabelText.Colour = Colour4.FromHex("#FF714D");
