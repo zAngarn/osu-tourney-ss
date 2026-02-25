@@ -21,6 +21,9 @@ namespace osu.Game.Tournament.Models
         public BindableList<TournamentRound> Rounds = new BindableList<TournamentRound>();
         public BindableList<TournamentTeam> Teams = new BindableList<TournamentTeam>();
 
+        public BindableList<RoundBeatmap?> RedBans = new BindableList<RoundBeatmap?>();
+        public BindableList<RoundBeatmap?> BlueBans = new BindableList<RoundBeatmap?>();
+
         // only used for serialisation
         public List<TournamentProgression> Progressions = new List<TournamentProgression>();
 

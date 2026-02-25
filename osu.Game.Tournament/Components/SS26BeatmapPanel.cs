@@ -23,6 +23,10 @@ namespace osu.Game.Tournament.Components
 
         private Container scoreContainer = null!;
 
+        private Container winLabelContainer = null!;
+
+        private TournamentSpriteText winLabelText = null!;
+
         private string slot;
 
         private string score;
@@ -91,34 +95,6 @@ namespace osu.Game.Tournament.Components
                             RelativeSizeAxes = Axes.Both,
                             Colour = Colour4.FromHex("#26262622"),
                             Width = 1 / 3f
-                        }
-                    }
-                },
-                new Container
-                {
-                    Width = 44 / 350f,
-                    Height = 44 / 50f,
-                    RelativeSizeAxes = Axes.Both,
-                    Anchor = Anchor.CentreLeft,
-                    Origin = Anchor.CentreLeft,
-                    Masking = true,
-                    CornerRadius = 22f,
-                    Margin = new MarginPadding { Left = 3f },
-                    Children = new Drawable[]
-                    {
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = TournamentGameBase.GetColor(mod),
-                        },
-                        new TournamentSpriteText
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            Colour = Colour4.White,
-                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
-                            Text = slot,
-                            Margin = new MarginPadding { Bottom = 5f },
                         }
                     }
                 },
@@ -208,10 +184,94 @@ namespace osu.Game.Tournament.Components
                             }
                         }
                     },
-                }
+                },
+                winLabelContainer = new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.FromHex("26262666")
+                        },
+                        new FillFlowContainer
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Margin = new MarginPadding { Left = 240f, Top = 5f },
+                            Direction = FillDirection.Vertical,
+                            Spacing = new Vector2(-5),
+                            Children = new Drawable[]
+                            {
+                                new TournamentSpriteText
+                                {
+                                    Colour = TournamentGameBase.GetColor(mod),
+                                    Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 12),
+                                    Text = "Ganado por",
+                                    Shadow = true,
+                                },
+                                winLabelText = new TournamentSpriteText
+                                {
+                                    Colour = Colour4.White,
+                                    Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 24),
+                                    Text = "",
+                                    Shadow = true
+                                },
+                            }
+                        }
+                    }
+                },
+                new Container
+                {
+                    Width = 44 / 350f,
+                    Height = 44 / 50f,
+                    RelativeSizeAxes = Axes.Both,
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.CentreLeft,
+                    Masking = true,
+                    CornerRadius = 22f,
+                    Margin = new MarginPadding { Left = 3f },
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = TournamentGameBase.GetColor(mod),
+                        },
+                        new TournamentSpriteText
+                        {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            Colour = Colour4.White,
+                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 16),
+                            Text = slot,
+                            Margin = new MarginPadding { Bottom = 5f },
+                        }
+                    }
+                },
             });
 
+            winLabelContainer.Alpha = 0;
+
             if (score == "0") scoreContainer.Alpha = 0;
+        }
+
+        public void SetWinState(TeamColour colour)
+        {
+            if (colour == TeamColour.Red)
+            {
+                winLabelText.Colour = Colour4.FromHex("#FF714D");
+                winLabelText.Text = "EQUIPO ROJO";
+            }
+            else
+            {
+                winLabelText.Colour = Colour4.FromHex("#4DDBFF");
+                winLabelText.Text = "EQUIPO AZUL";
+            }
+
+            winLabelContainer.Alpha = 1;
         }
 
         public partial class NoUnloadBeatmapSetCover : UpdateableOnlineBeatmapSetCover

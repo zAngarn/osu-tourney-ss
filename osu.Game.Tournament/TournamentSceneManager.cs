@@ -101,6 +101,7 @@ namespace osu.Game.Tournament
                                 new TeamIntroScreen(),
                                 new SeedingScreen(),
                                 new DrawingsScreen(),
+                                new MatchTimelineScreen(),
                                 new GameplayScreen(),
                                 new TeamWinScreen(),
                                 transitionScreen = new TransitionScreen()
@@ -144,6 +145,7 @@ namespace osu.Game.Tournament
                                 new ScreenButton(typeof(TeamIntroScreen), Key.I) { Text = "Team Intro", RequestSelection = SetScreen },
                                 new ScreenButton(typeof(SeedingScreen), Key.D) { Text = "Seeding", RequestSelection = SetScreen },
                                 new Separator(),
+                                new ScreenButton(typeof(MatchTimelineScreen), Key.P) { Text = "Match Timeline", RequestSelection = SetScreen },
                                 new ScreenButton(typeof(MapPoolScreen), Key.M) { Text = "Map Pool", RequestSelection = SetScreen },
                                 new ScreenButton(typeof(GameplayScreen), Key.G) { Text = "Gameplay", RequestSelection = SetScreen },
                                 new Separator(),

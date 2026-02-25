@@ -20,13 +20,16 @@ namespace osu.Game.Tournament.Models
         public ChoiceType Type;
 
         public int BeatmapID;
+
+        public string Slot = string.Empty;
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum TeamColour
     {
         Red,
-        Blue
+        Blue,
+        None
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
@@ -34,5 +37,6 @@ namespace osu.Game.Tournament.Models
     {
         Pick,
         Ban,
+        None,
     }
 }
