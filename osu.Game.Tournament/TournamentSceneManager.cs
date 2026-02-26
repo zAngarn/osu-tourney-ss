@@ -92,18 +92,18 @@ namespace osu.Game.Tournament
                             Children = new Drawable[]
                             {
                                 new SetupScreen(),
-                                new ScheduleScreen(),
+                                //new ScheduleScreen(),
                                 new LadderScreen(),
                                 new LadderEditorScreen(),
                                 new TeamEditorScreen(),
                                 new RoundEditorScreen(),
-                                new MapPoolScreen(),
-                                new TeamIntroScreen(),
+                                //new MapPoolScreen(),
+                                //new TeamIntroScreen(),
                                 new SeedingScreen(),
-                                new DrawingsScreen(),
+                                // DrawingsScreen(),
                                 new MatchTimelineScreen(),
                                 new GameplayScreen(),
-                                new TeamWinScreen(),
+                                //new TeamWinScreen(),
                                 transitionScreen = new TransitionScreen()
                             }
                         },
