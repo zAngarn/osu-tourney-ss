@@ -57,7 +57,7 @@ namespace osu.Game.Tournament.Components
 
         public partial class Spacer : CompositeDrawable
         {
-            public Spacer(float height = 20)
+            public Spacer(float height = 10)
             {
                 RelativeSizeAxes = Axes.X;
                 Height = height;

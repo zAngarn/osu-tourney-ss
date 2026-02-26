@@ -200,6 +200,25 @@ namespace osu.Game.Tournament.Screens.MapPool
                         },
                     }
                 },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 500 / 1920f,
+                    Height = 164 / 1080f,
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                    Margin = new MarginPadding { Bottom = -58 },
+                    Masking = true,
+                    CornerRadius = 65f,
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.FromHex("#262626"),
+                        },
+                    }
+                },
                 redPlayer = new DrawableTeamCard(dummyMatch.Team1.Value!, Color4Extensions.FromHex("#FF714D"))
                 {
                     Anchor = Anchor.TopLeft,
@@ -354,6 +373,19 @@ namespace osu.Game.Tournament.Screens.MapPool
                         new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
+                            Text = "Force TB",
+                            Action = forceTiebreaker
+                        },
+                        new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Refresh Internal Automaton",
+                            Action = computeCurrentState
+                        },
+                        new ControlPanel.Spacer(),
+                        new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
                             Text = "Reset Match State",
                             Action = resetMatch,
                         },
@@ -414,6 +446,40 @@ namespace osu.Game.Tournament.Screens.MapPool
             }, true);
 
             ipc.Beatmap.BindValueChanged(beatmapChanged);
+        }
+
+        private void forceTiebreaker()
+        {
+            var tbMap = CurrentMatch.Value?.Round.Value?.Beatmaps.FirstOrDefault(x => x.Slot == "TB1");
+
+            if (tbMap != null)
+            {
+                if (tiebreakerCardContainer.Children.Count > 1)
+                {
+                    foreach (var panel in tiebreakerCardContainer.Children.OfType<SS26BeatmapPanel>())
+                    {
+                        tiebreakerCardContainer.Remove(panel, true);
+                    }
+                }
+                else
+                {
+                    tiebreakerCardContainer.Add(new SS26BeatmapPanel(tbMap.Beatmap, "TB1")
+                    {
+                        Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
+                        Anchor = Anchor.BottomCentre,
+                        Origin = Anchor.BottomCentre,
+                        Margin = new MarginPadding { Bottom = 10 },
+                    });
+
+                    CurrentMatch.Value!.PicksBans.Add(new BeatmapChoice
+                    {
+                        Team = TeamColour.None,
+                        Type = ChoiceType.Pick,
+                        BeatmapID = tbMap.Beatmap!.OnlineID,
+                        Slot = tbMap.Slot,
+                    });
+                }
+            }
         }
 
         private void onScoreChanged(TeamColour team, int? oldScore, int? newScore)
@@ -860,7 +926,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
                         Anchor = Anchor.BottomCentre,
                         Origin = Anchor.BottomCentre,
-                        Margin = new MarginPadding { Bottom = 40 },
+                        Margin = new MarginPadding { Bottom = 10 },
                     });
 
                     CurrentMatch.Value!.PicksBans.Add(new BeatmapChoice
