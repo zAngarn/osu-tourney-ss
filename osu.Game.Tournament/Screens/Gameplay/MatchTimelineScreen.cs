@@ -16,6 +16,7 @@ using osu.Game.Overlays.Settings;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
+using osu.Game.Tournament.Screens.Gameplay.Components;
 using osuTK;
 
 namespace osu.Game.Tournament.Screens.MapPool
@@ -219,7 +220,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
                 },
-                //new MatchHeader(),
+                new ScoreOnlyMatchHeader(),
                 new FillFlowContainer
                 {
                     RelativeSizeAxes = Axes.X,
@@ -346,7 +347,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Deshacer último ganador",
+                            Text = "Undo last win",
                             Action = undoLastWinner
                         },
                         new ControlPanel.Spacer(),
