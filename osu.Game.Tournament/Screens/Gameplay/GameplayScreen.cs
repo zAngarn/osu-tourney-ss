@@ -157,7 +157,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 return;
 
             scheduledContract?.Cancel();
-            scoreDisplay.FadeOut(100);
+            //scoreDisplay.FadeOut(100);
             using (chat.BeginDelayedSequence(500))
                 chat.Expand();
         }
