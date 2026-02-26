@@ -9,6 +9,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
 using osu.Game.Graphics.UserInterface;
 using osu.Game.Overlays.Settings;
@@ -86,19 +87,131 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Loop = true,
                     RelativeSizeAxes = Axes.Both
                 },
+                new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.FromHex("#FF714D"),
+                    Width = 1 / 2f,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopRight
+                },
+                new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.FromHex("#4DDBFF"),
+                    Width = 1 / 2f,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopLeft
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 800 / 1920f,
+                    Height = 835 / 1080f,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopLeft,
+                    Margin = new MarginPadding { Left = 28, Top = 96 },
+                    Masking = true,
+                    CornerRadius = 28f,
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.FromHex("#262626"),
+                        },
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 750 / 1920f,
+                    Height = 835 / 1080f,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopRight,
+                    Margin = new MarginPadding { Right = 28, Top = 96 },
+                    Masking = true,
+                    CornerRadius = 28f,
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.FromHex("#262626"),
+                        },
+                    }
+                },
+                new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.FromHex("#262626"),
+                    Width = 400 / 1920f,
+                    Height = 810 / 1080f,
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
+                    Margin = new MarginPadding { Top = 192 },
+                },
+                new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.FromHex("#262626"),
+                    Width = 400 / 1920f,
+                    Height = 810 / 1080f,
+                    Anchor = Anchor.TopRight,
+                    Origin = Anchor.TopRight,
+                    Margin = new MarginPadding { Top = 192 },
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 839 / 1920f,
+                    Height = 245 / 1080f,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopRight,
+                    Margin = new MarginPadding { Right = 28, Top = 689 },
+                    Masking = true,
+                    CornerRadius = 65f,
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.FromHex("#FF714D"),
+                        },
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 839 / 1920f,
+                    Height = 245 / 1080f,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopLeft,
+                    Margin = new MarginPadding { Left = 28, Top = 689 },
+                    Masking = true,
+                    CornerRadius = 65f,
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.FromHex("#4DDBFF"),
+                        },
+                    }
+                },
                 redPlayer = new DrawableTeamCard(dummyMatch.Team1.Value!, Color4Extensions.FromHex("#FF714D"))
                 {
                     Anchor = Anchor.TopLeft,
                     Origin = Anchor.TopLeft,
                     Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
-                    Margin = new MarginPadding { Top = 100, Left = 20 }
+                    Margin = new MarginPadding { Top = 70, Left = 70 }
                 },
-                bluePlayer = new DrawableTeamCard(dummyMatch.Team2.Value!, Color4Extensions.FromHex("#4DDBFF"))
+                bluePlayer = new DrawableTeamCard(dummyMatch.Team2.Value!, Color4Extensions.FromHex("#4DDBFF"), 0, true)
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
                     Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
-                    Margin = new MarginPadding { Top = 100, Right = 220 }
+                    Margin = new MarginPadding { Top = 70, Right = 430 }
                 },
                 tiebreakerCardContainer = new Container
                 {
@@ -110,10 +223,11 @@ namespace osu.Game.Tournament.Screens.MapPool
                 new FillFlowContainer
                 {
                     RelativeSizeAxes = Axes.X,
-                    Y = 95,
-                    Width = 0.5f,
+                    Y = 140,
+                    Width = 0.49f,
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
+
                     Children = new Drawable[]
                     {
                         new Container
@@ -148,6 +262,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                         },
                     }
                 },
+
                 new ControlPanel
                 {
                     Children = new Drawable[]

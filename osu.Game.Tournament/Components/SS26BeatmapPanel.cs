@@ -29,6 +29,8 @@ namespace osu.Game.Tournament.Components
 
         private TournamentSpriteText winLabelText = null!;
 
+        private SS26SlotPill choiceTypeLabel = null!;
+
         public bool HasWinner { get; private set; } = false;
 
         private string slot;
@@ -70,6 +72,23 @@ namespace osu.Game.Tournament.Components
 
             Masking = true;
             CornerRadius = 25f;
+
+            string choiceType = string.Empty;
+            Colour4 choiceTypeTextColor = Colour4.FromHex("#262626");
+
+            if (Choice != null)
+            {
+                if (Choice.Type == ChoiceType.Ban)
+                {
+                    choiceType = "BAN";
+                    choiceTypeTextColor = Colour4.FromHex("#FF0000");
+                }
+                else
+                {
+                    choiceType = "PICK";
+                    choiceTypeTextColor = Colour4.FromHex("#89F336");
+                }
+            }
 
             AddRangeInternal(new Drawable[]
             {
@@ -192,6 +211,12 @@ namespace osu.Game.Tournament.Components
                         }
                     },
                 },
+                choiceTypeLabel = new SS26SlotPill(choiceType, choiceTypeTextColor, Colour4.FromHex("#262626"))
+                {
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                    Margin = new MarginPadding { Bottom = 15 },
+                },
                 winLabelContainer = new Container
                 {
                     RelativeSizeAxes = Axes.Both,
@@ -261,11 +286,13 @@ namespace osu.Game.Tournament.Components
             });
 
             winLabelContainer.Alpha = 0;
+            choiceTypeLabel.Alpha = 0;
 
             if (score == "0") scoreContainer.Alpha = 0;
 
             if (Choice != null)
             {
+                choiceTypeLabel.Alpha = 1;
                 winnerBindable.BindTo(Choice.Winner);
                 winnerBindable.BindValueChanged(winner => SetWinState(winner.NewValue), true);
             }

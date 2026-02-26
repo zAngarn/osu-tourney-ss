@@ -32,10 +32,34 @@ namespace osu.Game.Tournament.Components
         private readonly TournamentSpriteText avgRank;
         public readonly DrawableTeamFlag TeamFlag;
 
-        public DrawableTeamCard(TournamentTeam team, Colour4 color, int corte = 0)
+        public DrawableTeamCard(TournamentTeam team, Colour4 color, int corte = 0, bool flip = false)
         {
             Margin = new MarginPadding(10);
             this.team = team;
+
+            Anchor foregroundAnchor, hackAnchor, burbujaSeedAnchor, textAnchor, textItemAnchor;
+            MarginPadding burbujaSeedMargin, textMargin;
+
+            if (flip)
+            {
+                foregroundAnchor = Anchor.BottomLeft;
+                hackAnchor = Anchor.TopRight;
+                burbujaSeedAnchor = Anchor.TopLeft;
+                burbujaSeedMargin = new MarginPadding { Top = 20, Left = 10 };
+                textAnchor = Anchor.CentreRight;
+                textItemAnchor = Anchor.TopRight;
+                textMargin = new MarginPadding { Right = 20, Top = -20 };
+            }
+            else
+            {
+                foregroundAnchor = Anchor.BottomRight;
+                hackAnchor = Anchor.TopLeft;
+                burbujaSeedAnchor = Anchor.TopRight;
+                burbujaSeedMargin = new MarginPadding { Top = 20, Right = 10 };
+                textAnchor = Anchor.CentreLeft;
+                textItemAnchor = Anchor.TopLeft;
+                textMargin = new MarginPadding { Left = 20, Top = -20 };
+            }
 
             InternalChildren = new Drawable[]
             {
@@ -60,8 +84,8 @@ namespace osu.Game.Tournament.Components
                             Height = (475f - corte) / (505f - corte),
                             CornerRadius = 15f,
                             Masking = true,
-                            Origin = Anchor.BottomRight,
-                            Anchor = Anchor.BottomRight,
+                            Origin = foregroundAnchor,
+                            Anchor = foregroundAnchor,
                             Children = new Drawable[]
                             {
                                 new Box
@@ -78,8 +102,8 @@ namespace osu.Game.Tournament.Components
                             Width = 300f / 350f,
                             Height = (475f - corte) / (505f - corte),
                             CornerRadius = 15f,
-                            Origin = Anchor.BottomRight,
-                            Anchor = Anchor.BottomRight,
+                            Origin = foregroundAnchor,
+                            Anchor = foregroundAnchor,
                             Children = new Drawable[]
                             {
                                 new Box
@@ -88,16 +112,16 @@ namespace osu.Game.Tournament.Components
                                     Colour = color,
                                     Width = 90f / 300f,
                                     Height = 90f / (475f - corte),
-                                    Anchor = Anchor.TopLeft,
-                                    Origin = Anchor.TopLeft,
+                                    Anchor = hackAnchor,
+                                    Origin = hackAnchor,
                                 },
                                 new Container
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Width = 180f / 300f,
                                     Height = 180f / (475f - corte),
-                                    Anchor = Anchor.TopLeft,
-                                    Origin = Anchor.TopLeft,
+                                    Anchor = hackAnchor,
+                                    Origin = hackAnchor,
                                     Masking = true,
                                     CornerRadius = 90f,
                                     Children = new Drawable[]
@@ -116,11 +140,11 @@ namespace osu.Game.Tournament.Components
                                             RelativeSizeAxes = Axes.Both,
                                             Width = 55f / 180f,
                                             Height = 55f / 180f,
-                                            Anchor = Anchor.TopRight,
-                                            Origin = Anchor.TopRight,
+                                            Anchor = burbujaSeedAnchor,
+                                            Origin = burbujaSeedAnchor,
                                             Masking = true,
                                             CornerRadius = 27.5f,
-                                            Margin = new MarginPadding { Top = 20, Right = 10 },
+                                            Margin = burbujaSeedMargin,
                                             Children = new Drawable[]
                                             {
                                                 new Box
@@ -133,7 +157,7 @@ namespace osu.Game.Tournament.Components
                                                     Anchor = Anchor.Centre,
                                                     Origin = Anchor.Centre,
                                                     Colour = Colour4.FromHex("#262626"),
-                                                    Text = team.Seed.Value ?? "???",
+                                                    Text = $"#{team.Seed.Value}" ?? "???",
                                                     Shadow = false,
                                                     Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 24),
                                                     Margin = new MarginPadding { Bottom = 6 },
@@ -146,25 +170,40 @@ namespace osu.Game.Tournament.Components
                                 {
                                     Direction = FillDirection.Vertical,
                                     Spacing = new Vector2(0, 5),
-                                    Anchor = Anchor.CentreLeft,
-                                    Origin = Anchor.CentreLeft,
-                                    RelativeSizeAxes = Axes.Both,
-                                    Margin = new MarginPadding { Left = 20, Top = 360 },
+                                    Anchor = textAnchor,
+                                    Origin = textAnchor,
+                                    RelativeSizeAxes = Axes.X,
+                                    AutoSizeAxes = Axes.Y,
+                                    Margin = textMargin,
                                     Children = new Drawable[]
                                     {
-                                        teamName = new TournamentSpriteText
+                                        new Container
                                         {
-                                            Colour = color,
-                                            Shadow = false,
-                                            Text = team.FullName.Value ?? "???",
-                                            Font = OsuFont.BalooDa.With(weight: FontWeight.Black, size: 32),
+                                            RelativeSizeAxes = Axes.X,
+                                            AutoSizeAxes = Axes.Y,
+                                            Child = teamName = new TournamentSpriteText
+                                            {
+                                                Anchor = textItemAnchor,
+                                                Origin = textItemAnchor,
+                                                Colour = color,
+                                                Shadow = false,
+                                                Text = team.FullName.Value ?? "???",
+                                                Font = OsuFont.BalooDa.With(weight: FontWeight.Black, size: 32),
+                                            }
                                         },
-                                        avgRank = new TournamentSpriteText
+                                        new Container
                                         {
-                                            Colour = Colour4.White,
-                                            Shadow = false,
-                                            Text = "#" + team.AverageRank.ToString(CultureInfo.InvariantCulture),
-                                            Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 40),
+                                            RelativeSizeAxes = Axes.X,
+                                            AutoSizeAxes = Axes.Y,
+                                            Child = avgRank = new TournamentSpriteText
+                                            {
+                                                Anchor = textItemAnchor,
+                                                Origin = textItemAnchor,
+                                                Colour = Colour4.White,
+                                                Shadow = false,
+                                                Text = "#" + team.AverageRank.ToString(CultureInfo.InvariantCulture),
+                                                Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 40),
+                                            }
                                         }
                                     }
                                 }
