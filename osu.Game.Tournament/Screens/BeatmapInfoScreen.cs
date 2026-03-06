@@ -24,7 +24,7 @@ namespace osu.Game.Tournament.Screens
             AddInternal(SongBar = new SS26Songbar
             {
                 Y = -128,
-                X = -393,
+                X = -394,
                 Anchor = Anchor.BottomRight,
                 Origin = Anchor.BottomRight,
                 Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,

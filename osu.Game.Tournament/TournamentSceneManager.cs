@@ -211,16 +211,17 @@ namespace osu.Game.Tournament
             }
 
             screens.ChangeChildDepth(currentScreen, depth--);
-            screens.ChangeChildDepth(transitionScreen, float.MinValue);
+            currentScreen.Show();
+            //screens.ChangeChildDepth(transitionScreen, float.MinValue);
 
-            transitionScreen.Show();
-            transitionScreen.TransitionVideo.Reset();
+            // transitionScreen.Show();
+            //transitionScreen.TransitionVideo.Reset();
 
-            Scheduler.AddDelayed(() =>
+            /*Scheduler.AddDelayed(() =>
             {
                 currentScreen.Show();
                 transitionScreen?.Hide();
-            }, 500);
+            }, 500);*/
 
             switch (currentScreen)
             {

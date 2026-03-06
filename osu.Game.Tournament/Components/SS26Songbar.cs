@@ -30,9 +30,14 @@ namespace osu.Game.Tournament.Components
         [Resolved]
         private BeatmapDifficultyCache difficultyCache { get; set; } = null!;
 
+        private IBeatmapInfo? lastCalculatedBeatmap;
+        private List<Mod>? lastCalculatedMods;
+
         private CancellationTokenSource? starDifficultyCancellationSource;
 
         //private TournamentSpriteText starRating = null!;
+
+        private SS26SongbarBeatmapPanel panel = null!;
 
         private IBeatmapInfo? beatmap;
 
@@ -45,7 +50,7 @@ namespace osu.Game.Tournament.Components
                     return;
 
                 beatmap = value;
-                refreshContent();
+                Scheduler.AddOnce(refreshContent);
             }
         }
 
@@ -57,21 +62,18 @@ namespace osu.Game.Tournament.Components
             set
             {
                 slot = value;
-                refreshContent();
+                Scheduler.AddOnce(refreshContent);
             }
         }
 
         private LegacyMods mods;
-
-        private bool peru;
 
         public LegacyMods Mods
         {
             set
             {
                 mods = value;
-                peru = true;
-                refreshContent();
+                Scheduler.AddOnce(refreshContent);
             }
         }
 
@@ -197,7 +199,7 @@ namespace osu.Game.Tournament.Components
                                     Origin = Anchor.TopLeft
                                 },
                             }
-                        }
+                        },
                     }
                 }
             };
@@ -226,12 +228,10 @@ namespace osu.Game.Tournament.Components
             };
 
             mods = convertSlotToMods(slot);
+
             var rulesetInstance = ruleset.Value.CreateInstance();
             var convertedMods = rulesetInstance.ConvertFromLegacyMods(mods).ToList();
             var adjustedDifficulty = rulesetInstance.GetAdjustedDisplayDifficulty(beatmap, convertedMods);
-            if (peru) computeStarRating(rulesetInstance.RulesetInfo, convertedMods);
-
-            peru = false;
 
             double rate = ModUtils.CalculateRateWithMods(convertedMods);
             double bpm = FormatUtils.RoundBPM(beatmap.BPM, rate);
@@ -245,155 +245,49 @@ namespace osu.Game.Tournament.Components
                 beatmap = localInfo;
             }
 
-            container.Children = new Drawable[]
+            computeStarRating(rulesetInstance.RulesetInfo, convertedMods);
+
+            if (container.Children[^1] is SS26SongbarBeatmapPanel)
             {
-                new Box
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = Colour4.FromHex("#FF714D"),
-                    Width = 1 / 2f,
-                    Anchor = Anchor.TopCentre,
-                    Origin = Anchor.TopRight
-                },
-                new Box
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = Colour4.FromHex("#4DDBFF"),
-                    Width = 1 / 2f,
-                    Anchor = Anchor.TopCentre,
-                    Origin = Anchor.TopLeft
-                },
-                new Container
-                {
-                    Height = 280,
-                    Width = 1922,
-                    Masking = true,
-                    CornerRadius = 90,
-                    Anchor = Anchor.BottomCentre,
-                    Origin = Anchor.TopCentre,
-                    Margin = new MarginPadding { Top = -140 },
-                    Children = new Drawable[]
-                    {
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = Colour4.FromHex("#282828"),
-                            Width = 1 / 2f,
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopRight
-                        },
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = Colour4.FromHex("#282828"),
-                            Width = 1 / 2f,
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopLeft
-                        },
-                    }
-                },
-                new Container
-                {
-                    Height = 420,
-                    Width = 1802,
-                    Masking = true,
-                    CornerRadius = 90,
-                    Anchor = Anchor.TopCentre,
-                    Origin = Anchor.TopCentre,
-                    Margin = new MarginPadding { Top = -210 },
-                    Children = new Drawable[]
-                    {
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = Colour4.FromHex("#282828"),
-                            Width = 1 / 2f,
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopRight
-                        },
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = Colour4.FromHex("#282828"),
-                            Width = 1 / 2f,
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopLeft
-                        },
-                    }
-                },
-                new Container
-                {
-                    Height = 140,
-                    Width = 722,
-                    Masking = true,
-                    CornerRadius = 90,
-                    Anchor = Anchor.TopCentre,
-                    Origin = Anchor.TopCentre,
-                    Margin = new MarginPadding { Top = -70 },
-                    Children = new Drawable[]
-                    {
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = Colour4.FromHex("#FF714D"),
-                            Width = 1 / 2f,
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopRight
-                        },
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = Colour4.FromHex("#4DDBFF"),
-                            Width = 1 / 2f,
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.TopLeft
-                        },
-                    }
-                },
-                new SS26SongbarBeatmapPanel(apibeatmap, slot, adjustedDifficulty, bpm, length.ToFormattedDuration().ToString(), starDifficultyBindable)
-                {
-                    Anchor = Anchor.BottomCentre,
-                    Origin = Anchor.Centre,
-                    Margin = new MarginPadding { Bottom = 140 },
-                },
-            };
+                container.Children[^1].RemoveAndDisposeImmediately();
+            }
+
+            container.Add(new SS26SongbarBeatmapPanel(apibeatmap, slot, adjustedDifficulty, bpm, length.ToFormattedDuration().ToString(), starDifficultyBindable)
+            {
+                Anchor = Anchor.BottomCentre,
+                Origin = Anchor.Centre,
+                Margin = new MarginPadding { Bottom = 140 },
+            });
         }
 
         private void computeStarRating(IRulesetInfo ruleset, List<Mod> mods)
         {
+            if (beatmap == null)
+                return;
+
+            if (lastCalculatedBeatmap == beatmap && lastCalculatedMods != null && mods.SequenceEqual(lastCalculatedMods))
+                return;
+
             starDifficultyCancellationSource?.Cancel();
             starDifficultyCancellationSource = new CancellationTokenSource();
 
-            if (beatmap == null)
-                return;
+            lastCalculatedBeatmap = beatmap;
+            lastCalculatedMods = mods.ToList();
 
             starDifficultyBindable = difficultyCache.GetBindableDifficultyArtesanal(beatmap, ruleset, mods, starDifficultyCancellationSource.Token);
         }
 
         private LegacyMods convertSlotToMods(string slot)
         {
-            LegacyMods slotToMods = LegacyMods.None;
-
-            if (slot[..2] == "NM")
+            LegacyMods slotToMods = slot[..2] switch
             {
-                slotToMods = LegacyMods.None;
-            }
-            else if (slot[..2] == "HD")
-            {
-                slotToMods = LegacyMods.Hidden;
-            }
-            else if (slot[..2] == "HR")
-            {
-                slotToMods = LegacyMods.HardRock;
-            }
-            else if (slot[..2] == "DT")
-            {
-                slotToMods = LegacyMods.DoubleTime;
-            }
-            else if (slot[..2] == "TB")
-            {
-                slotToMods = LegacyMods.None;
-            }
+                "NM" => LegacyMods.None,
+                "HD" => LegacyMods.Hidden,
+                "HR" => LegacyMods.HardRock,
+                "DT" => LegacyMods.DoubleTime,
+                "TB" => LegacyMods.None,
+                _ => LegacyMods.None
+            };
 
             return slotToMods;
         }

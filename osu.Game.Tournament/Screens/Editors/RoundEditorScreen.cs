@@ -235,6 +235,7 @@ namespace osu.Game.Tournament.Screens.Editors
                     private void load()
                     {
                         beatmapId.Value = Model.ID;
+
                         beatmapId.BindValueChanged(id =>
                         {
                             Model.ID = id.NewValue ?? 0;
@@ -281,7 +282,7 @@ namespace osu.Game.Tournament.Screens.Editors
 
                         if (Model.Beatmap != null)
                         {
-                            drawableContainer.Child = new SS26BeatmapPanel(Model.Beatmap, Model.Slot)
+                            drawableContainer.Child = new TournamentBeatmapPanel(Model.Beatmap, Model.Slot)
                             {
                                 Anchor = Anchor.CentreLeft,
                                 Origin = Anchor.CentreLeft,

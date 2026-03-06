@@ -123,7 +123,7 @@ namespace osu.Game.Screens.Play.HUD
                     RelativeSizeAxes = Axes.X,
                     Width = 16 / 1920f,
                     Colour = Colour4.FromHex("#FF714D"),
-                    Margin = new MarginPadding { Top = 3 },
+                    Margin = new MarginPadding { Top = 4 },
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre
                 },
@@ -133,7 +133,7 @@ namespace osu.Game.Screens.Play.HUD
                     RelativeSizeAxes = Axes.X,
                     Width = 16 / 1920f,
                     Colour = Colour4.FromHex("#4DDBFF"),
-                    Margin = new MarginPadding { Top = 3 },
+                    Margin = new MarginPadding { Top = 4 },
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre
                 },
@@ -184,7 +184,7 @@ namespace osu.Game.Screens.Play.HUD
                     Anchor = Anchor.TopCentre,
                     Margin = new MarginPadding
                     {
-                        Top = 0,
+                        Top = -2,
                         Horizontal = 8
                     },
                     Alpha = 0
@@ -344,8 +344,8 @@ namespace osu.Game.Screens.Play.HUD
         protected override void UpdateAfterChildren()
         {
             base.UpdateAfterChildren();
-            Score1Text.X = -160;
-            Score2Text.X = 160;
+            Score1Text.X = -140;
+            Score2Text.X = 140;
             Score1Text.Y = -8;
             Score2Text.Y = -8;
 
