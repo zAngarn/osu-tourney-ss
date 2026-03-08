@@ -46,7 +46,7 @@ namespace osu.Game.Tournament.Components
             get => beatmap;
             set
             {
-                if (beatmap == value || beatmap?.MD5Hash == null)
+                if (beatmap == value)
                     return;
 
                 beatmap = value;
@@ -78,6 +78,7 @@ namespace osu.Game.Tournament.Components
         }
 
         private Container container = null!;
+        private Container panelContainer = null!;
 
         private IBindable<StarDifficulty> starDifficultyBindable = null!;
 
@@ -200,6 +201,10 @@ namespace osu.Game.Tournament.Components
                                 },
                             }
                         },
+                        panelContainer = new Container
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                        }
                     }
                 }
             };
@@ -242,22 +247,17 @@ namespace osu.Game.Tournament.Components
             if (beatmap.Metadata.Title != "no beatmap selected")
             {
                 var localInfo = beatmapManager.QueryOnlineBeatmapId(beatmap.OnlineID);
-                beatmap = localInfo;
+                if (localInfo != null) beatmap = localInfo;
             }
 
             computeStarRating(rulesetInstance.RulesetInfo, convertedMods);
 
-            if (container.Children[^1] is SS26SongbarBeatmapPanel)
-            {
-                container.Children[^1].RemoveAndDisposeImmediately();
-            }
-
-            container.Add(new SS26SongbarBeatmapPanel(apibeatmap, slot, adjustedDifficulty, bpm, length.ToFormattedDuration().ToString(), starDifficultyBindable)
+            panelContainer.Child = new SS26SongbarBeatmapPanel(apibeatmap, slot, adjustedDifficulty, bpm, length.ToFormattedDuration().ToString(), starDifficultyBindable)
             {
                 Anchor = Anchor.BottomCentre,
                 Origin = Anchor.Centre,
                 Margin = new MarginPadding { Bottom = 140 },
-            });
+            };
         }
 
         private void computeStarRating(IRulesetInfo ruleset, List<Mod> mods)
