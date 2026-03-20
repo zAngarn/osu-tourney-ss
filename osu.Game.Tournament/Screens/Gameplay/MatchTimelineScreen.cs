@@ -10,6 +10,7 @@ using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Threading;
 using osu.Game.Graphics;
 using osu.Game.Graphics.UserInterface;
 using osu.Game.Overlays.Settings;
@@ -38,6 +39,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
         private DrawableTeamCard redPlayer = null!;
         private DrawableTeamCard bluePlayer = null!;
+        private ScheduledDelegate? scheduledScreenChange;
 
         private string mapSlot = null!;
 
@@ -59,6 +61,9 @@ namespace osu.Game.Tournament.Screens.MapPool
 
         private SettingsCheckbox firstBanCheck = null!;
         private SettingsCheckbox firstPickCheck = null!;
+
+        [Resolved]
+        private TournamentSceneManager? sceneManager { get; set; }
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
@@ -551,6 +556,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             if (found)
             {
                 addMap(currentPick, ChoiceType.Pick, map);
+                scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(MatchTimelineScreen)); }, 4000);
             }
         }
 
