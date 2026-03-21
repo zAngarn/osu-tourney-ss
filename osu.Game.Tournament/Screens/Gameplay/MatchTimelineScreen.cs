@@ -17,6 +17,7 @@ using osu.Game.Overlays.Settings;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
+using osu.Game.Tournament.Screens.Gameplay;
 using osu.Game.Tournament.Screens.Gameplay.Components;
 using osuTK;
 
@@ -556,7 +557,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             if (found)
             {
                 addMap(currentPick, ChoiceType.Pick, map);
-                scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(MatchTimelineScreen)); }, 4000);
+                scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(GameplayScreen)); }, 4000);
             }
         }
 
