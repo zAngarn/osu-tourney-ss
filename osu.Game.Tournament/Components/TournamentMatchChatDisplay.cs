@@ -12,6 +12,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
+using osu.Game.Graphics;
 using osu.Game.Graphics.Containers;
 using osu.Game.Graphics.Sprites;
 using osu.Game.Online.API;
@@ -52,7 +53,7 @@ namespace osu.Game.Tournament.Components
         {
             RelativeSizeAxes = Axes.X;
             Height = 300;
-            Width = 1.38f;
+            Width = 0.27f;
             Anchor = Anchor.BottomLeft;
             Origin = Anchor.BottomLeft;
         }
@@ -198,6 +199,7 @@ namespace osu.Game.Tournament.Components
                     textFlow.AddText(message, t =>
                     {
                         t.Colour = Color4.White;
+                        t.Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 12);
                         t.UseFullGlyphHeight = true;
                     });
 
@@ -255,12 +257,14 @@ namespace osu.Game.Tournament.Components
                                         AutoSizeAxes = Axes.Y,
                                         Direction = FillDirection.Horizontal,
                                         Padding = new MarginPadding { Left = avatar_size + content_spacing },
+                                        Margin = new MarginPadding { Top = 3 },
                                         Spacing = new Vector2(5, 0),
                                         Children = new Drawable[]
                                         {
                                             new OsuSpriteText
                                             {
                                                 Text = user.Username,
+                                                Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 12),
                                                 Colour = teamColour ?? Colour4.Gray,
                                                 UseFullGlyphHeight = true,
                                             },
