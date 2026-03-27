@@ -134,7 +134,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 Anchor = Anchor.BottomLeft,
                 Origin = Anchor.BottomLeft,
                 AutoSizeAxes = Axes.Both,
-                Margin = new MarginPadding { Left = 40, Bottom = 25 },
+                Margin = new MarginPadding { Left = 40, Bottom = 15 },
                 Children = new Drawable[]
                 {
                     new FillFlowContainer
@@ -200,7 +200,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 Anchor = Anchor.BottomRight,
                 Origin = Anchor.BottomRight,
                 AutoSizeAxes = Axes.Both,
-                Margin = new MarginPadding { Right = 40, Bottom = 25 },
+                Margin = new MarginPadding { Right = 40, Bottom = 15 },
                 Children = new Drawable[]
                 {
                     new FillFlowContainer
@@ -301,7 +301,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
             rebuildChoices();
         }
 
-        private void rebuildChoices() // Mejor llamarlo así ahora
+        private void rebuildChoices()
         {
             redBansFlow.Clear();
             redPicksFlow.Clear();
@@ -326,6 +326,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                             break;
 
                         case TeamColour.Blue:
+                            choiceItem.Depth = -blueBansFlow.Count;
                             blueBansFlow.Add(choiceItem);
                             break;
                     }
@@ -339,12 +340,15 @@ namespace osu.Game.Tournament.Screens.Gameplay
                             break;
 
                         case TeamColour.Blue:
+                            choiceItem.Depth = -blueBansFlow.Count;
                             bluePicksFlow.Add(choiceItem);
                             break;
 
                         default:
                             redPicksFlow.Add(new GameplayPickItem(choice));
-                            bluePicksFlow.Add(new GameplayPickItem(choice));
+                            var blueTbItem = new GameplayPickItem(choice);
+                            blueTbItem.Depth = -bluePicksFlow.Count;
+                            bluePicksFlow.Add(blueTbItem);
                             break;
                     }
                 }

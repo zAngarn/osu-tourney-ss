@@ -94,7 +94,7 @@ namespace osu.Game.Tournament.Screens.TeamWin
                     Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
-                    Margin = new MarginPadding { Left = -800, Top = 300 },
+                    Margin = new MarginPadding { Left = -900, Top = 300 },
                 },
                 new RoundDisplay(match)
                 {
@@ -108,7 +108,7 @@ namespace osu.Game.Tournament.Screens.TeamWin
                     Direction = FillDirection.Vertical,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    X = 150,
+                    X = 250,
                     Children = new Drawable[]
                     {
                         new TournamentSpriteText

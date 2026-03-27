@@ -48,6 +48,7 @@ namespace osu.Game.Tournament.Components
             "El equipo",
             "Activando",
             "first",
+            "Parando",
         ];
 
         public TournamentMatchChatDisplay()

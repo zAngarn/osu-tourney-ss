@@ -939,6 +939,7 @@ namespace osu.Game.Tournament.Screens.MapPool
         private void resetMatch()
         {
             LadderInfo.CurrentMatch.Value?.PicksBans.Clear();
+            tiebreakerCardContainer.Clear();
             updateDisplay();
         }
 
