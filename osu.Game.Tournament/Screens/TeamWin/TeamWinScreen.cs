@@ -8,6 +8,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
+using osu.Game.Graphics.Backgrounds;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
 using osuTK;
@@ -31,6 +32,13 @@ namespace osu.Game.Tournament.Screens.TeamWin
                 {
                     RelativeSizeAxes = Axes.Both,
                     Colour = Colour4.FromHex("#262626"),
+                },
+                new Triangles
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Alpha = 0.5f,
+                    TriangleScale = 2,
+                    Colour = Colour4.FromHex("#282828")
                 },
                 new Box
                 {
@@ -105,7 +113,7 @@ namespace osu.Game.Tournament.Screens.TeamWin
                     {
                         new TournamentSpriteText
                         {
-                            Text = "Ganador",
+                            Text = $"¡Ganador! ({match.Team1Score.Value} - {match.Team2Score.Value})",
                             Font = OsuFont.BalooDa.With(size: 80, weight: FontWeight.Black),
                             Margin = new MarginPadding { Bottom = 40 },
                         },
