@@ -3,8 +3,10 @@
 
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
@@ -18,9 +20,6 @@ namespace osu.Game.Tournament.Screens.TeamWin
 
         private readonly Bindable<bool> currentCompleted = new Bindable<bool>();
 
-        private TourneyVideo blueWinVideo = null!;
-        private TourneyVideo redWinVideo = null!;
-
         [BackgroundDependencyLoader]
         private void load()
         {
@@ -28,22 +27,23 @@ namespace osu.Game.Tournament.Screens.TeamWin
 
             InternalChildren = new Drawable[]
             {
-                blueWinVideo = new TourneyVideo("teamwin-blue")
+                new Box
                 {
-                    Alpha = 1,
                     RelativeSizeAxes = Axes.Both,
-                    Loop = true,
+                    Colour = Colour4.FromHex("#262626"),
                 },
-                redWinVideo = new TourneyVideo("teamwin-red")
+                new Box
                 {
-                    Alpha = 0,
                     RelativeSizeAxes = Axes.Both,
-                    Loop = true,
+                    Height = 0.2f,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Colour = Colour4.FromHex("#303030"),
                 },
                 mainContainer = new Container
                 {
                     RelativeSizeAxes = Axes.Both,
-                }
+                },
             };
 
             currentCompleted.BindValueChanged(_ => update());
@@ -62,8 +62,6 @@ namespace osu.Game.Tournament.Screens.TeamWin
             update();
         }
 
-        private bool firstDisplay = true;
-
         private void update() => Scheduler.AddOnce(() =>
         {
             var match = CurrentMatch.Value;
@@ -74,26 +72,27 @@ namespace osu.Game.Tournament.Screens.TeamWin
                 return;
             }
 
-            redWinVideo.Alpha = match.WinnerColour == TeamColour.Red ? 1 : 0;
-            blueWinVideo.Alpha = match.WinnerColour == TeamColour.Blue ? 1 : 0;
+            Colour4 winnerColour = Color4Extensions.FromHex("#4DDBFF");
 
-            if (firstDisplay)
+            if (match.WinnerColour == TeamColour.Red)
             {
-                if (match.WinnerColour == TeamColour.Red)
-                    redWinVideo.Reset();
-                else
-                    blueWinVideo.Reset();
-                firstDisplay = false;
+                winnerColour = Color4Extensions.FromHex("#FF714D");
             }
 
             mainContainer.Children = new Drawable[]
             {
-                new DrawableTeamFlag(match.Winner)
+                new DrawableTeamCard(match.Winner, winnerColour)
                 {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Position = new Vector2(-300, 10),
-                    Scale = new Vector2(2f)
+                    Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Margin = new MarginPadding { Left = -800, Top = 300 },
+                },
+                new RoundDisplay(match)
+                {
+                    Margin = new MarginPadding { Left = 80, Top = 50 },
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
                 },
                 new FillFlowContainer
                 {
@@ -101,25 +100,21 @@ namespace osu.Game.Tournament.Screens.TeamWin
                     Direction = FillDirection.Vertical,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    X = 260,
+                    X = 150,
                     Children = new Drawable[]
                     {
-                        new RoundDisplay(match)
-                        {
-                            Margin = new MarginPadding { Bottom = 30 },
-                        },
                         new TournamentSpriteText
                         {
-                            Text = "WINNER",
-                            Font = OsuFont.Torus.With(size: 100, weight: FontWeight.Bold),
-                            Margin = new MarginPadding { Bottom = 50 },
+                            Text = "Ganador",
+                            Font = OsuFont.BalooDa.With(size: 80, weight: FontWeight.Black),
+                            Margin = new MarginPadding { Bottom = 40 },
                         },
-                        new DrawableTeamWithPlayers(match.Winner, match.WinnerColour)
                     }
                 },
             };
+
             mainContainer.FadeOut();
-            mainContainer.Delay(2000).FadeIn(1600, Easing.OutQuint);
+            mainContainer.Delay(1000).FadeIn(1600, Easing.OutQuint);
         });
     }
 }

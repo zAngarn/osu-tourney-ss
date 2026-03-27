@@ -103,7 +103,7 @@ namespace osu.Game.Tournament
                                 // DrawingsScreen(),
                                 new MatchTimelineScreen(),
                                 new GameplayScreen(),
-                                //new TeamWinScreen(),
+                                new TeamWinScreen(),
                                 transitionScreen = new TransitionScreen()
                             }
                         },

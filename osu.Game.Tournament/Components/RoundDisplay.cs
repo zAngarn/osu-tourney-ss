@@ -33,8 +33,8 @@ namespace osu.Game.Tournament.Components
                         {
                             Anchor = Anchor.TopLeft,
                             Origin = Anchor.TopLeft,
-                            Text = match.Round.Value?.Name.Value ?? "Unknown Round",
-                            Font = OsuFont.Torus.With(size: 26, weight: FontWeight.SemiBold)
+                            Text = match.Round.Value?.Description.Value ?? "Ronda desconocida",
+                            Font = OsuFont.BalooDa.With(size: 32, weight: FontWeight.Bold)
                         },
                     }
                 }
