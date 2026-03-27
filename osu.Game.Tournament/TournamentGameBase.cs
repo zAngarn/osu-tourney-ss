@@ -396,7 +396,7 @@ namespace osu.Game.Tournament
                     break;
 
                 default:
-                    color = Colour4.FromHex("659EEB"); // Mismo que NM. ¿Por qué? Porque me sale del nabo
+                    color = Colour4.FromHex("1e1e1e");
                     break;
             }
 

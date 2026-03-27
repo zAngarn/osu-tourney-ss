@@ -214,7 +214,7 @@ namespace osu.Game.Tournament.Components
                             new Box
                             {
                                 RelativeSizeAxes = Axes.Both,
-                                Colour = Colour4.FromHex("222228"),
+                                Colour = Colour4.FromHex("303030"),
                             },
                             new Box
                             {

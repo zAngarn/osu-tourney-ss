@@ -3,10 +3,12 @@
 
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Threading;
+using osu.Game.Graphics;
 using osu.Game.Graphics.UserInterfaceV2;
 using osu.Game.Overlays.Settings;
 using osu.Game.Tournament.Components;
@@ -15,6 +17,7 @@ using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Gameplay.Components;
 using osu.Game.Tournament.Screens.MapPool;
 using osu.Game.Tournament.Screens.TeamWin;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Gameplay
@@ -33,6 +36,12 @@ namespace osu.Game.Tournament.Screens.Gameplay
         private TournamentMatchChatDisplay chat { get; set; } = null!;
 
         private Drawable chroma = null!;
+
+        private FillFlowContainer redBansFlow = null!;
+        private FillFlowContainer redPicksFlow = null!;
+
+        private FillFlowContainer blueBansFlow = null!;
+        private FillFlowContainer bluePicksFlow = null!;
 
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
@@ -118,6 +127,140 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 }
             });
 
+            AddInternal(new FillFlowContainer
+            {
+                Direction = FillDirection.Vertical,
+                Spacing = new Vector2(0, -10),
+                Anchor = Anchor.BottomLeft,
+                Origin = Anchor.BottomLeft,
+                AutoSizeAxes = Axes.Both,
+                Margin = new MarginPadding { Left = 40, Bottom = 25 },
+                Children = new Drawable[]
+                {
+                    new FillFlowContainer
+                    {
+                        Direction = FillDirection.Horizontal,
+                        Spacing = new Vector2(20, 0),
+                        AutoSizeAxes = Axes.Both,
+                        Children = new Drawable[]
+                        {
+                            new TournamentSpriteText
+                            {
+                                Text = "BANS",
+                                Colour = Color4Extensions.FromHex("#FF714D"),
+                                Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 20),
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft
+                            },
+                            redBansFlow = new FillFlowContainer
+                            {
+                                Direction = FillDirection.Horizontal,
+                                Spacing = new Vector2(1, 0),
+                                AutoSizeAxes = Axes.Both,
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                Margin = new MarginPadding { Top = 10 },
+                            }
+                        }
+                    },
+                    new FillFlowContainer
+                    {
+                        Direction = FillDirection.Horizontal,
+                        Spacing = new Vector2(20, 0),
+                        AutoSizeAxes = Axes.Both,
+                        Children = new Drawable[]
+                        {
+                            new TournamentSpriteText
+                            {
+                                Text = "PICKS",
+                                Colour = Color4Extensions.FromHex("#FF714D"),
+                                Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 20),
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft
+                            },
+                            redPicksFlow = new FillFlowContainer
+                            {
+                                Direction = FillDirection.Horizontal,
+                                Spacing = new Vector2(1, 0),
+                                AutoSizeAxes = Axes.Both,
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                Margin = new MarginPadding { Top = 10 },
+                            }
+                        }
+                    }
+                }
+            });
+
+            AddInternal(new FillFlowContainer
+            {
+                Direction = FillDirection.Vertical,
+                Spacing = new Vector2(0, -10),
+                Anchor = Anchor.BottomRight,
+                Origin = Anchor.BottomRight,
+                AutoSizeAxes = Axes.Both,
+                Margin = new MarginPadding { Right = 40, Bottom = 25 },
+                Children = new Drawable[]
+                {
+                    new FillFlowContainer
+                    {
+                        Direction = FillDirection.Horizontal,
+                        Spacing = new Vector2(20, 0),
+                        AutoSizeAxes = Axes.Both,
+                        Anchor = Anchor.TopRight,
+                        Origin = Anchor.TopRight,
+                        Children = new Drawable[]
+                        {
+                            blueBansFlow = new FillFlowContainer
+                            {
+                                Direction = FillDirection.Horizontal,
+                                Spacing = new Vector2(1, 0),
+                                AutoSizeAxes = Axes.Both,
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                Margin = new MarginPadding { Top = 10 },
+                            },
+                            new TournamentSpriteText
+                            {
+                                Text = "BANS",
+                                Colour = Color4Extensions.FromHex("#4DDBFF"),
+                                Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 20),
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft
+                            },
+                        }
+                    },
+                    new FillFlowContainer
+                    {
+                        Direction = FillDirection.Horizontal,
+                        Spacing = new Vector2(20, 0),
+                        AutoSizeAxes = Axes.Both,
+                        Anchor = Anchor.TopRight,
+                        Origin = Anchor.TopRight,
+                        Children = new Drawable[]
+                        {
+                            bluePicksFlow = new FillFlowContainer
+                            {
+                                Direction = FillDirection.Horizontal,
+                                Spacing = new Vector2(1, 0),
+                                AutoSizeAxes = Axes.Both,
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                Margin = new MarginPadding { Top = 10 },
+                            },
+                            new TournamentSpriteText
+                            {
+                                Text = "PICKS",
+                                Colour = Color4Extensions.FromHex("#4DDBFF"),
+                                Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 20),
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft
+                            },
+                        }
+                    }
+                }
+            });
+
             State.BindValueChanged(state => chatToggle.Current.Value = State.Value == TourneyState.Idle, true);
             chatToggle.Current.BindValueChanged(v => State.Value = v.NewValue ? TourneyState.Idle : TourneyState.Playing);
 
@@ -138,11 +281,72 @@ namespace osu.Game.Tournament.Screens.Gameplay
         {
             base.CurrentMatchChanged(match);
 
-            if (match.NewValue == null)
-                return;
+            if (match.OldValue != null)
+            {
+                match.OldValue.PicksBans.CollectionChanged -= onPicksBansChanged;
+            }
 
-            warmup.Value = match.NewValue.Team1Score.Value + match.NewValue.Team2Score.Value == 0;
-            scheduledScreenChange?.Cancel();
+            if (match.NewValue != null)
+            {
+                match.NewValue.PicksBans.CollectionChanged += onPicksBansChanged;
+            }
+
+            rebuildChoices();
+        }
+
+        private void onPicksBansChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            rebuildChoices();
+        }
+
+        private void rebuildChoices() // Mejor llamarlo así ahora
+        {
+            redBansFlow.Clear();
+            redPicksFlow.Clear();
+            blueBansFlow.Clear();
+            bluePicksFlow.Clear();
+
+            if (CurrentMatch.Value == null) return;
+
+            foreach (var choice in CurrentMatch.Value.PicksBans)
+            {
+                var choiceItem = new GameplayPickItem(choice);
+
+                choiceItem.FadeInFromZero(400, Easing.OutQuint);
+                choiceItem.MoveToY(10).Then().MoveToY(0, 400, Easing.OutQuint);
+
+                if (choice.Type == ChoiceType.Ban)
+                {
+                    switch (choice.Team)
+                    {
+                        case TeamColour.Red:
+                            redBansFlow.Add(choiceItem);
+                            break;
+
+                        case TeamColour.Blue:
+                            blueBansFlow.Add(choiceItem);
+                            break;
+                    }
+                }
+                else if (choice.Type == ChoiceType.Pick)
+                {
+                    switch (choice.Team)
+                    {
+                        case TeamColour.Red:
+                            redPicksFlow.Add(choiceItem);
+                            break;
+
+                        case TeamColour.Blue:
+                            bluePicksFlow.Add(choiceItem);
+                            break;
+
+                        default:
+                            redPicksFlow.Add(new GameplayPickItem(choice));
+                            bluePicksFlow.Add(new GameplayPickItem(choice));
+                            break;
+                    }
+                }
+            }
         }
 
         private ScheduledDelegate? scheduledScreenChange;
@@ -290,6 +494,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                                 Height = 0.5f,
                             },
                         };
+
                         break;
 
                     default:
@@ -297,7 +502,105 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         {
                             RelativeSizeAxes = Axes.Both,
                         };
+
                         break;
+                }
+            }
+        }
+
+        public partial class GameplayPickItem : CompositeDrawable
+        {
+            public readonly BeatmapChoice Choice;
+
+            private Box winnerBackground;
+            private Container pulseContainer;
+
+            public GameplayPickItem(BeatmapChoice choice)
+            {
+                Choice = choice;
+                Size = new Vector2(51, 32);
+
+                InternalChild = pulseContainer = new Container
+                {
+                    AutoSizeAxes = Axes.Both,
+                    Origin = Anchor.Centre,
+                    Anchor = Anchor.Centre,
+                    Children = new Drawable[]
+                    {
+                        new Container
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            CornerRadius = 16,
+                            Masking = true,
+                            BorderThickness = 3,
+                            BorderColour = Colour4.Transparent,
+                            Children = new Drawable[]
+                            {
+                                winnerBackground = new Box
+                                {
+                                    RelativeSizeAxes = Axes.Both,
+                                    Alpha = 0f
+                                }
+                            }
+                        },
+                        new SS26SlotPill(choice.Slot)
+                        {
+                            Margin = new MarginPadding(4),
+                            Size = new Vector2(43, 24),
+                        }
+                    }
+                };
+            }
+
+            [BackgroundDependencyLoader]
+            private void load()
+            {
+                Choice.Winner.BindValueChanged(onWinnerChanged, true);
+            }
+
+            private void onWinnerChanged(ValueChangedEvent<TeamColour?> winner)
+            {
+                var winnerColor = Color4Extensions.FromHex("#4DDBFF");
+
+                if (winner.NewValue == TeamColour.Red)
+                {
+                    winnerColor = Color4Extensions.FromHex("#FF714D");
+                }
+
+                pulseContainer.ClearTransforms();
+
+                if (Choice.Type == ChoiceType.Ban)
+                {
+                    pulseContainer.ScaleTo(0.85f);
+                    pulseContainer.Alpha = 0.5f;
+                    winnerBackground.Alpha = 0f;
+                    pulseContainer.BorderColour = Colour4.Transparent;
+                    return;
+                }
+
+                if (winner.NewValue == null)
+                {
+                    pulseContainer.Alpha = 1f;
+                    pulseContainer.BorderColour = Colour4.Transparent;
+
+                    pulseContainer.ScaleTo(1f)
+                                  .Then()
+                                  .Loop(p => p.ScaleTo(1.08f, 600, Easing.InOutSine)
+                                              .Then()
+                                              .ScaleTo(1f, 600, Easing.InOutSine));
+
+                    winnerBackground.Alpha = 0f;
+                }
+                else
+                {
+                    pulseContainer.Alpha = 1f;
+                    pulseContainer.ScaleTo(1f, 400, Easing.OutElastic);
+
+                    pulseContainer.BorderColour = winnerColor;
+                    winnerBackground.Colour = winnerColor;
+
+                    bool isBreakpoint = winner.NewValue != Choice.Team && Choice.Team != TeamColour.None;
+                    winnerBackground.FadeTo(isBreakpoint ? 0.3f : 0.8f, 400, Easing.OutQuint);
                 }
             }
         }

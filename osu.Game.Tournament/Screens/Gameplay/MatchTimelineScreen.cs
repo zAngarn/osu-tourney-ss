@@ -50,6 +50,8 @@ namespace osu.Game.Tournament.Screens.MapPool
         private OsuButton bluePickButton = null!;
         private OsuButton deletionButton = null!;
 
+        private readonly Bindable<string> scrollingRoundText = new Bindable<string>("Ronda desconocida - Spanish Showdown 2026");
+
         private RoundBeatmap lastPickedMap = null!;
 
         private ChoiceType currentPhase = ChoiceType.Ban;
@@ -63,6 +65,11 @@ namespace osu.Game.Tournament.Screens.MapPool
         private SettingsCheckbox firstBanCheck = null!;
         private SettingsCheckbox firstPickCheck = null!;
 
+        private Box redTurnGlow = null!;
+        private Box blueTurnGlow = null!;
+        private Box redTurnGlow2 = null!;
+        private Box blueTurnGlow2 = null!;
+
         [Resolved]
         private TournamentSceneManager? sceneManager { get; set; }
 
@@ -75,7 +82,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             {
                 Round =
                 {
-                    Value = new TournamentRound { Name = { Value = "???" } }
+                    Value = new TournamentRound { Description = { Value = "???" } }
                 },
                 Team1 =
                 {
@@ -109,6 +116,26 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Width = 1 / 2f,
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopLeft
+                },
+                redTurnGlow = new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.White,
+                    Width = 1 / 2f,
+                    Blending = BlendingParameters.Additive,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopRight,
+                    Alpha = 0,
+                },
+                blueTurnGlow = new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.White,
+                    Width = 1 / 2f,
+                    Blending = BlendingParameters.Additive,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopLeft,
+                    Alpha = 0,
                 },
                 new Container
                 {
@@ -193,6 +220,27 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Width = 839 / 1920f,
                     Height = 245 / 1080f,
                     Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopRight,
+                    Margin = new MarginPadding { Right = 28, Top = 689 },
+                    Masking = true,
+                    CornerRadius = 65f,
+                    Children = new Drawable[]
+                    {
+                        redTurnGlow2 = new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.White,
+                            Blending = BlendingParameters.Additive,
+                            Alpha = 0,
+                        },
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 839 / 1920f,
+                    Height = 245 / 1080f,
+                    Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopLeft,
                     Margin = new MarginPadding { Left = 28, Top = 689 },
                     Masking = true,
@@ -203,6 +251,27 @@ namespace osu.Game.Tournament.Screens.MapPool
                         {
                             RelativeSizeAxes = Axes.Both,
                             Colour = Colour4.FromHex("#4DDBFF"),
+                        },
+                    }
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Width = 839 / 1920f,
+                    Height = 245 / 1080f,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopLeft,
+                    Margin = new MarginPadding { Left = 28, Top = 689 },
+                    Masking = true,
+                    CornerRadius = 65f,
+                    Children = new Drawable[]
+                    {
+                        blueTurnGlow2 = new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.White,
+                            Blending = BlendingParameters.Additive,
+                            Alpha = 0,
                         },
                     }
                 },
@@ -244,6 +313,25 @@ namespace osu.Game.Tournament.Screens.MapPool
                     RelativeSizeAxes = Axes.Both,
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
+                },
+                new SS26ScrollingMessage(() =>
+                {
+                    var text = new TournamentSpriteText
+                    {
+                        Font = OsuFont.BalooDa.With(size: 24, weight: FontWeight.Black),
+                        Colour = Colour4.White,
+                        Blending = BlendingParameters.Additive,
+                        Alpha = 0.2f,
+                    };
+
+                    scrollingRoundText.BindValueChanged(v => text.Text = v.NewValue, true);
+
+                    return text;
+                })
+                {
+                    Y = 16,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
                 },
                 new ScoreOnlyMatchHeader(),
                 new FillFlowContainer
@@ -288,7 +376,6 @@ namespace osu.Game.Tournament.Screens.MapPool
                         },
                     }
                 },
-
                 new ControlPanel
                 {
                     Children = new Drawable[]
@@ -446,8 +533,12 @@ namespace osu.Game.Tournament.Screens.MapPool
                 TournamentTeam t2 = match.NewValue?.Team2?.Value
                                     ?? new TournamentTeam { FullName = { Value = "???" } };
 
+                var round = match.NewValue?.Round.Value
+                            ?? new TournamentRound { Description = { Value = "???" } };
+
                 redPlayer.Team = t1;
                 bluePlayer.Team = t2;
+                scrollingRoundText.Value = $"{round.Description.Value} - Spanish Showdown 2026";
                 computeCurrentState();
             }, true);
 
@@ -469,13 +560,22 @@ namespace osu.Game.Tournament.Screens.MapPool
                 }
                 else
                 {
-                    tiebreakerCardContainer.Add(new SS26BeatmapPanel(tbMap.Beatmap, "TB1")
+                    var tbPanel = new SS26BeatmapPanel(tbMap.Beatmap, "TB1")
                     {
-                        Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
                         Anchor = Anchor.BottomCentre,
                         Origin = Anchor.BottomCentre,
                         Margin = new MarginPadding { Bottom = 10 },
-                    });
+                        Y = 50,
+                        Alpha = 0,
+                    };
+
+                    tiebreakerCardContainer.Add(tbPanel);
+                    tbPanel.FadeIn(600, Easing.OutQuint);
+                    tbPanel.MoveToY(0, 800, Easing.OutElastic);
+
+                    tbPanel.ScaleTo(TournamentGame.FACTOR_DE_REESCALADO_1080 + new Vector2(0.05f), 400, Easing.OutQuint)
+                           .Then()
+                           .ScaleTo(TournamentGame.FACTOR_DE_REESCALADO_1080, 800, Easing.OutElastic);
 
                     CurrentMatch.Value!.PicksBans.Add(new BeatmapChoice
                     {
@@ -490,20 +590,18 @@ namespace osu.Game.Tournament.Screens.MapPool
 
         private void onScoreChanged(TeamColour team, int? oldScore, int? newScore)
         {
-            // Si la puntuación es null, asumimos que es 0
             int oldVal = oldScore ?? 0;
             int newVal = newScore ?? 0;
 
-            // Solo asignamos si el score ha SUBIDO (ignora si el ref resta puntos)
             if (newVal <= oldVal) return;
 
-            // Buscamos el primer Pick cronológico que todavía no tenga un ganador asignado
             var activePick = CurrentMatch.Value?.PicksBans
                                          .FirstOrDefault(p => p.Type == ChoiceType.Pick && p.Winner.Value == null);
 
             if (activePick != null)
             {
-                activePick.Winner.Value = team; // Esto dispara el evento visual automáticamente
+                activePick.Winner.Value = team;
+                computeCurrentState();
             }
         }
 
@@ -515,6 +613,7 @@ namespace osu.Game.Tournament.Screens.MapPool
             if (activePick != null)
             {
                 activePick.Winner.Value = team;
+                computeCurrentState();
             }
         }
 
@@ -592,62 +691,44 @@ namespace osu.Game.Tournament.Screens.MapPool
 
                 lastPickedMap = targetMap;
 
-                switch (choiceType)
+                var panel = new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot, "0", choice)
                 {
-                    // Bans ---------------------------------------------
-                    case ChoiceType.Ban when colour == TeamColour.Red:
-                    {
-                        redActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot, "0", choice)
-                        {
-                            Anchor = Anchor.TopLeft,
-                            Origin = Anchor.TopLeft,
-                            Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
-                        });
+                    Anchor = colour == TeamColour.Red ? Anchor.TopLeft : Anchor.TopRight,
+                    Origin = colour == TeamColour.Red ? Anchor.TopLeft : Anchor.TopRight,
+                };
 
+                if (colour == TeamColour.Red)
+                {
+                    redActions.Add(panel);
+
+                    if (choiceType == ChoiceType.Ban)
+                    {
                         currentBan = TeamColour.Blue;
                         LadderInfo.RedBans.Add(targetMap);
-                        break;
                     }
+                    else { currentPick = TeamColour.Blue; }
 
-                    case ChoiceType.Ban when colour == TeamColour.Blue:
+                    redActions.ScaleTo(1.03f, 50, Easing.OutQuint).Then().ScaleTo(1f, 400, Easing.OutElastic);
+                }
+                else
+                {
+                    blueActions.Add(panel);
+
+                    if (choiceType == ChoiceType.Ban)
                     {
-                        blueActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot, "0", choice)
-                        {
-                            Anchor = Anchor.TopRight,
-                            Origin = Anchor.TopRight,
-                            Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
-                        });
-
                         currentBan = TeamColour.Red;
                         LadderInfo.BlueBans.Add(targetMap);
-                        break;
                     }
+                    else { currentPick = TeamColour.Red; }
 
-                    // Picks ---------------------------------------------
-                    case ChoiceType.Pick when colour == TeamColour.Red:
-
-                        redActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot, "0", choice)
-                        {
-                            Anchor = Anchor.TopLeft,
-                            Origin = Anchor.TopLeft,
-                            Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
-                        });
-
-                        currentPick = TeamColour.Blue;
-                        break;
-
-                    case ChoiceType.Pick when colour == TeamColour.Blue:
-
-                        blueActions.Add(new SS26BeatmapPanel(targetMap.Beatmap, targetMap.Slot, "0", choice)
-                        {
-                            Anchor = Anchor.TopRight,
-                            Origin = Anchor.TopRight,
-                            Scale = TournamentGame.FACTOR_DE_REESCALADO_1080,
-                        });
-
-                        currentPick = TeamColour.Red;
-                        break;
+                    blueActions.ScaleTo(1.03f, 50, Easing.OutQuint).Then().ScaleTo(1f, 400, Easing.OutElastic);
                 }
+
+                panel.ScaleTo(0)
+                     .Then()
+                     .ScaleTo(TournamentGame.FACTOR_DE_REESCALADO_1080, 800, Easing.OutQuint);
+
+                panel.FadeInFromZero(800);
 
                 computeCurrentState();
             }
@@ -859,6 +940,8 @@ namespace osu.Game.Tournament.Screens.MapPool
             int bansRealizados = picksBansList.Count(choice => choice.Type == ChoiceType.Ban);
             int picksRealizados = picksBansList.Count(choice => choice.Type == ChoiceType.Pick && choice.Slot != "TB1");
 
+            bool isMapInPlay = picksBansList.Any(choice => choice.Type == ChoiceType.Pick && choice.Winner.Value == null && choice.Slot != "TB1");
+
             bool isTiebreaker = CurrentMatch.Value?.Team1Score.Value == (CurrentMatch.Value?.Round.Value.BestOf.Value - 1) / 2
                                 && CurrentMatch.Value?.Team2Score.Value == (CurrentMatch.Value?.Round.Value.BestOf.Value - 1) / 2;
 
@@ -944,6 +1027,31 @@ namespace osu.Game.Tournament.Screens.MapPool
                         Slot = tbMap.Slot,
                     });
                 }
+            }
+
+            redTurnGlow.ClearTransforms();
+            blueTurnGlow.ClearTransforms();
+
+            redTurnGlow2.ClearTransforms();
+            blueTurnGlow2.ClearTransforms();
+
+            redTurnGlow.FadeOut(300, Easing.OutQuint);
+            blueTurnGlow.FadeOut(300, Easing.OutQuint);
+
+            redTurnGlow2.FadeOut(300, Easing.OutQuint);
+            blueTurnGlow2.FadeOut(300, Easing.OutQuint);
+
+            if (isMapInPlay) return;
+
+            if (currentPick == TeamColour.Red || currentBan == TeamColour.Red)
+            {
+                redTurnGlow.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
+                redTurnGlow2.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
+            }
+            else if (currentPick == TeamColour.Blue || currentBan == TeamColour.Blue)
+            {
+                blueTurnGlow.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
+                blueTurnGlow2.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
             }
         }
     }
