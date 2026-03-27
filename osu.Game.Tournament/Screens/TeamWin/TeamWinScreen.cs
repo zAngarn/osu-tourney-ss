@@ -114,7 +114,13 @@ namespace osu.Game.Tournament.Screens.TeamWin
             };
 
             mainContainer.FadeOut();
-            mainContainer.Delay(1000).FadeIn(1600, Easing.OutQuint);
+            mainContainer.MoveToOffset(new Vector2(0, 100), 0, Easing.OutQuint);
+
+            using (BeginDelayedSequence(1000))
+            {
+                mainContainer.MoveToOffset(new Vector2(0, -100), 1600, Easing.OutQuint);
+                mainContainer.FadeIn(1600, Easing.OutQuint);
+            }
         });
     }
 }

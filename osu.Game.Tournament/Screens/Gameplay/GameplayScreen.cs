@@ -14,6 +14,7 @@ using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Gameplay.Components;
 using osu.Game.Tournament.Screens.MapPool;
+using osu.Game.Tournament.Screens.TeamWin;
 using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Gameplay
@@ -210,8 +211,9 @@ namespace osu.Game.Tournament.Screens.Gameplay
                             // we should automatically proceed after a short delay
                             if (lastState == TourneyState.Ranking && !warmup.Value)
                             {
-                                /*if (CurrentMatch.Value?.Completed.Value == true)
-                                    scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(TeamWinScreen)); }, delay_before_progression * 2);*/
+                                if (CurrentMatch.Value?.Completed.Value == true)
+                                    scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(TeamWinScreen)); }, delay_before_progression * 2);
+
                                 if (CurrentMatch.Value?.Completed.Value == false)
                                     scheduledScreenChange = Scheduler.AddDelayed(() => { sceneManager?.SetScreen(typeof(MatchTimelineScreen)); }, delay_before_progression * 2);
 
