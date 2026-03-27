@@ -13,6 +13,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osu.Game.Graphics;
+using osu.Game.Graphics.Backgrounds;
 using osu.Game.Graphics.Containers;
 using osu.Game.Graphics.Sprites;
 using osu.Game.Online.API;
@@ -215,6 +216,13 @@ namespace osu.Game.Tournament.Components
                             {
                                 RelativeSizeAxes = Axes.Both,
                                 Colour = Colour4.FromHex("303030"),
+                            },
+                            new Triangles
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Alpha = 0.5f,
+                                TriangleScale = 1,
+                                Colour = Colour4.FromHex("#282828")
                             },
                             new Box
                             {

@@ -12,6 +12,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.Legacy;
 using osu.Game.Extensions;
+using osu.Game.Graphics.Backgrounds;
 using osu.Game.Models;
 using osu.Game.Rulesets;
 using osu.Game.Rulesets.Mods;
@@ -141,6 +142,13 @@ namespace osu.Game.Tournament.Components
                                     Anchor = Anchor.TopCentre,
                                     Origin = Anchor.TopLeft
                                 },
+                                new Triangles
+                                {
+                                    RelativeSizeAxes = Axes.Both,
+                                    Alpha = 0.5f,
+                                    TriangleScale = 2,
+                                    Colour = Colour4.FromHex("#303030")
+                                }
                             }
                         },
                         new Container
@@ -170,6 +178,13 @@ namespace osu.Game.Tournament.Components
                                     Anchor = Anchor.TopCentre,
                                     Origin = Anchor.TopLeft
                                 },
+                                new Triangles
+                                {
+                                    RelativeSizeAxes = Axes.Both,
+                                    Alpha = 0.5f,
+                                    TriangleScale = 2,
+                                    Colour = Colour4.FromHex("#262626")
+                                }
                             }
                         },
                         new Container

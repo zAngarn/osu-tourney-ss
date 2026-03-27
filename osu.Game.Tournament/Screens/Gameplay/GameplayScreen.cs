@@ -168,6 +168,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         Direction = FillDirection.Horizontal,
                         Spacing = new Vector2(20, 0),
                         AutoSizeAxes = Axes.Both,
+                        Margin = new MarginPadding { Top = 10 },
                         Children = new Drawable[]
                         {
                             new TournamentSpriteText
@@ -237,6 +238,7 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         AutoSizeAxes = Axes.Both,
                         Anchor = Anchor.TopRight,
                         Origin = Anchor.TopRight,
+                        Margin = new MarginPadding { Top = 10 },
                         Children = new Drawable[]
                         {
                             bluePicksFlow = new FillFlowContainer

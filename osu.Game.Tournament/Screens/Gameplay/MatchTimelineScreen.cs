@@ -12,6 +12,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Threading;
 using osu.Game.Graphics;
+using osu.Game.Graphics.Backgrounds;
 using osu.Game.Graphics.UserInterface;
 using osu.Game.Overlays.Settings;
 using osu.Game.Tournament.Components;
@@ -70,6 +71,16 @@ namespace osu.Game.Tournament.Screens.MapPool
         private Box redTurnGlow2 = null!;
         private Box blueTurnGlow2 = null!;
 
+        private Container centerStatusContainer = null!;
+        private TournamentSpriteText centerStatusText = null!;
+        private Box centerStatusBackground = null!;
+
+        private Container redStatusContainer = null!;
+        private TournamentSpriteText redStatusText = null!;
+
+        private Container blueStatusContainer = null!;
+        private TournamentSpriteText blueStatusText = null!;
+
         [Resolved]
         private TournamentSceneManager? sceneManager { get; set; }
 
@@ -116,6 +127,14 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Width = 1 / 2f,
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopLeft
+                },
+                new Triangles
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Alpha = 0.37f,
+                    TriangleScale = 2,
+                    Blending = BlendingParameters.Additive,
+                    Colour = Colour4.White,
                 },
                 redTurnGlow = new Box
                 {
@@ -212,6 +231,14 @@ namespace osu.Game.Tournament.Screens.MapPool
                             RelativeSizeAxes = Axes.Both,
                             Colour = Colour4.FromHex("#FF714D"),
                         },
+                        new Triangles
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Alpha = 0.37f,
+                            TriangleScale = 2,
+                            Blending = BlendingParameters.Additive,
+                            Colour = Colour4.White,
+                        },
                     }
                 },
                 new Container
@@ -251,6 +278,14 @@ namespace osu.Game.Tournament.Screens.MapPool
                         {
                             RelativeSizeAxes = Axes.Both,
                             Colour = Colour4.FromHex("#4DDBFF"),
+                        },
+                        new Triangles
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Alpha = 0.37f,
+                            TriangleScale = 2,
+                            Blending = BlendingParameters.Additive,
+                            Colour = Colour4.White,
                         },
                     }
                 },
@@ -485,6 +520,61 @@ namespace osu.Game.Tournament.Screens.MapPool
                     },
                 },
             };
+
+            AddInternal(centerStatusContainer = new Container
+            {
+                Anchor = Anchor.TopCentre,
+                Origin = Anchor.TopCentre,
+                Y = 30,
+                Height = 40,
+                Margin = new MarginPadding { Top = 600 },
+                AutoSizeAxes = Axes.X,
+                Masking = true,
+                CornerRadius = 20,
+                Alpha = 0,
+                Children = new Drawable[]
+                {
+                    centerStatusBackground = new Box { RelativeSizeAxes = Axes.Both, Colour = Colour4.Black.Opacity(0.8f) },
+                    centerStatusText = new TournamentSpriteText
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 20),
+                        Margin = new MarginPadding { Horizontal = 20, Top = -10 },
+                        Colour = Colour4.White,
+                    }
+                }
+            });
+
+            AddInternal(redStatusContainer = new Container
+            {
+                Anchor = Anchor.TopCentre,
+                Origin = Anchor.TopCentre,
+                Position = new Vector2(-500, 40),
+                Margin = new MarginPadding { Top = 380 },
+                AutoSizeAxes = Axes.Both,
+                Alpha = 0,
+                Child = redStatusText = new TournamentSpriteText
+                {
+                    Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 24),
+                    Colour = Color4Extensions.FromHex("#FF714D"),
+                }
+            });
+
+            AddInternal(blueStatusContainer = new Container
+            {
+                Anchor = Anchor.TopCentre,
+                Origin = Anchor.TopCentre,
+                Position = new Vector2(500, 40),
+                Margin = new MarginPadding { Top = 380 },
+                AutoSizeAxes = Axes.Both,
+                Alpha = 0,
+                Child = blueStatusText = new TournamentSpriteText
+                {
+                    Font = OsuFont.BalooDa.With(weight: FontWeight.Bold, size: 24),
+                    Colour = Color4Extensions.FromHex("#4DDBFF"),
+                }
+            });
 
             firstBanBindable.BindValueChanged(e =>
             {
@@ -1041,17 +1131,121 @@ namespace osu.Game.Tournament.Screens.MapPool
             redTurnGlow2.FadeOut(300, Easing.OutQuint);
             blueTurnGlow2.FadeOut(300, Easing.OutQuint);
 
-            if (isMapInPlay) return;
+            bool isRedTurn = (currentPhase == ChoiceType.Ban && currentBan == TeamColour.Red) ||
+                             (currentPhase == ChoiceType.Pick && currentPick == TeamColour.Red);
 
-            if (currentPick == TeamColour.Red || currentBan == TeamColour.Red)
+            bool isBlueTurn = (currentPhase == ChoiceType.Ban && currentBan == TeamColour.Blue) ||
+                              (currentPhase == ChoiceType.Pick && currentPick == TeamColour.Blue);
+
+            if (!isMapInPlay)
             {
-                redTurnGlow.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
-                redTurnGlow2.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
+                if (isRedTurn)
+                {
+                    redTurnGlow.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
+                    redTurnGlow2.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
+                }
+                else if (isBlueTurn)
+                {
+                    blueTurnGlow.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
+                    blueTurnGlow2.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
+                }
             }
-            else if (currentPick == TeamColour.Blue || currentBan == TeamColour.Blue)
+
+            string newCenterText = "";
+            Colour4 newCenterColor = Colour4.Black.Opacity(0.8f);
+            string newRedText = "";
+            string newBlueText = "";
+
+            if (isMapInPlay)
             {
-                blueTurnGlow.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
-                blueTurnGlow2.FadeTo(0.12f, 800, Easing.InOutSine).Then().FadeTo(0.02f, 800, Easing.InOutSine).Loop();
+                newCenterText = "¡A JUGAR!";
+                newCenterColor = Color4Extensions.FromHex("#FFD700"); // Dorado
+            }
+            else if (isRedTurn)
+            {
+                newRedText = currentPhase == ChoiceType.Ban ? "Baneando mapa..." : "Pickeando mapa...";
+            }
+            else if (isBlueTurn)
+            {
+                newBlueText = currentPhase == ChoiceType.Ban ? "Baneando mapa..." : "Pickeando mapa...";
+            }
+            else
+            {
+                newCenterText = "Esperando...";
+            }
+
+            if (string.IsNullOrEmpty(newCenterText))
+            {
+                centerStatusContainer.FadeOut(300, Easing.OutQuint);
+            }
+            else
+            {
+                centerStatusContainer.FadeIn(300, Easing.OutQuint);
+
+                if (centerStatusText.Text != newCenterText)
+                {
+                    centerStatusBackground.FadeColour(newCenterColor, 300, Easing.OutQuint);
+                    centerStatusText.Text = newCenterText;
+
+                    centerStatusText.ClearTransforms();
+                    centerStatusContainer.ScaleTo(1.15f, 150, Easing.OutQuint).Then().ScaleTo(1f, 400, Easing.OutElastic);
+
+                    if (newCenterText == "¡A JUGAR!")
+                    {
+                        centerStatusText.Delay(550)
+                                        .Loop(t => t.ScaleTo(1.05f, 800, Easing.InOutSine).RotateTo(1, 800, Easing.InOutSine)
+                                                    .Then()
+                                                    .ScaleTo(1f, 800, Easing.InOutSine).RotateTo(-1, 800, Easing.InOutSine));
+                    }
+                    else
+                    {
+                        centerStatusText.ScaleTo(1f, 300).RotateTo(0, 300);
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(newRedText))
+            {
+                redStatusContainer.FadeOut(300, Easing.OutQuint);
+            }
+            else
+            {
+                redStatusContainer.FadeIn(300, Easing.OutQuint);
+
+                if (redStatusText.Text != newRedText)
+                {
+                    redStatusText.Text = newRedText;
+                    redStatusContainer.MoveToY(30).Then().MoveToY(40, 500, Easing.OutElastic);
+
+                    redStatusText.ClearTransforms();
+
+                    redStatusText.ScaleTo(1f).RotateTo(0)
+                                 .Loop(t => t.ScaleTo(1.08f, 1100, Easing.InOutSine).RotateTo(2, 1100, Easing.InOutSine)
+                                             .Then()
+                                             .ScaleTo(1f, 1100, Easing.InOutSine).RotateTo(-2, 1100, Easing.InOutSine));
+                }
+            }
+
+            if (string.IsNullOrEmpty(newBlueText))
+            {
+                blueStatusContainer.FadeOut(300, Easing.OutQuint);
+            }
+            else
+            {
+                blueStatusContainer.FadeIn(300, Easing.OutQuint);
+
+                if (blueStatusText.Text != newBlueText)
+                {
+                    blueStatusText.Text = newBlueText;
+                    blueStatusContainer.MoveToY(30).Then().MoveToY(40, 500, Easing.OutElastic);
+
+                    blueStatusText.ClearTransforms();
+
+                    blueStatusText.ScaleTo(1f).RotateTo(0)
+                                  .Loop(t => t.ScaleTo(1.08f, 1150, Easing.InOutSine).RotateTo(-2, 1150, Easing.InOutSine)
+                                              .Then()
+                                              .ScaleTo(1f, 1150, Easing.InOutSine).RotateTo(2, 1150, Easing.InOutSine));
+                }
             }
         }
     }
