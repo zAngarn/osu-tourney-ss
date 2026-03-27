@@ -14,7 +14,6 @@ using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Screens;
-using osu.Game.Tournament.Screens.Drawings;
 using osu.Game.Tournament.Screens.Editors;
 using osu.Game.Tournament.Screens.Gameplay;
 using osu.Game.Tournament.Screens.Ladder;
@@ -143,15 +142,13 @@ namespace osu.Game.Tournament
                                 new ScreenButton(typeof(LadderScreen), Key.B) { Text = "Bracket", RequestSelection = SetScreen },
                                 new Separator(),
                                 new ScreenButton(typeof(TeamIntroScreen), Key.I) { Text = "Team Intro", RequestSelection = SetScreen },
+                                new ScreenButton(typeof(MapPoolScreen), Key.M) { Text = "Map Pool", RequestSelection = SetScreen },
+                                new Separator(),
                                 new ScreenButton(typeof(SeedingScreen), Key.D) { Text = "Seeding", RequestSelection = SetScreen },
                                 new Separator(),
                                 new ScreenButton(typeof(MatchTimelineScreen), Key.P) { Text = "Match Timeline", RequestSelection = SetScreen },
-                                new ScreenButton(typeof(MapPoolScreen), Key.M) { Text = "Map Pool", RequestSelection = SetScreen },
                                 new ScreenButton(typeof(GameplayScreen), Key.G) { Text = "Gameplay", RequestSelection = SetScreen },
-                                new Separator(),
                                 new ScreenButton(typeof(TeamWinScreen), Key.W) { Text = "Win", RequestSelection = SetScreen },
-                                new Separator(),
-                                new ScreenButton(typeof(DrawingsScreen)) { Text = "Drawings", RequestSelection = SetScreen },
                             }
                         },
                     },
