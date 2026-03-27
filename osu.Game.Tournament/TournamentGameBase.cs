@@ -396,7 +396,7 @@ namespace osu.Game.Tournament
                     break;
 
                 default:
-                    color = Colour4.FromHex("1e1e1e");
+                    color = Colour4.FromHex("fc9758");
                     break;
             }
 
