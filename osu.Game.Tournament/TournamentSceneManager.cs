@@ -110,7 +110,7 @@ namespace osu.Game.Tournament
                         chatContainer = new Container
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Child = chat
+                            Child = chat,
                         },
                     }
                 },
@@ -225,14 +225,8 @@ namespace osu.Game.Tournament
 
             switch (currentScreen)
             {
-                case MapPoolScreen:
+                case MatchTimelineScreen:
                     chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
-                    chatContainer.ResizeWidthTo(1, 500, Easing.OutQuint);
-                    break;
-
-                case GameplayScreen:
-                    chatContainer.FadeIn(TournamentScreen.FADE_DELAY);
-                    chatContainer.ResizeWidthTo(0f, 500, Easing.OutQuint);
                     break;
 
                 default:

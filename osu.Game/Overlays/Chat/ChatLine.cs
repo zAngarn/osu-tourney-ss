@@ -7,7 +7,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions;
 using osu.Framework.Extensions.Color4Extensions;
-using osu.Framework.Extensions.LocalisationExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
@@ -17,11 +16,9 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Game.Configuration;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Containers;
-using osu.Game.Graphics.Sprites;
 using osu.Game.Online.API;
 using osu.Game.Online.API.Requests.Responses;
 using osu.Game.Online.Chat;
-using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Overlays.Chat
@@ -48,7 +45,7 @@ namespace osu.Game.Overlays.Chat
 
         public IEnumerable<Drawable> DrawableContentFlow => drawableContentFlow.Children;
 
-        private const float font_size = 13;
+        private const float font_size = 16;
 
         protected virtual float Spacing => 15;
 
@@ -59,8 +56,6 @@ namespace osu.Game.Overlays.Chat
 
         [Resolved]
         private OverlayColourProvider? colourProvider { get; set; }
-
-        private OsuSpriteText drawableTimestamp = null!;
 
         private DrawableChatUsername drawableUsername = null!;
 
@@ -138,7 +133,6 @@ namespace osu.Game.Overlays.Chat
         private void load(OsuConfigManager configManager)
         {
             configManager.BindWith(OsuSetting.Prefer24HourTime, prefer24HourTime);
-            prefer24HourTime.BindValueChanged(_ => updateTimestamp());
 
             Padding = new MarginPadding { Right = 5 };
 
@@ -169,7 +163,6 @@ namespace osu.Game.Overlays.Chat
                     RowDimensions = new[] { new Dimension(GridSizeMode.AutoSize) },
                     ColumnDimensions = new[]
                     {
-                        new Dimension(GridSizeMode.Absolute, 45),
                         new Dimension(GridSizeMode.Absolute, Spacing + UsernameWidth + Spacing),
                         new Dimension(),
                     },
@@ -177,15 +170,6 @@ namespace osu.Game.Overlays.Chat
                     {
                         new Drawable[]
                         {
-                            drawableTimestamp = new OsuSpriteText
-                            {
-                                Shadow = false,
-                                Anchor = Anchor.TopLeft,
-                                Origin = Anchor.TopLeft,
-                                Spacing = new Vector2(-1, 0),
-                                Font = OsuFont.GetFont(size: font_size, weight: FontWeight.SemiBold, fixedWidth: true),
-                                AlwaysPresent = true,
-                            },
                             drawableUsername = new DrawableChatUsername(message.Sender)
                             {
                                 Width = UsernameWidth,
@@ -213,8 +197,6 @@ namespace osu.Game.Overlays.Chat
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
-            drawableTimestamp.Colour = colourProvider?.Background1 ?? Colour4.White;
 
             updateMessageContent();
             FinishTransforms(true);
@@ -277,16 +259,6 @@ namespace osu.Game.Overlays.Chat
         {
             this.FadeTo(message is LocalEchoMessage ? 0.4f : 1.0f, 500, Easing.OutQuint);
 
-            if (requiresTimestamp && !(message is LocalEchoMessage))
-            {
-                drawableTimestamp.Show();
-                updateTimestamp();
-            }
-            else
-            {
-                drawableTimestamp.Hide();
-            }
-
             drawableUsername.Text = $@"{message.Sender.Username}";
 
             // remove non-existent channels from the link list
@@ -296,11 +268,6 @@ namespace osu.Game.Overlays.Chat
 
             drawableContentFlow.Clear();
             drawableContentFlow.AddLinks(message.DisplayContent, message.Links);
-        }
-
-        private void updateTimestamp()
-        {
-            drawableTimestamp.Text = message.Timestamp.LocalDateTime.ToLocalisableString(prefer24HourTime.Value ? @"HH:mm" : @"hh:mm tt");
         }
 
         private static readonly Color4[] default_username_colours =
